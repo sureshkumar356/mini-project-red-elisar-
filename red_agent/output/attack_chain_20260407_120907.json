@@ -1,0 +1,409 @@
+{
+  "attack_chain": {
+    "attack_chain": [
+      {
+        "step": 1,
+        "technique_id": "T1594",
+        "technique_name": "",
+        "tactic": "initial-access",
+        "description": "Search Victim-Owned Websites: Identify vulnerable search functionality on the target website.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 2,
+        "technique_id": "T1204",
+        "technique_name": "",
+        "tactic": "execution",
+        "description": "User Execution: Trick the user into executing malicious code by injecting a malicious search query.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 3,
+        "technique_id": "T1550.004",
+        "technique_name": "",
+        "tactic": "execution",
+        "description": "Web Session Cookie: Steal the user's session cookie to maintain persistence.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 4,
+        "technique_id": "T1584.006",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Web Services: Use the stolen session cookie to access the user's account and extract credentials.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 5,
+        "technique_id": "T1584.006",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Web Services: Use the extracted credentials to access other web services and gather more information.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      }
+    ],
+    "metadata": {}
+  },
+  "retrieval_results": [
+    {
+      "technique_id": "T1110",
+      "name": "Brute Force",
+      "relevance_score": 0.423,
+      "tactics": [
+        "credential-access"
+      ]
+    },
+    {
+      "technique_id": "T1204",
+      "name": "User Execution",
+      "relevance_score": 0.4142,
+      "tactics": [
+        "execution"
+      ]
+    },
+    {
+      "technique_id": "T1550.004",
+      "name": "Web Session Cookie",
+      "relevance_score": 0.4141,
+      "tactics": [
+        "defense-evasion",
+        " lateral-movement"
+      ]
+    },
+    {
+      "technique_id": "T1087",
+      "name": "Account Discovery",
+      "relevance_score": 0.4028,
+      "tactics": [
+        "discovery"
+      ]
+    },
+    {
+      "technique_id": "T1204.004",
+      "name": "Malicious Copy and Paste",
+      "relevance_score": 0.3876,
+      "tactics": [
+        "execution"
+      ]
+    },
+    {
+      "technique_id": "T1593.002",
+      "name": "Search Engines",
+      "relevance_score": 0.3865,
+      "tactics": [
+        "reconnaissance"
+      ]
+    },
+    {
+      "technique_id": "T1674",
+      "name": "Input Injection",
+      "relevance_score": 0.3833,
+      "tactics": [
+        "execution"
+      ]
+    },
+    {
+      "technique_id": "T1556.001",
+      "name": "Domain Controller Authentication",
+      "relevance_score": 0.3784,
+      "tactics": [
+        "credential-access",
+        " defense-evasion",
+        " persistence"
+      ]
+    },
+    {
+      "technique_id": "T1594",
+      "name": "Search Victim-Owned Websites",
+      "relevance_score": 0.3739,
+      "tactics": [
+        "reconnaissance"
+      ]
+    },
+    {
+      "technique_id": "T1110.002",
+      "name": "Password Cracking",
+      "relevance_score": 0.3727,
+      "tactics": [
+        "credential-access"
+      ]
+    },
+    {
+      "technique_id": "T1586.002",
+      "name": "Email Accounts",
+      "relevance_score": 0.3696,
+      "tactics": [
+        "resource-development"
+      ]
+    },
+    {
+      "technique_id": "T1584.006",
+      "name": "Web Services",
+      "relevance_score": 0.3685,
+      "tactics": [
+        "resource-development"
+      ]
+    },
+    {
+      "technique_id": "T1539",
+      "name": "Steal Web Session Cookie",
+      "relevance_score": 0.3679,
+      "tactics": [
+        "credential-access"
+      ]
+    },
+    {
+      "technique_id": "T1606.001",
+      "name": "Web Cookies",
+      "relevance_score": 0.3662,
+      "tactics": [
+        "credential-access"
+      ]
+    },
+    {
+      "technique_id": "T1110.003",
+      "name": "Password Spraying",
+      "relevance_score": 0.3621,
+      "tactics": [
+        "credential-access"
+      ]
+    },
+    {
+      "technique_id": "T1586",
+      "name": "Compromise Accounts",
+      "relevance_score": 0.3608,
+      "tactics": [
+        "resource-development"
+      ]
+    },
+    {
+      "technique_id": "T1589.001",
+      "name": "Credentials",
+      "relevance_score": 0.3591,
+      "tactics": [
+        "reconnaissance"
+      ]
+    },
+    {
+      "technique_id": "T1078",
+      "name": "Valid Accounts",
+      "relevance_score": 0.3589,
+      "tactics": [
+        "defense-evasion",
+        " persistence",
+        " privilege-escalation",
+        " initial-access"
+      ]
+    },
+    {
+      "technique_id": "T1556",
+      "name": "Modify Authentication Process",
+      "relevance_score": 0.3567,
+      "tactics": [
+        "credential-access",
+        " defense-evasion",
+        " persistence"
+      ]
+    },
+    {
+      "technique_id": "T1056.003",
+      "name": "Web Portal Capture",
+      "relevance_score": 0.3534,
+      "tactics": [
+        "collection",
+        " credential-access"
+      ]
+    },
+    {
+      "technique_id": "T1056.002",
+      "name": "GUI Input Capture",
+      "relevance_score": 0.3519,
+      "tactics": [
+        "collection",
+        " credential-access"
+      ]
+    },
+    {
+      "technique_id": "T1110.001",
+      "name": "Password Guessing",
+      "relevance_score": 0.3512,
+      "tactics": [
+        "credential-access"
+      ]
+    },
+    {
+      "technique_id": "T1552",
+      "name": "Unsecured Credentials",
+      "relevance_score": 0.3475,
+      "tactics": [
+        "credential-access"
+      ]
+    },
+    {
+      "technique_id": "T1078.003",
+      "name": "Local Accounts",
+      "relevance_score": 0.342,
+      "tactics": [
+        "defense-evasion",
+        " persistence",
+        " privilege-escalation",
+        " initial-access"
+      ]
+    },
+    {
+      "technique_id": "T1589",
+      "name": "Gather Victim Identity Information",
+      "relevance_score": 0.3406,
+      "tactics": [
+        "reconnaissance"
+      ]
+    },
+    {
+      "technique_id": "T1593",
+      "name": "Search Open Websites/Domains",
+      "relevance_score": 0.3389,
+      "tactics": [
+        "reconnaissance"
+      ]
+    },
+    {
+      "technique_id": "T1608.006",
+      "name": "SEO Poisoning",
+      "relevance_score": 0.3388,
+      "tactics": [
+        "resource-development"
+      ]
+    },
+    {
+      "technique_id": "T1596",
+      "name": "Search Open Technical Databases",
+      "relevance_score": 0.3361,
+      "tactics": [
+        "reconnaissance"
+      ]
+    },
+    {
+      "technique_id": "T1212",
+      "name": "Exploitation for Credential Access",
+      "relevance_score": 0.3341,
+      "tactics": [
+        "credential-access"
+      ]
+    },
+    {
+      "technique_id": "T1550.001",
+      "name": "Application Access Token",
+      "relevance_score": 0.3335,
+      "tactics": [
+        "defense-evasion",
+        " lateral-movement"
+      ]
+    }
+  ],
+  "latency": {
+    "pipeline_start": 590848.7987474,
+    "retrieval_time_s": 5.407393299974501,
+    "augmentation_time_s": 0.0007849999237805605,
+    "llm_request_start": 590854.2106673,
+    "llm_model": "llama-3.1-8b-instant",
+    "prompt_chars": 2719,
+    "llm_request_end": 590855.5571339,
+    "llm_latency_s": 1.3464665999636054,
+    "eval_count": 1149,
+    "eval_duration_ns": 0,
+    "tokens_per_second": 853.344598396319,
+    "validation_time_s": 1.3656289998907596,
+    "pipeline_total_s": 6.783359499997459
+  },
+  "warnings": [],
+  "faithfulness_score": 1.0,
+  "scenario": "SQL injection attack against search and login",
+  "target_environment": "Enterprise Windows Active Directory network",
+  "timestamp": "2026-04-07T06:39:07.431067+00:00",
+  "analysis": {
+    "total_steps": 5,
+    "unique_techniques": 4,
+    "technique_reuse": 1,
+    "tactical_coverage": {
+      "covered": [
+        "credential-access",
+        "execution",
+        "initial-access"
+      ],
+      "total_mitre_tactics": 14,
+      "coverage_ratio": 0.21428571428571427
+    },
+    "detection_coverage": {
+      "steps_with_detection": 0,
+      "coverage_ratio": 0.0
+    },
+    "hallucination_metrics": {
+      "hallucinated_steps": 0,
+      "total_steps": 5,
+      "faithfulness_score": 1.0
+    },
+    "latency_summary": {
+      "total_pipeline_s": 6.783359499997459,
+      "retrieval_ms": 5407.393299974501,
+      "generation_s": 1.3464665999636054,
+      "tokens_per_second": 853.344598396319
+    }
+  },
+  "probe_result": {
+    "found": true,
+    "endpoints_tested": [
+      "http://127.0.0.1:5000/search?q=' OR '1'='1",
+      "http://127.0.0.1:5000/search?q=' OR '1'='1'--",
+      "http://127.0.0.1:5000/login [POST SQLi]"
+    ],
+    "evidence": [
+      {
+        "url": "http://127.0.0.1:5000/search?q=' OR '1'='1",
+        "status": 200,
+        "payload": "' OR '1'='1",
+        "confirmed": true,
+        "detail": "SQLi at /search — shows all results — authentication bypass. Response length: 1085 bytes"
+      },
+      {
+        "url": "http://127.0.0.1:5000/search?q=' OR '1'='1'--",
+        "status": 200,
+        "payload": "' OR '1'='1'--",
+        "confirmed": true,
+        "detail": "SQLi at /search — comments out password check. Response length: 1088 bytes"
+      },
+      {
+        "url": "http://127.0.0.1:5000/login",
+        "status": 200,
+        "payload": "' OR '1'='1'-- (POST login)",
+        "confirmed": true,
+        "detail": "SQL injection bypasses login authentication entirely"
+      }
+    ],
+    "vuln_description": "SQL Injection: unsanitised user input is inserted directly into SQL queries, allowing auth bypass and data extraction.",
+    "manual_test": "http://127.0.0.1:5000/search?q=' OR '1'='1",
+    "recommendation": "Use parameterised queries / prepared statements. Never concatenate user input into SQL strings.",
+    "attack_type": "sql_injection",
+    "target_url": "http://127.0.0.1:5000",
+    "severity": "CRITICAL"
+  }
+}

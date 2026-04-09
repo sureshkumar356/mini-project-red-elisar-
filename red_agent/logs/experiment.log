@@ -1,0 +1,39 @@
+2026-03-04 22:19:07,964 | red_elisar.parser | INFO | Loading STIX bundle from: C:\mini project\enterprise-attack.json
+2026-03-04 22:19:08,232 | red_elisar.parser | INFO | STIX bundle validated: 24772 total objects, ID: bundle--ffe1a478-536b-4e91-91b0-0ca0094a97d5
+2026-03-04 22:19:08,235 | red_elisar.parser | INFO | Found 835 attack-pattern objects
+2026-03-04 22:19:08,300 | red_elisar.parser | INFO | Extracted 691 valid techniques (skipped 12 deprecated, 132 revoked)
+2026-03-04 22:19:08,462 | red_elisar.chunking | INFO | Loading tokenizer for: all-MiniLM-L6-v2
+2026-03-04 22:19:09,986 | red_elisar.chunking | INFO | Tokenizer loaded
+2026-03-04 22:19:10,328 | red_elisar.chunking | INFO | Chunking complete: 691 techniques → 691 chunks (691 single, 0 multi, max 1 chunks/technique)
+2026-03-04 22:19:10,328 | red_elisar.faiss_store | INFO | Loading FAISS index from C:\mini project\red_agent\faiss_index\hnsw_index.faiss
+2026-03-04 22:19:10,345 | red_elisar.faiss_store | INFO | FAISS index loaded: 691 vectors in 0.02s
+2026-03-04 22:19:10,346 | red_elisar.faiss_store | INFO | Index already contains 691 vectors. Skipping. Use force_reindex=True to rebuild.
+2026-03-04 22:19:10,488 | red_elisar.baseline | INFO | Starting full comparison: 5 scenarios × 1 runs × 2 models × 2 configs
+2026-03-04 22:19:10,489 | red_elisar.baseline | INFO | 
+============================================================
+2026-03-04 22:19:10,489 | red_elisar.baseline | INFO | BASELINE: mistral (no RAG)
+2026-03-04 22:19:10,489 | red_elisar.baseline | INFO | ============================================================
+2026-03-04 22:19:10,489 | red_elisar.baseline | INFO | [Baseline mistral] Run 1/1
+2026-03-04 22:19:10,489 | red_elisar.baseline | INFO |   Scenario SS-001: An attacker sends a targeted spearphishing email w...
+2026-03-04 22:22:26,230 | red_elisar.baseline | INFO |   Scenario SS-002: Attacker executes PowerShell commands on a comprom...
+2026-03-04 22:24:39,933 | red_elisar.baseline | INFO |   Scenario SS-003: Malware adds itself to the Windows Registry Run ke...
+2026-04-02 09:16:45,611 | red_elisar.parser | INFO | Loading STIX bundle from: C:\mini project\enterprise-attack.json
+2026-04-02 09:16:45,944 | red_elisar.parser | INFO | STIX bundle validated: 24772 total objects, ID: bundle--ffe1a478-536b-4e91-91b0-0ca0094a97d5
+2026-04-02 09:16:45,949 | red_elisar.parser | INFO | Found 835 attack-pattern objects
+2026-04-02 09:16:46,074 | red_elisar.parser | INFO | Extracted 691 valid techniques (skipped 12 deprecated, 132 revoked)
+2026-04-02 09:16:46,379 | red_elisar.chunking | INFO | Loading tokenizer for: all-MiniLM-L6-v2
+2026-04-02 09:16:47,813 | huggingface_hub.utils._http | WARNING | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-02 09:16:50,399 | red_elisar.chunking | INFO | Tokenizer loaded
+2026-04-02 09:16:51,108 | red_elisar.chunking | INFO | Chunking complete: 691 techniques → 691 chunks (691 single, 0 multi, max 1 chunks/technique)
+2026-04-02 09:16:51,110 | red_elisar.faiss_store | INFO | Loading FAISS index from C:\mini project\red_agent\faiss_index\hnsw_index.faiss
+2026-04-02 09:16:51,213 | red_elisar.faiss_store | INFO | FAISS index loaded: 691 vectors in 0.10s
+2026-04-02 09:16:51,214 | red_elisar.faiss_store | INFO | Index already contains 691 vectors. Skipping. Use force_reindex=True to rebuild.
+2026-04-02 09:16:51,370 | red_elisar.baseline | INFO | Starting full comparison: 5 scenarios × 1 runs × 2 models × 2 configs
+2026-04-02 09:16:51,372 | red_elisar.baseline | INFO | 
+============================================================
+2026-04-02 09:16:51,374 | red_elisar.baseline | INFO | BASELINE: mistral (no RAG)
+2026-04-02 09:16:51,375 | red_elisar.baseline | INFO | ============================================================
+2026-04-02 09:16:51,377 | red_elisar.baseline | INFO | [Baseline mistral] Run 1/1
+2026-04-02 09:16:51,378 | red_elisar.baseline | INFO |   Scenario SS-001: An attacker sends a targeted spearphishing email w...
+2026-04-02 09:19:53,555 | red_elisar.baseline | ERROR | Baseline generation failed (mistral): HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=180)
+2026-04-02 09:19:53,662 | red_elisar.baseline | INFO |   Scenario SS-002: Attacker executes PowerShell commands on a comprom...

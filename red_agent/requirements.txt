@@ -1,0 +1,41 @@
+# Red ELISAR Dependencies — Paper-Aligned
+# ==========================================
+# Pinned for reproducibility. All packages work fully offline
+# once installed (no runtime internet access required).
+
+# --- Vector Database (FAISS HNSW) ---
+faiss-cpu>=1.7.4
+
+# --- Legacy (ChromaDB — kept for backward compatibility) ---
+chromadb>=1.5.2
+
+# --- Embedding Model ---
+sentence-transformers==3.3.1
+
+# --- HTTP Client (Ollama communication) ---
+requests==2.32.3
+
+# --- Data Processing ---
+numpy>=2.0.0
+
+# --- Logging & Utilities ---
+tqdm==4.67.1
+
+# --- Evaluation (for research metrics) ---
+scikit-learn==1.5.2
+rouge-score==0.1.2
+
+# --- JSON Schema Validation ---
+jsonschema==4.23.0
+
+# --- Visualization (paper figures) ---
+matplotlib>=3.8.0
+
+# --- Tokenization (for chunking) ---
+transformers>=4.36.0
+
+# --- Groq Cloud API (replaces local Ollama) ---
+groq>=0.4.0
+
+# --- Vulnerable app target (Flask) ---
+flask>=3.0.0

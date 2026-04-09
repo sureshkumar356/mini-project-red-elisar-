@@ -1,0 +1,2 @@
+# Requirements for Vulnerable App (VulnShop target)
+flask>=3.0.0

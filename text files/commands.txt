@@ -1,0 +1,144 @@
+Red ELISAR + VulnShop (vulnerable_app) — Command Cheat-Sheet (Windows / PowerShell)
+================================================================================
+
+0) One-time setup (recommended)
+--------------------------------
+Open PowerShell in the workspace root:
+	cd "C:\mini project"
+
+If venv activation is blocked in PowerShell:
+	Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+
+Install dependencies (if needed):
+	& ".\.venv\Scripts\Activate.ps1"
+	python -m pip install -r .\red_agent\requirements.txt
+	python -m pip install -r .\vulnerable_app\requirements.txt
+
+Tip: you can always run without activating venv using the full interpreter:
+	& "C:\mini project\.venv\Scripts\python.exe" <script.py> <args>
+
+
+1) Start the vulnerable Flask app (VulnShop)
+--------------------------------------------
+Terminal 1:
+	cd "C:\mini project"
+	& ".\.venv\Scripts\Activate.ps1"
+	python .\vulnerable_app\app.py
+
+Expected:
+	Runs at http://127.0.0.1:5000
+
+
+2) Live vulnerability scan against VulnShop (active checks)
+------------------------------------------------------------
+Terminal 2 (basic run):
+	cd "C:\mini project"
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\live_vuln_checker.py http://127.0.0.1:5000
+
+Save JSON + Markdown reports:
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\live_vuln_checker.py http://127.0.0.1:5000 `
+		-o .\red_agent\output\live_scan_results.json `
+		-m .\red_agent\output\live_scan_results.md
+
+Increase HTTP timeout:
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\live_vuln_checker.py http://127.0.0.1:5000 --timeout 15
+
+
+3) Passive recon only (no payloads)
+-----------------------------------
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\web_recon.py http://127.0.0.1:5000
+
+
+4) Full autonomous web assessment (Recon → Scan → Live Confirm → MITRE → (optional) LLM → Report)
+-------------------------------------------------------------------------------------------------
+Fast (skip LLM narrative):
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\web_vuln_agent.py http://127.0.0.1:5000 --no-llm
+
+With LLM narrative (requires Groq key):
+	$env:LLAMA3_API_KEY = "gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+	# optional model override
+	$env:GROQ_MODEL = "llama-3.1-8b-instant"
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\web_vuln_agent.py http://127.0.0.1:5000
+
+Force rebuild the MITRE index (slower, for first run / reset):
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\web_vuln_agent.py http://127.0.0.1:5000 --force-reindex
+
+Outputs:
+	red_agent/output/*.md and red_agent/output/*.json
+
+
+5) Red ELISAR main pipeline (attack-chain generation / CLI modes)
+------------------------------------------------------------------
+Run from the workspace root (run.py handles working directory internally):
+
+Index-only (build FAISS index; no generation):
+	& "C:\mini project\.venv\Scripts\python.exe" .\run.py --index-only
+
+Health check:
+	& "C:\mini project\.venv\Scripts\python.exe" .\run.py --health
+
+Custom scenario:
+	& "C:\mini project\.venv\Scripts\python.exe" .\run.py --scenario "APT phishing campaign" --chain-length 5
+
+Custom scenario + live target probing (uses vulnerable app URL as target-url):
+	& "C:\mini project\.venv\Scripts\python.exe" .\run.py --scenario "SQL injection attack" --target-url http://127.0.0.1:5000
+
+Predefined scenario:
+	& "C:\mini project\.venv\Scripts\python.exe" .\run.py --predefined apt_phishing_to_exfil
+
+Run all predefined scenarios:
+	& "C:\mini project\.venv\Scripts\python.exe" .\run.py --batch
+
+Interactive mode:
+	& "C:\mini project\.venv\Scripts\python.exe" .\run.py --interactive
+
+Autonomous website assessment via main CLI (same as web agent entrypoint):
+	& "C:\mini project\.venv\Scripts\python.exe" .\run.py --assess-url http://127.0.0.1:5000 --no-llm
+
+
+6) Scenario / demo scripts for the vulnerable app
+--------------------------------------------------
+6.1) Direct HTTP exploit walkthrough (writes a transcript file)
+	# Make sure VulnShop is running first (Terminal 1)
+	& "C:\mini project\.venv\Scripts\python.exe" .\run_scenarios.py
+
+Output:
+	red_agent/output/scenario_results.txt
+
+6.2) PPT review scenarios (calls run.py with target-url and chain length)
+	# Make sure VulnShop is running first (Terminal 1)
+	& "C:\mini project\.venv\Scripts\python.exe" .\run_ppt_scenarios.py
+
+
+7) Experiments / paper-aligned evaluation
+------------------------------------------
+Quick experiment (5 scenarios, 1 run):
+	& "C:\mini project\.venv\Scripts\python.exe" .\run.py --quick
+
+Full experiment (50 scenarios, 5 runs):
+	& "C:\mini project\.venv\Scripts\python.exe" .\run.py --full
+
+Generate flow diagram only:
+	& "C:\mini project\.venv\Scripts\python.exe" .\run.py --diagram
+
+Demo plots (synthetic):
+	& "C:\mini project\.venv\Scripts\python.exe" .\run.py --demo-plots
+
+Run experiment runner directly:
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\run_experiment.py --quick
+
+
+8) Common troubleshooting
+--------------------------
+If port 5000 is already in use:
+	# Find PID using port 5000
+	netstat -ano | findstr ":5000"
+	# Kill the PID (replace <PID>)
+	taskkill /PID <PID> /F
+
+If you see missing API key errors (LLAMA3/MISTRAL):
+	$env:LLAMA3_API_KEY  = "gsk_xxx..."
+	$env:MISTRAL_API_KEY = "xxx..."
+
+If the app is not reachable:
+	Open in browser: http://127.0.0.1:5000

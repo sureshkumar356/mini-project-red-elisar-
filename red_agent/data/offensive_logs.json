@@ -1,0 +1,476 @@
+{
+  "metadata": {
+    "description": "Red ELISAR Offensive Scenario Dataset — Paper-Aligned",
+    "version": "1.0",
+    "total_scenarios": 50,
+    "single_step_count": 18,
+    "multi_step_count": 32,
+    "reference": "ELISAR: A Multi-Agent Cybersecurity Framework (2024)",
+    "categories": [
+      "initial_access",
+      "execution",
+      "persistence",
+      "privilege_escalation",
+      "defense_evasion",
+      "credential_access",
+      "discovery",
+      "lateral_movement",
+      "collection",
+      "exfiltration",
+      "impact",
+      "command_and_control"
+    ]
+  },
+  "scenarios": [
+    {
+      "scenario_id": "SS-001",
+      "scenario_type": "single_step",
+      "category": "initial_access",
+      "description": "Spearphishing attachment delivering macro-enabled Office document to enterprise user",
+      "query": "An attacker sends a targeted spearphishing email with a malicious Word document containing VBA macros to an employee in the finance department",
+      "expected_techniques": ["T1566.001"],
+      "difficulty": "basic"
+    },
+    {
+      "scenario_id": "SS-002",
+      "scenario_type": "single_step",
+      "category": "execution",
+      "description": "PowerShell command execution for system reconnaissance",
+      "query": "Attacker executes PowerShell commands on a compromised Windows workstation to enumerate system information and running processes",
+      "expected_techniques": ["T1059.001"],
+      "difficulty": "basic"
+    },
+    {
+      "scenario_id": "SS-003",
+      "scenario_type": "single_step",
+      "category": "persistence",
+      "description": "Registry run key modification for persistence",
+      "query": "Malware adds itself to the Windows Registry Run key to ensure it executes automatically when the user logs in",
+      "expected_techniques": ["T1547.001"],
+      "difficulty": "basic"
+    },
+    {
+      "scenario_id": "SS-004",
+      "scenario_type": "single_step",
+      "category": "privilege_escalation",
+      "description": "UAC bypass using DLL side-loading",
+      "query": "Attacker bypasses Windows User Account Control by exploiting a trusted application that loads a malicious DLL from a writable directory",
+      "expected_techniques": ["T1574.002"],
+      "difficulty": "intermediate"
+    },
+    {
+      "scenario_id": "SS-005",
+      "scenario_type": "single_step",
+      "category": "defense_evasion",
+      "description": "Process injection via DLL injection into legitimate process",
+      "query": "Attacker injects a malicious DLL into the address space of a legitimate running process like explorer.exe to evade detection",
+      "expected_techniques": ["T1055.001"],
+      "difficulty": "intermediate"
+    },
+    {
+      "scenario_id": "SS-006",
+      "scenario_type": "single_step",
+      "category": "credential_access",
+      "description": "OS credential dumping using LSASS memory extraction",
+      "query": "Attacker dumps credentials from the LSASS process memory on a Windows system using Mimikatz to obtain plaintext passwords and NTLM hashes",
+      "expected_techniques": ["T1003.001"],
+      "difficulty": "intermediate"
+    },
+    {
+      "scenario_id": "SS-007",
+      "scenario_type": "single_step",
+      "category": "discovery",
+      "description": "Active Directory domain enumeration",
+      "query": "Attacker runs LDAP queries against the domain controller to enumerate user accounts, group memberships, and organizational units in Active Directory",
+      "expected_techniques": ["T1087.002"],
+      "difficulty": "basic"
+    },
+    {
+      "scenario_id": "SS-008",
+      "scenario_type": "single_step",
+      "category": "lateral_movement",
+      "description": "Remote service exploitation using SMB/Windows Admin Shares",
+      "query": "Attacker uses stolen administrator credentials to access remote systems via SMB Windows Admin Shares (C$ and ADMIN$) for lateral movement",
+      "expected_techniques": ["T1021.002"],
+      "difficulty": "intermediate"
+    },
+    {
+      "scenario_id": "SS-009",
+      "scenario_type": "single_step",
+      "category": "collection",
+      "description": "Screen capture for data collection",
+      "query": "Malware captures screenshots of the victim's desktop at regular intervals and stores them for later exfiltration",
+      "expected_techniques": ["T1113"],
+      "difficulty": "basic"
+    },
+    {
+      "scenario_id": "SS-010",
+      "scenario_type": "single_step",
+      "category": "exfiltration",
+      "description": "Data exfiltration over HTTPS to cloud storage",
+      "query": "Attacker exfiltrates collected sensitive data by uploading files to a legitimate cloud storage service over HTTPS to blend with normal traffic",
+      "expected_techniques": ["T1567.002"],
+      "difficulty": "intermediate"
+    },
+    {
+      "scenario_id": "SS-011",
+      "scenario_type": "single_step",
+      "category": "impact",
+      "description": "Data encryption for ransomware impact",
+      "query": "Ransomware encrypts files on local drives and network shares using AES-256 encryption and demands cryptocurrency payment for the decryption key",
+      "expected_techniques": ["T1486"],
+      "difficulty": "intermediate"
+    },
+    {
+      "scenario_id": "SS-012",
+      "scenario_type": "single_step",
+      "category": "command_and_control",
+      "description": "DNS tunneling for command and control communication",
+      "query": "Malware uses DNS queries and responses to establish a covert command and control channel by encoding data in DNS TXT records",
+      "expected_techniques": ["T1071.004"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "SS-013",
+      "scenario_type": "single_step",
+      "category": "initial_access",
+      "description": "Drive-by compromise through watering hole attack",
+      "query": "Attacker compromises a frequently visited website to deliver exploits targeting browser vulnerabilities when employees visit the site",
+      "expected_techniques": ["T1189"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "SS-014",
+      "scenario_type": "single_step",
+      "category": "execution",
+      "description": "Windows Management Instrumentation command execution",
+      "query": "Attacker uses WMI to remotely execute commands and scripts on target Windows systems through the WMI service",
+      "expected_techniques": ["T1047"],
+      "difficulty": "intermediate"
+    },
+    {
+      "scenario_id": "SS-015",
+      "scenario_type": "single_step",
+      "category": "defense_evasion",
+      "description": "Obfuscated script execution with Base64 encoding",
+      "query": "Attacker encodes malicious PowerShell script in Base64 and executes it using the -EncodedCommand parameter to evade string-based detection",
+      "expected_techniques": ["T1027"],
+      "difficulty": "basic"
+    },
+    {
+      "scenario_id": "SS-016",
+      "scenario_type": "single_step",
+      "category": "credential_access",
+      "description": "Brute force password attack against RDP service",
+      "query": "Attacker launches automated brute force password guessing attack against exposed Remote Desktop Protocol service to gain valid credentials",
+      "expected_techniques": ["T1110"],
+      "difficulty": "basic"
+    },
+    {
+      "scenario_id": "SS-017",
+      "scenario_type": "single_step",
+      "category": "persistence",
+      "description": "Scheduled task creation for persistent execution",
+      "query": "Attacker creates a Windows scheduled task that executes a malicious payload every hour to maintain persistent access to the compromised system",
+      "expected_techniques": ["T1053.005"],
+      "difficulty": "basic"
+    },
+    {
+      "scenario_id": "SS-018",
+      "scenario_type": "single_step",
+      "category": "discovery",
+      "description": "Network service scanning for open ports",
+      "query": "Attacker performs TCP port scanning across the internal network subnet to identify running services and potential targets for exploitation",
+      "expected_techniques": ["T1046"],
+      "difficulty": "basic"
+    },
+    {
+      "scenario_id": "MS-001",
+      "scenario_type": "multi_step",
+      "category": "apt_campaign",
+      "description": "APT phishing campaign targeting enterprise network with credential harvesting and lateral movement",
+      "query": "Advanced persistent threat group sends spearphishing emails with malicious attachments to gain initial access. After the user opens the attachment, PowerShell is executed to download a second-stage payload. The attacker then dumps credentials from LSASS memory and uses stolen credentials to move laterally via SMB to the domain controller.",
+      "expected_techniques": ["T1566.001", "T1059.001", "T1003.001", "T1021.002"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-002",
+      "scenario_type": "multi_step",
+      "category": "ransomware",
+      "description": "Full ransomware attack chain from initial access to encryption",
+      "query": "Ransomware operator gains initial access through a phishing link, executes PowerShell to disable Windows Defender, escalates privileges by exploiting a local vulnerability, enumerates all network shares, and encrypts files across the network using AES-256 before dropping a ransom note.",
+      "expected_techniques": ["T1566.002", "T1059.001", "T1562.001", "T1083", "T1486"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-003",
+      "scenario_type": "multi_step",
+      "category": "data_theft",
+      "description": "Corporate espionage with data staging and exfiltration",
+      "query": "Insider threat actor uses valid credentials to access sensitive file shares, collects and stages documents in a temporary directory, compresses the data into encrypted archives, and exfiltrates the archives over HTTPS to a personal cloud storage account during business hours.",
+      "expected_techniques": ["T1078", "T1039", "T1560.001", "T1567.002"],
+      "difficulty": "intermediate"
+    },
+    {
+      "scenario_id": "MS-004",
+      "scenario_type": "multi_step",
+      "category": "supply_chain",
+      "description": "Supply chain compromise through trojanized software update",
+      "query": "Attacker compromises a software vendor's build environment and inserts a backdoor into a legitimate software update package. When the update is distributed to customers, the backdoor establishes persistence via a scheduled task and creates a reverse shell connection to the attacker's C2 server.",
+      "expected_techniques": ["T1195.002", "T1053.005", "T1571"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-005",
+      "scenario_type": "multi_step",
+      "category": "apt_campaign",
+      "description": "Living-off-the-land binaries for stealthy attack chain",
+      "query": "Attacker gains initial access through a compromised valid account. Uses certutil to download additional tools from a remote server, then uses mshta to execute a malicious HTA file. The attacker modifies the Windows Registry for persistence and uses WMIC for remote execution on other systems in the network.",
+      "expected_techniques": ["T1078", "T1105", "T1218.005", "T1547.001", "T1047"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-006",
+      "scenario_type": "multi_step",
+      "category": "credential_theft",
+      "description": "Kerberoasting attack chain for domain compromise",
+      "query": "Attacker compromises a standard domain user account, performs LDAP enumeration to identify service accounts with SPNs, requests Kerberos service tickets (TGS) for those accounts, extracts the tickets offline for password cracking, and uses the cracked service account credentials to access high-value database servers.",
+      "expected_techniques": ["T1078", "T1087.002", "T1558.003", "T1021.002"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-007",
+      "scenario_type": "multi_step",
+      "category": "cloud_attack",
+      "description": "Cloud infrastructure compromise and data exfiltration",
+      "query": "Attacker uses stolen API keys to access cloud management console. They enumerate cloud storage buckets and virtual machines, create a new privileged IAM user for persistence, snapshot sensitive databases, and transfer the snapshots to an attacker-controlled cloud account.",
+      "expected_techniques": ["T1078.004", "T1580", "T1136.003", "T1537"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-008",
+      "scenario_type": "multi_step",
+      "category": "apt_campaign",
+      "description": "Watering hole to domain admin compromise",
+      "query": "APT group compromises a popular industry website visited by the target organization. When employees visit the site, a browser exploit delivers a payload that establishes persistence through a startup folder shortcut. The attacker discovers domain trusts, performs pass-the-hash attacks, and eventually compromises the domain admin account.",
+      "expected_techniques": ["T1189", "T1547.001", "T1482", "T1550.002"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-009",
+      "scenario_type": "multi_step",
+      "category": "destructive",
+      "description": "Wiper malware deployment after network compromise",
+      "query": "Attacker exploits public-facing web application to gain initial access. Uses cmd.exe to disable system recovery options, deletes volume shadow copies, stops critical Windows services, and deploys a wiper that overwrites the MBR and all data on local and network drives.",
+      "expected_techniques": ["T1190", "T1059.003", "T1490", "T1489", "T1561.002"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-010",
+      "scenario_type": "multi_step",
+      "category": "data_theft",
+      "description": "Email collection and exfiltration from Exchange server",
+      "query": "Attacker compromises an Exchange administrator account through password spraying. Uses Exchange management shell to search mailboxes for sensitive keywords, exports matching emails to PST files, compresses and encrypts the export, then exfiltrates via DNS tunneling to avoid network monitoring.",
+      "expected_techniques": ["T1110.003", "T1114.002", "T1560.001", "T1048.001"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-011",
+      "scenario_type": "multi_step",
+      "category": "ransomware",
+      "description": "Double extortion ransomware with data leak threat",
+      "query": "Ransomware group gains access via exposed RDP service with weak credentials. They deploy Cobalt Strike beacon for C2, use BloodHound to map Active Directory, escalate to domain admin, exfiltrate sensitive data to a leak site, then deploy ransomware across the domain via Group Policy.",
+      "expected_techniques": ["T1133", "T1219", "T1087.002", "T1567", "T1486"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-012",
+      "scenario_type": "multi_step",
+      "category": "apt_campaign",
+      "description": "Firmware implant persistence and long-term espionage",
+      "query": "Nation-state attacker gains physical access to target systems, installs UEFI firmware implant for persistence that survives OS reinstallation, establishes encrypted C2 channel over legitimate web services, performs continuous keylogging and screen capture, and periodically exfiltrates intelligence data.",
+      "expected_techniques": ["T1542.001", "T1071.001", "T1056.001", "T1113", "T1041"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-013",
+      "scenario_type": "multi_step",
+      "category": "privilege_escalation",
+      "description": "Token impersonation and privilege escalation chain",
+      "query": "Attacker exploits web application vulnerability to gain limited shell access. Identifies running processes with elevated tokens, uses token impersonation to assume SYSTEM privileges, creates a new local administrator account, and installs a Windows service for persistent backdoor access.",
+      "expected_techniques": ["T1190", "T1134.001", "T1136.001", "T1543.003"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-014",
+      "scenario_type": "multi_step",
+      "category": "lateral_movement",
+      "description": "Remote desktop chaining across network segments",
+      "query": "Attacker compromises a VPN gateway using valid stolen credentials. From the initial VPN endpoint, uses RDP to access a jump server in the DMZ, then pivots through the jump server to reach internal workstations, and finally accesses the database server segment through additional RDP sessions.",
+      "expected_techniques": ["T1133", "T1021.001", "T1090", "T1021.001"],
+      "difficulty": "intermediate"
+    },
+    {
+      "scenario_id": "MS-015",
+      "scenario_type": "multi_step",
+      "category": "defense_evasion",
+      "description": "Rootkit installation with anti-forensics capabilities",
+      "query": "After gaining kernel-level access, attacker installs a rootkit that hooks system calls to hide malicious processes, clears Windows Event logs and USN journal, timestomps created malicious files to blend with legitimate system files, and disables security monitoring tools.",
+      "expected_techniques": ["T1014", "T1070.001", "T1070.006", "T1562.001"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-016",
+      "scenario_type": "multi_step",
+      "category": "apt_campaign",
+      "description": "Targeted attack on industrial control systems",
+      "query": "APT group sends spearphishing emails to ICS engineers. After compromising engineering workstations, they discover OPC servers on the OT network, transfer custom ICS malware through a dual-homed system, and manipulate programmable logic controllers to cause physical damage.",
+      "expected_techniques": ["T1566.001", "T1018", "T1021.002", "T1565.001"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-017",
+      "scenario_type": "multi_step",
+      "category": "credential_theft",
+      "description": "Golden ticket attack for persistent domain access",
+      "query": "Attacker compromises domain controller, extracts the KRBTGT account hash using DCSync, forges a Kerberos golden ticket that grants unlimited domain access, uses the ticket to access any system in the forest, and creates additional backdoor admin accounts.",
+      "expected_techniques": ["T1003.006", "T1558.001", "T1550.003", "T1136.002"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-018",
+      "scenario_type": "multi_step",
+      "category": "cloud_attack",
+      "description": "Container escape and cloud lateral movement",
+      "query": "Attacker exploits vulnerable web application running in a container, escapes the container to access the host system, discovers cloud metadata service credentials, uses those credentials to enumerate other cloud resources, and pivots to production databases.",
+      "expected_techniques": ["T1190", "T1611", "T1552.005", "T1580", "T1078.004"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-019",
+      "scenario_type": "multi_step",
+      "category": "data_theft",
+      "description": "Insider threat with USB exfiltration",
+      "query": "Malicious insider with legitimate access to classified documents uses PowerShell to search for sensitive files matching specific keywords, stages them in a hidden directory, disables USB device logging, and copies the data to an encrypted USB drive.",
+      "expected_techniques": ["T1083", "T1074.001", "T1562.001", "T1052.001"],
+      "difficulty": "intermediate"
+    },
+    {
+      "scenario_id": "MS-020",
+      "scenario_type": "multi_step",
+      "category": "apt_campaign",
+      "description": "Browser extension compromise for credential harvesting",
+      "query": "Attacker publishes a malicious browser extension that appears to be a legitimate productivity tool. Once installed by the victim, the extension captures all form submissions including login credentials, injects additional JavaScript into banking sites, and exfiltrates data to a C2 server using websockets.",
+      "expected_techniques": ["T1176", "T1056.004", "T1185", "T1071.001"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-021",
+      "scenario_type": "multi_step",
+      "category": "ransomware",
+      "description": "Ransomware deployment via managed service provider",
+      "query": "Attacker compromises a managed service provider's remote management tool credentials. Uses the RMM tool to push a malicious script to all managed client systems, disables endpoint protection across managed environments, and deploys ransomware simultaneously to multiple organizations.",
+      "expected_techniques": ["T1199", "T1072", "T1562.001", "T1486"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-022",
+      "scenario_type": "multi_step",
+      "category": "lateral_movement",
+      "description": "WinRM lateral movement with Pass-the-Hash",
+      "query": "Attacker uses Mimikatz to extract NTLM hashes from compromised workstation. Performs Pass-the-Hash attack to authenticate to WinRM service on remote systems, executes reconnaissance commands, and deploys a persistent backdoor on each accessed system.",
+      "expected_techniques": ["T1003.001", "T1550.002", "T1021.006", "T1547.001"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-023",
+      "scenario_type": "multi_step",
+      "category": "defense_evasion",
+      "description": "Living-off-the-land binary proxy execution chain",
+      "query": "Attacker uses mshta.exe to execute an HTA file that downloads a payload, uses rundll32.exe to load the payload DLL, injects into a trusted process using process hollowing, and communicates with C2 over port 443 to blend with legitimate HTTPS traffic.",
+      "expected_techniques": ["T1218.005", "T1218.011", "T1055.012", "T1071.001"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-024",
+      "scenario_type": "multi_step",
+      "category": "apt_campaign",
+      "description": "DLL search order hijacking for persistence and evasion",
+      "query": "After initial compromise through a malicious email attachment, attacker identifies an application with a DLL search order vulnerability. Places a malicious DLL in the application's directory, sets up the DLL to load each time the application starts, and uses the trusted application's network access to communicate with C2.",
+      "expected_techniques": ["T1566.001", "T1574.001", "T1036.005", "T1071.001"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-025",
+      "scenario_type": "multi_step",
+      "category": "data_theft",
+      "description": "Database compromise and record exfiltration",
+      "query": "Attacker exploits SQL injection vulnerability in a web application to execute arbitrary SQL commands. Enumerates database schema and tables, extracts customer PII and financial records, stages the data in a web-accessible directory, and downloads it over HTTPS.",
+      "expected_techniques": ["T1190", "T1505.001", "T1213", "T1041"],
+      "difficulty": "intermediate"
+    },
+    {
+      "scenario_id": "MS-026",
+      "scenario_type": "multi_step",
+      "category": "credential_theft",
+      "description": "NTLM relay attack for privilege escalation",
+      "query": "Attacker sets up a rogue SMB server on the network, uses LLMNR/NBT-NS poisoning to capture NTLM authentication requests, relays the captured NTLM hashes to a target server to authenticate as the victim, and creates a new privileged domain account.",
+      "expected_techniques": ["T1557.001", "T1040", "T1550.002", "T1136.002"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-027",
+      "scenario_type": "multi_step",
+      "category": "apt_campaign",
+      "description": "SaaS application compromise and OAuth token abuse",
+      "query": "Attacker sends phishing email that directs victim to authorize a malicious OAuth application. The application gains access to the victim's cloud email and documents, enumerates organizational contacts, and sends internal phishing emails from the compromised account to spread access across the organization.",
+      "expected_techniques": ["T1566.002", "T1550.001", "T1114.002", "T1534"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-028",
+      "scenario_type": "multi_step",
+      "category": "destructive",
+      "description": "Coordinated denial of service with data destruction",
+      "query": "Attacker launches a DDoS attack against the target's external services as a distraction. While the security team focuses on DDoS mitigation, the attacker uses previously planted backdoor to access internal systems, deletes database backups, and corrupts primary database records.",
+      "expected_techniques": ["T1498", "T1133", "T1485", "T1565.001"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-029",
+      "scenario_type": "multi_step",
+      "category": "lateral_movement",
+      "description": "PowerShell remoting across segmented network",
+      "query": "Attacker compromises a dual-homed system that bridges two network segments. Uses PowerShell Remoting (WinRM) to access systems on the restricted segment, performs network enumeration of the new segment, identifies and compromises a domain controller, and establishes a reverse SSH tunnel for persistent access.",
+      "expected_techniques": ["T1021.006", "T1018", "T1003.003", "T1572"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-030",
+      "scenario_type": "multi_step",
+      "category": "supply_chain",
+      "description": "Open-source library poisoning and downstream exploitation",
+      "query": "Attacker creates a typosquatting package on a public package registry. When developers install the malicious package, it runs a post-install script that adds a backdoor to the build environment, injects malicious code into compiled applications, and reports installed systems back to the C2.",
+      "expected_techniques": ["T1195.001", "T1059.006", "T1554", "T1041"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-031",
+      "scenario_type": "multi_step",
+      "category": "apt_campaign",
+      "description": "Zero-day exploitation with custom implant deployment",
+      "query": "Nation-state attacker uses a zero-day vulnerability in a VPN appliance for initial access. Deploys a memory-only implant that avoids touching disk, uses DNS over HTTPS for C2 communication, harvests credentials from all connected VPN users, and maintains persistence through firmware modification.",
+      "expected_techniques": ["T1190", "T1620", "T1071.004", "T1556", "T1542.001"],
+      "difficulty": "advanced"
+    },
+    {
+      "scenario_id": "MS-032",
+      "scenario_type": "multi_step",
+      "category": "cloud_attack",
+      "description": "Cloud account takeover and crypto-mining deployment",
+      "query": "Attacker compromises cloud admin credentials through credential stuffing attack. Modifies security group rules to allow inbound connections, deploys cryptocurrency mining containers across all available compute instances, creates additional API keys for persistence, and sets up billing alerts suppression to avoid detection.",
+      "expected_techniques": ["T1110.004", "T1562.007", "T1496", "T1098"],
+      "difficulty": "advanced"
+    }
+  ]
+}

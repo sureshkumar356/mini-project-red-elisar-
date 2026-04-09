@@ -1,0 +1,303 @@
+{
+    "T1566": {
+        "mitigation_id": "M1049",
+        "name": "Antivirus/Antimalware",
+        "description": "Deploy email gateway filtering, sandboxing of attachments, and user security awareness training to detect and block phishing attempts.",
+        "nist_controls": [
+            "SI-3",
+            "SI-8",
+            "AT-2"
+        ]
+    },
+    "T1566.001": {
+        "mitigation_id": "M1049",
+        "name": "Antivirus/Antimalware + Email Filtering",
+        "description": "Block executable attachments at the email gateway. Enable macro-disabled policies in Office. Sandbox suspicious attachments before delivery.",
+        "nist_controls": [
+            "SI-3",
+            "SI-8",
+            "AT-2",
+            "CM-7"
+        ]
+    },
+    "T1566.002": {
+        "mitigation_id": "M1021",
+        "name": "Restrict Web-Based Content",
+        "description": "Implement URL filtering and web proxies to block known malicious domains. Train users to verify links before clicking.",
+        "nist_controls": [
+            "SC-7",
+            "SI-3",
+            "AT-2"
+        ]
+    },
+    "T1059": {
+        "mitigation_id": "M1042",
+        "name": "Disable or Remove Feature or Program",
+        "description": "Restrict PowerShell execution policies, disable Windows Script Host, apply application whitelisting (AppLocker/WDAC) to prevent unauthorized script execution.",
+        "nist_controls": [
+            "CM-7",
+            "CM-8",
+            "SI-7"
+        ]
+    },
+    "T1059.001": {
+        "mitigation_id": "M1042",
+        "name": "PowerShell Restriction",
+        "description": "Enable PowerShell Constrained Language Mode, enforce script signing, log all PowerShell activity via ScriptBlock logging and Module logging.",
+        "nist_controls": [
+            "CM-7",
+            "AU-2",
+            "SI-7"
+        ]
+    },
+    "T1053": {
+        "mitigation_id": "M1028",
+        "name": "Operating System Configuration",
+        "description": "Restrict scheduled task creation to privileged users. Monitor Task Scheduler for newly created or modified tasks. Audit schtasks.exe usage.",
+        "nist_controls": [
+            "CM-6",
+            "AC-6",
+            "AU-2"
+        ]
+    },
+    "T1078": {
+        "mitigation_id": "M1032",
+        "name": "Multi-factor Authentication",
+        "description": "Enforce MFA for all remote access and privileged accounts. Monitor for anomalous login patterns, impossible travel, and credential stuffing.",
+        "nist_controls": [
+            "IA-2",
+            "IA-5",
+            "AC-7"
+        ]
+    },
+    "T1190": {
+        "mitigation_id": "M1051",
+        "name": "Update Software",
+        "description": "Apply security patches promptly, especially for internet-facing applications. Deploy WAF rules. Conduct regular vulnerability scanning and penetration testing.",
+        "nist_controls": [
+            "SI-2",
+            "RA-5",
+            "SC-7"
+        ]
+    },
+    "T1133": {
+        "mitigation_id": "M1035",
+        "name": "Limit Access to Resource Over Network",
+        "description": "Restrict RDP and VPN access to authorized users. Use network-level authentication (NLA). Implement IP whitelisting and VPN with MFA.",
+        "nist_controls": [
+            "AC-3",
+            "AC-17",
+            "SC-7"
+        ]
+    },
+    "T1021": {
+        "mitigation_id": "M1032",
+        "name": "Multi-factor Authentication",
+        "description": "Enforce MFA for remote services (SMB, RDP, WinRM). Restrict lateral movement paths using network segmentation and privileged access workstations.",
+        "nist_controls": [
+            "IA-2",
+            "SC-7",
+            "AC-4"
+        ]
+    },
+    "T1486": {
+        "mitigation_id": "M1053",
+        "name": "Data Backup",
+        "description": "Maintain regular offline backups. Test restoration procedures. Implement volume shadow copy protection and endpoint detection for encryption behavior.",
+        "nist_controls": [
+            "CP-9",
+            "CP-10",
+            "SI-4"
+        ]
+    },
+    "T1055": {
+        "mitigation_id": "M1040",
+        "name": "Behavior Prevention on Endpoint",
+        "description": "Deploy EDR with memory protection capabilities. Enable Windows Credential Guard. Monitor for suspicious process injection APIs (WriteProcessMemory, NtMapViewOfSection).",
+        "nist_controls": [
+            "SI-4",
+            "SI-7",
+            "SC-39"
+        ]
+    },
+    "T1003": {
+        "mitigation_id": "M1043",
+        "name": "Credential Access Protection",
+        "description": "Enable Windows Credential Guard and LSASS protection (RunAsPPL). Restrict debug privileges. Monitor for LSASS memory access attempts.",
+        "nist_controls": [
+            "IA-5",
+            "SC-28",
+            "SI-4"
+        ]
+    },
+    "T1003.001": {
+        "mitigation_id": "M1043",
+        "name": "LSASS Memory Protection",
+        "description": "Enable Credential Guard and configure LSASS as Protected Process Light. Monitor for tools like Mimikatz, ProcDump accessing LSASS memory.",
+        "nist_controls": [
+            "IA-5",
+            "SC-28",
+            "SI-4",
+            "CM-6"
+        ]
+    },
+    "T1047": {
+        "mitigation_id": "M1026",
+        "name": "Privileged Account Management",
+        "description": "Restrict WMI access to authorized administrators. Monitor WMI event subscriptions and remote WMI activity. Disable DCOM if not required.",
+        "nist_controls": [
+            "AC-6",
+            "AU-2",
+            "CM-7"
+        ]
+    },
+    "T1548": {
+        "mitigation_id": "M1047",
+        "name": "Audit",
+        "description": "Enable enhanced auditing for privilege escalation events. Monitor for UAC bypass techniques, sudo misconfigurations, and SUID/SGID abuse.",
+        "nist_controls": [
+            "AU-2",
+            "AC-6",
+            "CM-6"
+        ]
+    },
+    "T1562": {
+        "mitigation_id": "M1022",
+        "name": "Restrict File and Directory Permissions",
+        "description": "Protect security tool configurations and log files with strict ACLs. Monitor for tampering with AV/EDR services, Event Log, and audit policies.",
+        "nist_controls": [
+            "AC-3",
+            "AU-9",
+            "SI-4"
+        ]
+    },
+    "T1071": {
+        "mitigation_id": "M1031",
+        "name": "Network Intrusion Prevention",
+        "description": "Deploy network IDS/IPS to detect C2 traffic patterns. Monitor for unusual DNS queries, beaconing behavior, and encrypted traffic to suspicious destinations.",
+        "nist_controls": [
+            "SI-4",
+            "SC-7",
+            "SC-8"
+        ]
+    },
+    "T1048": {
+        "mitigation_id": "M1031",
+        "name": "Network Intrusion Prevention",
+        "description": "Monitor for unusual outbound data transfers. Deploy DLP solutions. Restrict outbound connections to approved services. Inspect encrypted traffic at proxy.",
+        "nist_controls": [
+            "SC-7",
+            "SI-4",
+            "AC-4"
+        ]
+    },
+    "T1105": {
+        "mitigation_id": "M1031",
+        "name": "Network Intrusion Prevention",
+        "description": "Block known malicious file transfer protocols and domains. Monitor for downloads from uncommon sources. Deploy application whitelisting.",
+        "nist_controls": [
+            "SC-7",
+            "SI-3",
+            "CM-7"
+        ]
+    },
+    "T1547": {
+        "mitigation_id": "M1038",
+        "name": "Execution Prevention",
+        "description": "Monitor registry Run keys, startup folders, and boot configuration for unauthorized modifications. Use application whitelisting to prevent execution from startup locations.",
+        "nist_controls": [
+            "CM-6",
+            "SI-7",
+            "AU-2"
+        ]
+    },
+    "T1112": {
+        "mitigation_id": "M1024",
+        "name": "Restrict Registry Permissions",
+        "description": "Restrict write access to critical registry keys. Enable registry auditing. Monitor for modifications to Run/RunOnce keys, services, and security settings.",
+        "nist_controls": [
+            "AC-3",
+            "AU-2",
+            "CM-6"
+        ]
+    },
+    "T1027": {
+        "mitigation_id": "M1049",
+        "name": "Antivirus/Antimalware",
+        "description": "Deploy behavioral analysis and sandboxing solutions. Monitor for encoded/compressed executables, unusual file types, and packed binaries.",
+        "nist_controls": [
+            "SI-3",
+            "SI-4",
+            "SC-44"
+        ]
+    },
+    "T1036": {
+        "mitigation_id": "M1045",
+        "name": "Code Signing",
+        "description": "Enforce code signing requirements. Monitor for executables masquerading as legitimate system binaries. Verify digital signatures of running processes.",
+        "nist_controls": [
+            "SI-7",
+            "CM-7",
+            "AU-2"
+        ]
+    },
+    "T1070": {
+        "mitigation_id": "M1029",
+        "name": "Remote Data Storage",
+        "description": "Forward logs to a centralized SIEM in real-time. Protect log integrity with write-once storage. Monitor for Event Log clearing and timestomping activity.",
+        "nist_controls": [
+            "AU-9",
+            "AU-6",
+            "SI-4"
+        ]
+    },
+    "T1530": {
+        "mitigation_id": "M1032",
+        "name": "Multi-factor Authentication + Cloud ACLs",
+        "description": "Enforce strict IAM policies on cloud storage. Enable access logging and alerting. Implement least-privilege bucket policies and encryption at rest.",
+        "nist_controls": [
+            "AC-3",
+            "AC-6",
+            "SC-28"
+        ]
+    },
+    "T1195": {
+        "mitigation_id": "M1051",
+        "name": "Update Software",
+        "description": "Verify software integrity via hash comparison. Use trusted software repositories. Monitor for unexpected changes in build pipelines and update mechanisms.",
+        "nist_controls": [
+            "SI-7",
+            "SA-12",
+            "CM-14"
+        ]
+    },
+    "T1098": {
+        "mitigation_id": "M1032",
+        "name": "Multi-factor Authentication",
+        "description": "Monitor for unexpected account modifications, especially addition of credentials, group membership changes, and permission escalations in Active Directory.",
+        "nist_controls": [
+            "AC-2",
+            "AC-6",
+            "AU-2"
+        ]
+    },
+    "T1082": {
+        "mitigation_id": "M1000",
+        "name": "Detection-Focused Mitigation",
+        "description": "This technique is difficult to prevent. Focus on detection: monitor for enumeration commands (systeminfo, hostname, whoami) executed in rapid succession.",
+        "nist_controls": [
+            "SI-4",
+            "AU-2"
+        ]
+    },
+    "T1018": {
+        "mitigation_id": "M1031",
+        "name": "Network Intrusion Prevention",
+        "description": "Monitor for network scanning activity (port scans, ping sweeps). Restrict internal network visibility with segmentation. Alert on unusual SMB/LDAP enumeration.",
+        "nist_controls": [
+            "SC-7",
+            "SI-4",
+            "AC-4"
+        ]
+    }
+}
