@@ -1,121 +1,50 @@
-RED ELISAR PROMPT AND COMMAND CHECKLIST
+RED ELISAR OPTION-WISE SCENARIO CHECKLIST
 
-Purpose:
-Use this file as a ready-to-run checklist for validating the interactive Red Agent flow and report generation.
-
-Prerequisites:
-1. Start vulnerable app:
-   python app.py
-
-2. Activate virtual environment (project root):
-   (Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned) ; (& "c:\mini project\.venv\Scripts\Activate.ps1")
-
-3. Move to project root:
-   Set-Location "c:\mini project"
+OPTION 1 - FULL WEB VULNERABILITY SCAN
+Scenarios to test (at least 5):
+1. Baseline scan on http://127.0.0.1:5000 and verify all report files are generated.
+2. Exposed resource detection for /.env, /backup, /admin, /api/users.
+3. SQL Injection detection and primary MITRE mapping to T1190.
+4. Header and CORS weakness detection with relevant ATT&CK mapping.
+5. Form discovery plus form-driven SQLi/XSS findings included in final report.
+6. Duplicate merge check for same endpoint + same vulnerability type.
 
 
-CORE RUN COMMAND:
-Run interactive CLI:
-  "c:/mini project/.venv/Scripts/python.exe" run.py
+OPTION 2 - GENERATE ATTACK SCENARIO (NO URL)
+Scenarios to test (at least 5):
+1. SQL injection focused scenario narrative.
+2. Credential exposure scenario (.env / backup leakage chain).
+3. CORS plus missing-security-header scenario.
+4. XSS plus session hijack style scenario.
+5. Mixed web attack path (initial access -> execution -> data exposure).
+6. Validate chain readability and logical progression.
 
 
-OPTION-WISE PROMPT CHECKS
-
-Option 1: Full Web Vulnerability Scan
-Menu input sequence:
-1
-http://127.0.0.1:5000
-5
-
-One-liner automation:
-@("1","http://127.0.0.1:5000","5") | & "c:/mini project/.venv/Scripts/python.exe" run.py
-
-Expected outputs:
-- interactive_web_scan_*.json
-- interactive_web_scan_*.md
-- vuln_report_*.json
-- vuln_report_*.md
-- scan_report_*.txt
-
-Quick latest report check:
-$f = Get-ChildItem ".\red_agent\output" -Filter "scan_report_*.txt" | Sort-Object LastWriteTime -Descending | Select-Object -First 1 -ExpandProperty FullName
-Get-Content $f -TotalCount 120
+OPTION 3 - VALIDATE SCENARIO ON TARGET URL
+Scenarios to test (at least 5):
+1. Validate SQLi scenario against /search and /login.
+2. Validate exposed-file scenario on /.env and /backup.
+3. Validate CORS scenario using target response behavior.
+4. Validate auth bypass scenario on login flow.
+5. Validate reflected XSS scenario on discovered input endpoints.
+6. Confirm probe evidence and recommendations are present in reports.
 
 
-Option 2: Generate Attack Scenario (No URL)
-Menu input sequence:
-2
-Example scenario: attacker targets exposed login and input parameters in a web app
-Default environment: press Enter
-Default chain length: press Enter
-5
-
-Expected outputs:
-- attack_chain_*.json
-- attack_chain_report_*.md
-- report_scenario_*.txt
+OPTION 4 - ANALYZE SCENARIO ONLY
+Scenarios to test (at least 5):
+1. Credential theft to exfiltration scenario analysis.
+2. SQLi to database extraction scenario analysis.
+3. XSS to credential/session abuse scenario analysis.
+4. Open redirect plus phishing-assisted access scenario analysis.
+5. Defense-evasion style scenario with weak headers and debug leaks.
+6. Confirm technique chain is concise, realistic, and context-mapped.
 
 
-Option 3: Validate Scenario on Target URL
-Menu input sequence:
-3
-Example scenario: SQL injection attempt on search endpoint and login bypass
-http://127.0.0.1:5000
-5
-
-Expected outputs:
-- scenario_url_validation_*.json
-- scenario_url_validation_*.md
-- vuln_report_*.json
-- vuln_report_*.md
-- report_validation_*.txt
-
-
-Option 4: Analyze Scenario Only
-Menu input sequence:
-4
-Example scenario: attacker attempts data exposure via public files and weak headers
-5
-
-Expected outputs:
-- attack_chain_*.json
-- attack_chain_report_*.md
-- report_analysis_*.txt
-
-
-VALIDATION COMMANDS FOR QUALITY
-
-1. Count vulnerabilities in latest scan report:
-$f = Get-ChildItem ".\red_agent\output" -Filter "scan_report_*.txt" | Sort-Object LastWriteTime -Descending | Select-Object -First 1 -ExpandProperty FullName
-($content = Get-Content $f) | Select-String -Pattern "^\[VULNERABILITY #\d+\]" | Measure-Object
-
-2. Check SQL mapping quality:
-$content | Select-String -Pattern "Type: SQL Injection|Technique ID:" -Context 0,1
-
-3. Check chain length per vulnerability section (manual quick check):
-Look for numbered steps under ATTACK CHAIN and verify each chain is 5 to 6 steps.
-
-4. Check that forms were discovered:
-$j = Get-ChildItem ".\red_agent\output" -Filter "interactive_web_scan_*.json" | Sort-Object LastWriteTime -Descending | Select-Object -First 1 -ExpandProperty FullName
-(Get-Content $j -Raw | ConvertFrom-Json).discovery.forms | Select-Object -First 10
-
-
-PROMPT TEMPLATES FOR ITERATIVE TESTING
-
-Prompt template: SQL injection focused
-"Scan for SQL injection in search/login, map to MITRE with strict context, keep realistic web tools only."
-
-Prompt template: data exposure focused
-"Analyze exposed .env or backup resources and generate context-correct ATT&CK chain with no malware noise."
-
-Prompt template: CORS and headers focused
-"Validate CORS and missing security headers, map with primary technique accuracy and compact logical chain."
-
-
-PASS CRITERIA
-
-1. Duplicate endpoint and same vulnerability type are merged.
-2. Primary technique is context-correct (for example SQL Injection to T1190, .env exposure to T1552).
-3. Chain steps are 5 to 6, logical, and non-random.
-4. Tool list is realistic and web-relevant.
-5. Form-driven vulnerabilities are included in final report.
+OPTION 5 - EXIT
+Scenarios to test (at least 5):
+1. Exit immediately after app launch.
+2. Exit after completing Option 1.
+3. Exit after completing Option 2.
+4. Exit after completing Option 3.
+5. Exit after completing Option 4.
+6. Confirm no crash and clean CLI termination every time.
