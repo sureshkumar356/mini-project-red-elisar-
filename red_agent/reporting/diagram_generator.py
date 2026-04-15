@@ -5,8 +5,8 @@ Generates the runtime execution flow diagram automatically on every run.
 Output: diagrams/red_elisar_flow.md  (Mermaid flowchart TD)
 
 Usage:
-    python diagram_generator.py          # generate diagram only
-    from diagram_generator import generate_diagram  # call from other modules
+    python reporting/diagram_generator.py          # generate diagram only
+    from reporting.diagram_generator import generate_diagram  # call from other modules
 """
 
 import logging

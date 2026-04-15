@@ -9,11 +9,11 @@ import requests
 import jsonschema
 
 import config
-from vector_store_faiss import FAISSVectorStore
-from input_sanitizer import sanitize_scenario
-from mitigation_mapper import get_mitigation
-from exploit_tool_mapper import get_tools
-from llm_client import groq_chat_json, mistral_chat_json
+from .vector_store_faiss import FAISSVectorStore
+from vuln_checks.input_sanitizer import sanitize_scenario
+from mappings.mitigation_mapper import get_mitigation
+from mappings.exploit_tool_mapper import get_tools
+from llm.llm_client import groq_chat_json, mistral_chat_json
 
 logger = logging.getLogger("red_elisar.rag_engine")
 

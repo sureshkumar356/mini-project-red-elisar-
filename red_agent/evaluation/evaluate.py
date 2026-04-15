@@ -40,8 +40,8 @@ from typing import Optional
 from datetime import datetime, timezone
 
 import config
-from vector_store_faiss import FAISSVectorStore
-from attack_chain_generator import AttackChainGenerator, PREDEFINED_SCENARIOS
+from rag.vector_store_faiss import FAISSVectorStore
+from llm.attack_chain_generator import AttackChainGenerator, PREDEFINED_SCENARIOS
 
 logger = logging.getLogger("red_elisar.evaluate")
 

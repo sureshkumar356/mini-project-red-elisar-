@@ -23,13 +23,13 @@ if str(_THIS_DIR) not in sys.path:
     sys.path.insert(0, str(_THIS_DIR))
 
 import config
-from mitre_parser import MITREParser
-from vector_store_faiss import FAISSVectorStore
-from rag_engine import RAGEngine
-from attack_chain_generator import AttackChainGenerator, PREDEFINED_SCENARIOS
-from chunking import chunk_techniques
-from diagram_generator import generate_diagram
-from compare_rag_vs_baselines import run_comparison as run_rag_baseline_comparison
+from rag.mitre_parser import MITREParser
+from rag.vector_store_faiss import FAISSVectorStore
+from rag.rag_engine import RAGEngine
+from llm.attack_chain_generator import AttackChainGenerator, PREDEFINED_SCENARIOS
+from rag.chunking import chunk_techniques
+from reporting.diagram_generator import generate_diagram
+from comparison.compare_rag_vs_baselines import run_comparison as run_rag_baseline_comparison
 
 
 def setup_logging(level: str = None, log_file: bool = True):
@@ -104,7 +104,7 @@ def run_generation(
     # ── Live vulnerability probe (if --target-url given) ───────────
     probe_result = None
     if target_url:
-        from targeted_attack_scanner import detect_attack_type, probe_target
+        from vuln_checks.targeted_attack_scanner import detect_attack_type, probe_target
         attack_type  = detect_attack_type(scenario)
         print(f"\n  [PROBE] Probing {target_url} for [{attack_type.replace('_',' ').title()}]...")
         probe_result = probe_target(target_url, attack_type)
@@ -413,7 +413,7 @@ def main():
 
         elif args.assess_url:
             # ── Autonomous Web Vulnerability Assessment ──────────
-            from web_vuln_agent import WebVulnAgent
+            from vuln_checks.web_vuln_agent import WebVulnAgent
             agent  = WebVulnAgent(force_reindex=args.force_reindex)
             result = agent.assess(args.assess_url, use_llm=not args.no_llm)
             print(f"\n  Markdown report : {result['md_path']}")

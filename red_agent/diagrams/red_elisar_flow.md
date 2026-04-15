@@ -1,6 +1,6 @@
 # Red ELISAR — Runtime Execution Flow
 
-> Auto-generated on 2026-04-07 12:08:56
+> Auto-generated on 2026-04-15 19:30:21
 > Source: `diagram_generator.py`
 
 ## System: RAG-based Offensive Security Agent (Single Query Flow)

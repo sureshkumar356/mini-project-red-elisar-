@@ -41,7 +41,7 @@ import numpy as np
 # ── optional: use project config if available ──────────────────────────────
 try:
     import sys
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     import config as _cfg
     OUTPUT_DIR = _cfg.OUTPUT_DIR
     FIGURES_DIR = _cfg.FIGURES_DIR

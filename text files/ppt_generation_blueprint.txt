@@ -1,0 +1,217 @@
+PPT GENERATION BLUEPRINT
+Project: Red ELISAR - Context-Aware RAG-Driven Vulnerability Mapping
+
+How to use this file:
+Convert each section below into one or more slides. This content is structured to directly populate a technical presentation.
+
+
+SLIDE 1 - TITLE
+Title:
+Red ELISAR: Analyst-Grade Vulnerability Assessment with RAG and MITRE ATT&CK
+
+Subtitle:
+From raw web findings to precise, context-aware attack chains
+
+Presenter details:
+- Name
+- Project / Department
+- Date
+
+
+SLIDE 2 - PROBLEM STATEMENT
+Traditional vulnerability reports are often noisy and difficult to prioritize:
+- Duplicate findings across endpoints
+- Generic or incorrect ATT&CK mapping
+- Tool/data dumps with low practical relevance
+- Weak attack narrative from finding to impact
+
+Project goal:
+Build a system that produces precise, realistic, and actionable ATT&CK-aligned chains from live web vulnerability evidence.
+
+
+SLIDE 3 - OBJECTIVES
+1. Discover vulnerabilities from real web targets.
+2. Map each finding to correct MITRE ATT&CK techniques.
+3. Generate compact logical chains (5 to 6 steps).
+4. Enforce strict context filtering and reduce noise.
+5. Output analyst-friendly reports in JSON, Markdown, and TXT.
+
+
+SLIDE 4 - END-TO-END ARCHITECTURE
+Architecture blocks:
+1. Input Layer
+   - Target URL
+   - Optional scenario prompt
+
+2. Discovery Layer
+   - Route crawl
+   - Link extraction
+   - Form/action/input extraction
+
+3. Scanning Layer
+   - Passive scanner (headers, exposed paths, CORS, SSL)
+   - Live scanner (SQLi, XSS, auth bypass, redirect, cookie flags)
+   - Form active probe (SQLi/XSS payload testing on discovered forms)
+
+4. Normalization Layer
+   - Merge duplicates by endpoint path + vulnerability type
+   - Consolidate evidence strings
+   - Severity normalization
+
+5. Intelligence Layer (RAG + MITRE)
+   - FAISS vector retrieval over MITRE ATT&CK chunks
+   - Contextual filtering
+   - Primary technique enforcement by vulnerability context
+   - Logical tactic flow generation
+
+6. Reporting Layer
+   - interactive_web_scan JSON/MD
+   - vuln_report JSON/MD
+   - human-readable TXT final report
+
+
+SLIDE 5 - RAG MODEL (WHOLE FLOW)
+RAG pipeline used in the project:
+
+Data source:
+- MITRE ATT&CK STIX bundle (enterprise-attack.json)
+
+Preprocessing:
+- Parse ATT&CK techniques, tactics, software/tool relationships
+- Chunk technique content for retrieval
+
+Vectorization and index:
+- FAISSVectorStore
+- persistent index load/build in runtime
+
+Query construction:
+- Vulnerability type + detail + evidence + endpoint context
+- Example query style:
+  MITRE ATT&CK techniques for exposed env file leaking credentials in web application
+
+Retrieval and ranking:
+- Top-k retrieval from FAISS
+- Context overlap scoring
+- Relevance thresholding
+- Eliminate unrelated cloud/phishing/malware vectors unless context requires them
+
+Primary mapping logic:
+- Expected primary technique enforced by vulnerability family
+  - SQL Injection -> T1190
+  - Exposed .env or credentials -> T1552
+  - Missing HTTPS/plain HTTP -> T1048
+  - CORS data exposure context -> T1552
+
+Chain construction:
+- Ordered tactics in lifecycle flow
+- 5 to 6 techniques max
+- Unique and context-related steps
+- Supporting techniques near primary tactic window
+
+Tool curation:
+- Strict web-relevant tools only
+- Fallback web tool set when ATT&CK software is noisy
+
+
+SLIDE 6 - LOGICAL FLOW ENFORCEMENT
+Flow used for chain generation:
+Reconnaissance -> Initial Access -> Execution -> Credential Access -> Discovery -> Lateral Movement -> Collection -> Exfiltration -> Impact
+
+Practical rule:
+- Do not jump randomly across unrelated tactics.
+- Keep progression realistic from observed finding to plausible consequence.
+
+
+SLIDE 7 - VULNERABILITY FINDING COVERAGE
+What the vulnerable app assessment captures:
+- Exposed sensitive resources (.env, backup, admin/API exposures)
+- Missing security headers
+- CORS misconfiguration
+- Information disclosure via headers and errors
+- SQL Injection variants and login bypass
+- Reflected XSS
+- Unencrypted HTTP / weak transport
+- Form-based vulnerabilities through discovered form actions and parameters
+
+
+SLIDE 8 - DEDUPLICATION STRATEGY
+Duplicate control method:
+- Merge key: endpoint path + normalized vulnerability type
+- Ignore query payload differences for same endpoint path
+- Normalize families:
+  - SQL Injection variants -> SQL Injection
+  - XSS variants -> Reflected Cross-Site Scripting (XSS)
+- Merge evidence payloads into one combined evidence section
+
+Outcome:
+- Cleaner report
+- Lower analyst fatigue
+- Better prioritization
+
+
+SLIDE 9 - RESULTS AND COMPARISON
+Comparison dimensions (Before vs After improvements):
+
+1. Mapping precision
+- Before: generic or unrelated technique assignments
+- After: enforced context-correct primary technique
+
+2. Noise level
+- Before: malware/APT-like tool dump
+- After: strict filtering and realistic web tool output
+
+3. Chain quality
+- Before: repetitive and random tactic transitions
+- After: compact 5 to 6 step logical progression
+
+4. Coverage
+- Before: form endpoints discovered but under-utilized
+- After: active form probes add real findings into final merge
+
+5. Redundancy
+- Before: multiple repeated entries for same endpoint/type
+- After: endpoint+type dedup with evidence consolidation
+
+
+SLIDE 10 - SAMPLE OUTPUT SNAPSHOTS (USE ACTUAL REPORTS)
+Recommended artifacts to screenshot:
+- scan_report latest TXT
+- interactive_web_scan latest JSON summary
+- one SQL Injection section showing T1190 primary
+- one exposed credential section showing T1552 primary
+- one merged evidence example for duplicate findings
+
+
+SLIDE 11 - LIMITATIONS
+1. Precision still depends on input evidence quality.
+2. Some ATT&CK techniques can overlap across contexts.
+3. Live scanning coverage depends on reachable routes and app behavior.
+4. Tool naming in ATT&CK may still need manual analyst verification for some cases.
+
+
+SLIDE 12 - FUTURE WORK
+1. Add confidence score per mapping step.
+2. Add CVSS-based prioritization integrated with ATT&CK chain.
+3. Add visual attack graph generation for executive reporting.
+4. Add benchmarking against external scanners for objective precision metrics.
+
+
+SLIDE 13 - CONCLUSION
+Red ELISAR now provides:
+- Accurate primary ATT&CK mapping
+- Context-aware supporting techniques
+- Cleaner non-redundant findings
+- Realistic web-focused tooling
+- Analyst-grade report readability
+
+Final message:
+The system transforms noisy vulnerability data into a practical and defensible attack narrative for security analysis and decision-making.
+
+
+APPENDIX - QUICK DEMO SCRIPT
+1. Start vulnerable app.
+2. Run interactive Option 1 scan.
+3. Open latest scan_report TXT.
+4. Show deduped vulnerabilities.
+5. Show one SQL and one credential-exposure mapping.
+6. Show chain length and flow quality.

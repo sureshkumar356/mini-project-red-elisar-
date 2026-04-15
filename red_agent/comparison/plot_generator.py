@@ -20,6 +20,7 @@ Paper Style:
 
 import json
 import logging
+import sys
 from pathlib import Path
 from typing import Optional
 
@@ -27,6 +28,9 @@ import matplotlib
 matplotlib.use("Agg")  # Non-interactive backend for headless rendering
 import matplotlib.pyplot as plt
 import numpy as np
+
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import config
 

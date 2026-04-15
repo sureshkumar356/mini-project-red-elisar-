@@ -23,18 +23,18 @@ import argparse
 from pathlib import Path
 
 # ── ensure red_agent is importable when run directly ─────────────
-sys.path.insert(0, str(Path(__file__).parent.resolve()))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import config
-from web_recon          import WebReconAgent
-from vuln_scanner       import VulnerabilityScanner
-from live_vuln_checker  import LiveVulnChecker
-from mitre_mapper       import MITREMapper
-from report_generator   import ReportGenerator
-from vector_store_faiss import FAISSVectorStore
-from rag_engine         import RAGEngine
-from mitre_parser       import MITREParser
-from chunking           import chunk_techniques
+from vuln_checks.web_recon import WebReconAgent
+from vuln_checks.vuln_scanner import VulnerabilityScanner
+from vuln_checks.live_vuln_checker import LiveVulnChecker
+from mappings.mitre_mapper import MITREMapper
+from reporting.report_generator import ReportGenerator
+from rag.vector_store_faiss import FAISSVectorStore
+from rag.rag_engine import RAGEngine
+from rag.mitre_parser import MITREParser
+from rag.chunking import chunk_techniques
 
 logger = logging.getLogger("red_elisar.web_vuln_agent")
 

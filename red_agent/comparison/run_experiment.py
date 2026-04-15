@@ -6,14 +6,23 @@ import sys
 import time
 from pathlib import Path
 
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 import config
-from mitre_parser import MITREParser
-from chunking import chunk_techniques
-from vector_store_faiss import FAISSVectorStore
-from baseline_runner import BaselineRunner
-from feedback_loop import FeedbackLoop
-from plot_generator import generate_all_plots, generate_plots_from_file
-from diagram_generator import generate_diagram
+from rag.mitre_parser import MITREParser
+from rag.chunking import chunk_techniques
+from rag.vector_store_faiss import FAISSVectorStore
+try:
+    from .baseline_runner import BaselineRunner
+except ImportError:  # pragma: no cover
+    from baseline_runner import BaselineRunner
+from evaluation.feedback_loop import FeedbackLoop
+try:
+    from .plot_generator import generate_all_plots, generate_plots_from_file
+except ImportError:  # pragma: no cover
+    from plot_generator import generate_all_plots, generate_plots_from_file
+from reporting.diagram_generator import generate_diagram
 
 logger = logging.getLogger("red_elisar.experiment")
 

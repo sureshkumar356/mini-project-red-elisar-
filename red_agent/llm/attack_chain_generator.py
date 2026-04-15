@@ -6,8 +6,8 @@ from typing import Optional
 from datetime import datetime, timezone
 
 import config
-from vector_store_faiss import FAISSVectorStore
-from rag_engine import RAGEngine
+from rag.vector_store_faiss import FAISSVectorStore
+from rag.rag_engine import RAGEngine
 
 logger = logging.getLogger("red_elisar.chain_generator")
 
@@ -212,7 +212,7 @@ class AttackChainGenerator:
         # ── Inject live vulnerability probe results if available ──
         probe = result.get("probe_result")
         if probe:
-            from targeted_attack_scanner import format_probe_result_markdown
+            from vuln_checks.targeted_attack_scanner import format_probe_result_markdown
             lines.append(format_probe_result_markdown(probe))
 
         lines += [

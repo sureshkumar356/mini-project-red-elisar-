@@ -50,7 +50,7 @@ import chromadb
 from sentence_transformers import SentenceTransformer
 
 import config
-from mitre_parser import AttackTechnique
+from .mitre_parser import AttackTechnique
 
 logger = logging.getLogger("red_elisar.vector_store")
 

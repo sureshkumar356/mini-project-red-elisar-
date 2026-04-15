@@ -33,35 +33,35 @@ Expected:
 ------------------------------------------------------------
 Terminal 2 (basic run):
 	cd "C:\mini project"
-	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\live_vuln_checker.py http://127.0.0.1:5000
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\vuln_checks\live_vuln_checker.py http://127.0.0.1:5000
 
 Save JSON + Markdown reports:
-	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\live_vuln_checker.py http://127.0.0.1:5000 `
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\vuln_checks\live_vuln_checker.py http://127.0.0.1:5000 `
 		-o .\red_agent\output\live_scan_results.json `
 		-m .\red_agent\output\live_scan_results.md
 
 Increase HTTP timeout:
-	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\live_vuln_checker.py http://127.0.0.1:5000 --timeout 15
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\vuln_checks\live_vuln_checker.py http://127.0.0.1:5000 --timeout 15
 
 
 3) Passive recon only (no payloads)
 -----------------------------------
-	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\web_recon.py http://127.0.0.1:5000
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\vuln_checks\web_recon.py http://127.0.0.1:5000
 
 
 4) Full autonomous web assessment (Recon → Scan → Live Confirm → MITRE → (optional) LLM → Report)
 -------------------------------------------------------------------------------------------------
 Fast (skip LLM narrative):
-	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\web_vuln_agent.py http://127.0.0.1:5000 --no-llm
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\vuln_checks\web_vuln_agent.py http://127.0.0.1:5000 --no-llm
 
 With LLM narrative (requires Groq key):
 	$env:LLAMA3_API_KEY = "gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 	# optional model override
 	$env:GROQ_MODEL = "llama-3.1-8b-instant"
-	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\web_vuln_agent.py http://127.0.0.1:5000
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\vuln_checks\web_vuln_agent.py http://127.0.0.1:5000
 
 Force rebuild the MITRE index (slower, for first run / reset):
-	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\web_vuln_agent.py http://127.0.0.1:5000 --force-reindex
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\vuln_checks\web_vuln_agent.py http://127.0.0.1:5000 --force-reindex
 
 Outputs:
 	red_agent/output/*.md and red_agent/output/*.json
@@ -125,7 +125,7 @@ Demo plots (synthetic):
 	& "C:\mini project\.venv\Scripts\python.exe" .\run.py --demo-plots
 
 Run experiment runner directly:
-	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\run_experiment.py --quick
+	& "C:\mini project\.venv\Scripts\python.exe" .\red_agent\comparison\run_experiment.py --quick
 
 
 8) Common troubleshooting

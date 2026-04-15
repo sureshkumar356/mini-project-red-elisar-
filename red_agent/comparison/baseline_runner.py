@@ -28,17 +28,21 @@ import json
 import time
 import logging
 import statistics
+import sys
 from pathlib import Path
 from typing import Optional
 from datetime import datetime, timezone
 
 import requests
 
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 import config
-from vector_store_faiss import FAISSVectorStore
-from rag_engine import RAGEngine
-from attack_chain_generator import AttackChainGenerator
-from llm_client import groq_chat_json, mistral_chat_json
+from rag.vector_store_faiss import FAISSVectorStore
+from rag.rag_engine import RAGEngine
+from llm.attack_chain_generator import AttackChainGenerator
+from llm.llm_client import groq_chat_json, mistral_chat_json
 
 logger = logging.getLogger("red_elisar.baseline")
 

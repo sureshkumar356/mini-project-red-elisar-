@@ -5413,3 +5413,722 @@ Download from: https://github.com/mitre-attack/attack-stix-data/blob/master/ente
 2026-04-07 12:09:07,443 | red_elisar.chain_generator | INFO | Markdown report exported to: C:\mini project\red_agent\output\attack_chain_report_20260407_120907.md
 2026-04-07 12:09:07,444 | red_elisar.main | INFO | Markdown exported: C:\mini project\red_agent\output\attack_chain_report_20260407_120907.md
 2026-04-07 12:09:07,447 | red_elisar.main | INFO | Total execution time: 10.63s
+2026-04-15 19:30:21,052 | red_elisar.main | INFO | ============================================================
+2026-04-15 19:30:21,053 | red_elisar.main | INFO | STEP 1: Parsing MITRE ATT&CK STIX 2.1 Bundle
+2026-04-15 19:30:21,053 | red_elisar.main | INFO | ============================================================
+2026-04-15 19:30:21,053 | red_elisar.parser | INFO | Loading STIX bundle from: C:\mini project\enterprise-attack.json
+2026-04-15 19:30:21,490 | red_elisar.parser | INFO | STIX bundle validated: 24772 total objects, ID: bundle--ffe1a478-536b-4e91-91b0-0ca0094a97d5
+2026-04-15 19:30:21,493 | red_elisar.parser | INFO | Found 835 attack-pattern objects
+2026-04-15 19:30:21,601 | red_elisar.parser | INFO | Extracted 691 valid techniques (skipped 12 deprecated, 132 revoked)
+2026-04-15 19:30:21,819 | red_elisar.main | INFO | Parsed 691 techniques
+2026-04-15 19:30:21,822 | red_elisar.main | INFO |   defense-evasion                      215
+2026-04-15 19:30:21,828 | red_elisar.main | INFO |   persistence                          126
+2026-04-15 19:30:21,830 | red_elisar.main | INFO |   privilege-escalation                 109
+2026-04-15 19:30:21,832 | red_elisar.main | INFO |   credential-access                     67
+2026-04-15 19:30:21,834 | red_elisar.main | INFO |   discovery                             49
+2026-04-15 19:30:21,836 | red_elisar.main | INFO |   resource-development                  47
+2026-04-15 19:30:21,839 | red_elisar.main | INFO |   execution                             46
+2026-04-15 19:30:21,841 | red_elisar.main | INFO |   command-and-control                   45
+2026-04-15 19:30:21,845 | red_elisar.main | INFO |   reconnaissance                        45
+2026-04-15 19:30:21,848 | red_elisar.main | INFO |   collection                            41
+2026-04-15 19:30:21,851 | red_elisar.main | INFO |   impact                                33
+2026-04-15 19:30:21,855 | red_elisar.main | INFO |   lateral-movement                      23
+2026-04-15 19:30:21,860 | red_elisar.main | INFO |   initial-access                        22
+2026-04-15 19:30:21,864 | red_elisar.main | INFO |   exfiltration                          19
+2026-04-15 19:30:21,868 | red_elisar.main | INFO | ============================================================
+2026-04-15 19:30:21,869 | red_elisar.main | INFO | STEP 2: Chunking Techniques (512/128 tokens)
+2026-04-15 19:30:21,871 | red_elisar.main | INFO | ============================================================
+2026-04-15 19:30:21,877 | red_elisar.chunking | INFO | Loading tokenizer for: all-MiniLM-L6-v2
+2026-04-15 19:30:23,381 | huggingface_hub.utils._http | WARNING | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-15 19:30:24,135 | red_elisar.chunking | INFO | Tokenizer loaded
+2026-04-15 19:30:24,515 | red_elisar.chunking | INFO | Chunking complete: 691 techniques → 691 chunks (691 single, 0 multi, max 1 chunks/technique)
+2026-04-15 19:30:24,515 | red_elisar.main | INFO | Generated 691 chunks from 691 techniques
+2026-04-15 19:30:24,516 | red_elisar.main | INFO | ============================================================
+2026-04-15 19:30:24,516 | red_elisar.main | INFO | STEP 3: Building FAISS HNSW Vector Index (M=48, efSearch=32)
+2026-04-15 19:30:24,516 | red_elisar.main | INFO | ============================================================
+2026-04-15 19:30:24,516 | red_elisar.faiss_store | INFO | Loading FAISS index from C:\mini project\red_agent\faiss_index\hnsw_index.faiss
+2026-04-15 19:30:24,572 | red_elisar.faiss_store | INFO | FAISS index loaded: 691 vectors in 0.05s
+2026-04-15 19:30:24,572 | red_elisar.faiss_store | INFO | Index already contains 691 vectors. Skipping. Use force_reindex=True to rebuild.
+2026-04-15 19:30:24,572 | red_elisar.main | INFO | Indexing complete: {
+  "total_chunks": 691,
+  "indexed": 0,
+  "skipped": 691,
+  "embedding_time_s": 0.0,
+  "indexing_time_s": 0.0,
+  "total_time_s": 0.0560576999996556
+}
+2026-04-15 19:30:24,574 | red_elisar.main | INFO | No mode specified. Running default APT scenario.
+2026-04-15 19:30:24,575 | red_elisar.chain_generator | INFO | Generating predefined scenario: apt_phishing_to_exfil
+2026-04-15 19:30:24,575 | red_elisar.rag_engine | INFO | ============================================================
+2026-04-15 19:30:24,575 | red_elisar.rag_engine | INFO | PHASE 1: RETRIEVAL
+2026-04-15 19:30:24,575 | red_elisar.rag_engine | INFO | ============================================================
+2026-04-15 19:30:24,576 | red_elisar.faiss_store | INFO | Loading embedding model: all-MiniLM-L6-v2
+2026-04-15 19:30:30,216 | red_elisar.faiss_store | INFO | Embedding model loaded in 5.64s
+2026-04-15 19:30:30,481 | red_elisar.faiss_store | INFO | FAISS query completed in 5905.4ms: 'Advanced persistent threat group targets a corpora...' → 30 results
+2026-04-15 19:30:30,481 | red_elisar.rag_engine | INFO | Retrieved 30 techniques for scenario: 'Advanced persistent threat group targets a corporate enterpr...'
+2026-04-15 19:30:30,482 | red_elisar.rag_engine | INFO | ============================================================
+2026-04-15 19:30:30,482 | red_elisar.rag_engine | INFO | PHASE 2: PROMPT AUGMENTATION
+2026-04-15 19:30:30,482 | red_elisar.rag_engine | INFO | ============================================================
+2026-04-15 19:30:30,482 | red_elisar.rag_engine | INFO | Prompt constructed: 3078 chars, 5 techniques in context
+2026-04-15 19:30:30,482 | red_elisar.rag_engine | INFO | ============================================================
+2026-04-15 19:30:30,482 | red_elisar.rag_engine | INFO | PHASE 3: LLM GENERATION
+2026-04-15 19:30:30,483 | red_elisar.rag_engine | INFO | ============================================================
+2026-04-15 19:30:30,483 | red_elisar.rag_engine | INFO | ============================================================
+2026-04-15 19:30:30,483 | red_elisar.rag_engine | INFO | PHASE 4: VALIDATION & FAITHFULNESS CHECK
+2026-04-15 19:30:30,483 | red_elisar.rag_engine | INFO | ============================================================
+2026-04-15 19:30:30,483 | red_elisar.rag_engine | INFO | Sending request to Groq (llama-3.1-8b-instant)...
+2026-04-15 19:30:32,353 | red_elisar.rag_engine | INFO | LLM response: 2376 chars in 1.87s (690.3 tok/s)
+2026-04-15 19:30:32,371 | red_elisar.rag_engine | INFO | Grounded steps: 5/10 (50%)
+2026-04-15 19:30:32,394 | red_elisar.mitigations | INFO | Loaded 30 mitigation entries
+2026-04-15 19:30:32,478 | red_elisar.exploit_tools | INFO | Loaded 27 exploit tool entries
+2026-04-15 19:30:32,478 | red_elisar.rag_engine | INFO | ============================================================
+2026-04-15 19:30:32,478 | red_elisar.rag_engine | INFO | PIPELINE COMPLETE
+2026-04-15 19:30:32,478 | red_elisar.rag_engine | INFO | Total: 7.90s | Retrieval: 5906ms | Generation: 1.87s | Faithfulness: 83%
+2026-04-15 19:30:32,478 | red_elisar.rag_engine | INFO | ============================================================
+2026-04-15 19:30:32,489 | red_elisar.chain_generator | INFO | Attack chain exported to: C:\mini project\red_agent\output\attack_chain_20260415_193032.json
+2026-04-15 19:30:32,491 | red_elisar.chain_generator | INFO | Markdown report exported to: C:\mini project\red_agent\output\attack_chain_report_20260415_193032.md
+2026-04-15 19:30:32,491 | red_elisar.main | INFO | Total execution time: 11.44s
+2026-04-15 19:51:01,938 | red_elisar.faiss_store | INFO | Loading FAISS index from C:\mini project\red_agent\faiss_index\hnsw_index.faiss
+2026-04-15 19:51:01,954 | red_elisar.faiss_store | INFO | FAISS index loaded: 691 vectors in 0.02s
+2026-04-15 19:51:01,955 | red_elisar.web_vuln_agent | INFO | [WebVulnAgent] FAISS index already built — loading cached index
+2026-04-15 19:51:01,955 | red_elisar.faiss_store | INFO | Loading FAISS index from C:\mini project\red_agent\faiss_index\hnsw_index.faiss
+2026-04-15 19:51:01,962 | red_elisar.faiss_store | INFO | FAISS index loaded: 691 vectors in 0.01s
+2026-04-15 19:51:02,033 | red_elisar.vuln_scanner | INFO | [Scanner] Starting vulnerability scan for: http://127.0.0.1:5000
+2026-04-15 19:51:02,034 | red_elisar.vuln_scanner | INFO | [Scanner] Found 16 vulnerabilities — CRITICAL:4 HIGH:4 MEDIUM:4 LOW:3
+2026-04-15 19:51:02,040 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 19:51:02,939 | red_elisar.mitre_mapper | INFO | [MITREMapper] Mapping 44 vulnerabilities to MITRE ATT&CK...
+2026-04-15 19:51:02,940 | red_elisar.faiss_store | INFO | Loading embedding model: all-MiniLM-L6-v2
+2026-04-15 19:51:04,689 | huggingface_hub.utils._http | WARNING | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-15 19:51:16,550 | red_elisar.faiss_store | INFO | Embedding model loaded in 13.61s
+2026-04-15 19:51:16,781 | red_elisar.faiss_store | INFO | FAISS query completed in 13840.8ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 19:51:16,781 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 19:51:16,782 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1552', 'T1552.001']
+2026-04-15 19:51:16,801 | red_elisar.faiss_store | INFO | FAISS query completed in 18.7ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 19:51:16,801 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 19:51:16,801 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1552', 'T1552.001']
+2026-04-15 19:51:16,829 | red_elisar.faiss_store | INFO | FAISS query completed in 27.2ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 19:51:16,829 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 19:51:16,830 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1078.002', 'T1078']
+2026-04-15 19:51:17,192 | red_elisar.faiss_store | INFO | FAISS query completed in 361.4ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 19:51:17,210 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 19:51:17,232 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'No HTTPS / Plain HTTP' → ['T1599', 'T1090.003']
+2026-04-15 19:51:18,205 | red_elisar.faiss_store | INFO | FAISS query completed in 932.7ms: 'JavaScript execution browser scripting cross-site ...' → 3 results
+2026-04-15 19:51:18,237 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'JavaScript execution browser scripting cross-site scripting ...'
+2026-04-15 19:51:18,267 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1059.007', 'T1189']
+2026-04-15 19:51:19,487 | red_elisar.faiss_store | INFO | FAISS query completed in 1176.7ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 19:51:19,530 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 19:51:19,574 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1599', 'T1090.003']
+2026-04-15 19:51:21,222 | red_elisar.faiss_store | INFO | FAISS query completed in 1616.0ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 19:51:21,250 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 19:51:21,281 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1078.002', 'T1078']
+2026-04-15 19:51:22,288 | red_elisar.faiss_store | INFO | FAISS query completed in 988.1ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 19:51:22,333 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 19:51:22,365 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'CORS Misconfiguration' → ['T1599', 'T1090.003']
+2026-04-15 19:51:23,366 | red_elisar.faiss_store | INFO | FAISS query completed in 957.1ms: 'browser session hijacking clickjacking iframe...' → 3 results
+2026-04-15 19:51:23,389 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'browser session hijacking clickjacking iframe...'
+2026-04-15 19:51:23,416 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1550.004', 'T1539']
+2026-04-15 19:51:24,478 | red_elisar.faiss_store | INFO | FAISS query completed in 1042.6ms: 'user execution malicious link phishing redirect...' → 3 results
+2026-04-15 19:51:24,507 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'user execution malicious link phishing redirect...'
+2026-04-15 19:51:24,563 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1204', 'T1204.001']
+2026-04-15 19:51:25,481 | red_elisar.faiss_store | INFO | FAISS query completed in 869.0ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 19:51:25,532 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 19:51:25,583 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (HTTP Header)' → ['T1592', 'T1596.002']
+2026-04-15 19:51:26,654 | red_elisar.faiss_store | INFO | FAISS query completed in 1025.4ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 19:51:26,690 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 19:51:26,729 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (HTTP Header)' → ['T1592', 'T1596.002']
+2026-04-15 19:51:27,691 | red_elisar.faiss_store | INFO | FAISS query completed in 926.5ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 19:51:27,718 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 19:51:27,749 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1592', 'T1596.002']
+2026-04-15 19:51:28,823 | red_elisar.faiss_store | INFO | FAISS query completed in 1018.9ms: 'impair defenses disable security controls bypass...' → 3 results
+2026-04-15 19:51:28,836 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'impair defenses disable security controls bypass...'
+2026-04-15 19:51:28,852 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1562', 'T1562.013']
+2026-04-15 19:51:29,179 | red_elisar.faiss_store | INFO | FAISS query completed in 310.0ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 19:51:29,184 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 19:51:29,193 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (HTTP Header)' → ['T1592', 'T1596.002']
+2026-04-15 19:51:29,392 | red_elisar.faiss_store | INFO | FAISS query completed in 192.3ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 19:51:29,395 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 19:51:29,404 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1592', 'T1596.002']
+2026-04-15 19:51:29,645 | red_elisar.faiss_store | INFO | FAISS query completed in 227.4ms: 'Sensitive File / Path Disclosure Path '/.env' retu...' → 3 results
+2026-04-15 19:51:29,650 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'Sensitive File / Path Disclosure Path '/.env' returned HTTP ...'
+2026-04-15 19:51:29,651 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1552.001', 'T1552']
+2026-04-15 19:51:29,754 | red_elisar.faiss_store | INFO | FAISS query completed in 101.2ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 19:51:29,755 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 19:51:29,756 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1552', 'T1552.001']
+2026-04-15 19:51:29,858 | red_elisar.faiss_store | INFO | FAISS query completed in 101.4ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 19:51:29,861 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 19:51:29,868 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1078.002', 'T1078']
+2026-04-15 19:51:30,194 | red_elisar.faiss_store | INFO | FAISS query completed in 322.6ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 19:51:30,201 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 19:51:30,206 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 19:51:30,380 | red_elisar.faiss_store | INFO | FAISS query completed in 168.5ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 19:51:30,383 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 19:51:30,391 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 19:51:30,555 | red_elisar.faiss_store | INFO | FAISS query completed in 160.7ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 19:51:30,557 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 19:51:30,561 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 19:51:30,642 | red_elisar.faiss_store | INFO | FAISS query completed in 76.7ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 19:51:30,644 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 19:51:30,644 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 19:51:30,694 | red_elisar.faiss_store | INFO | FAISS query completed in 48.4ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 19:51:30,695 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 19:51:30,697 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 19:51:30,736 | red_elisar.faiss_store | INFO | FAISS query completed in 37.2ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 19:51:30,737 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 19:51:30,737 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (UNION — Data Exfiltrated)' → ['T1203', 'T1190']
+2026-04-15 19:51:30,772 | red_elisar.faiss_store | INFO | FAISS query completed in 34.5ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 19:51:30,776 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 19:51:30,777 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 19:51:30,812 | red_elisar.faiss_store | INFO | FAISS query completed in 34.7ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 19:51:30,813 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 19:51:30,813 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 19:51:30,853 | red_elisar.faiss_store | INFO | FAISS query completed in 38.8ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 19:51:30,853 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 19:51:30,853 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 19:51:30,893 | red_elisar.faiss_store | INFO | FAISS query completed in 39.5ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 19:51:30,894 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 19:51:30,895 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Authentication Bypass via SQL Injection' → ['T1078.002', 'T1078']
+2026-04-15 19:51:30,937 | red_elisar.faiss_store | INFO | FAISS query completed in 41.8ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 19:51:30,937 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 19:51:30,938 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Unauthenticated Admin Panel Access' → ['T1078.002', 'T1078']
+2026-04-15 19:51:30,980 | red_elisar.faiss_store | INFO | FAISS query completed in 42.1ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 19:51:30,981 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 19:51:30,982 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Unencrypted HTTP (No TLS)' → ['T1599', 'T1090.003']
+2026-04-15 19:51:31,029 | red_elisar.faiss_store | INFO | FAISS query completed in 46.3ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 19:51:31,030 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 19:51:31,030 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'CORS Wildcard Misconfiguration' → ['T1599', 'T1090.003']
+2026-04-15 19:51:31,065 | red_elisar.faiss_store | INFO | FAISS query completed in 32.4ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 19:51:31,066 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 19:51:31,066 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1078.002', 'T1078']
+2026-04-15 19:51:31,100 | red_elisar.faiss_store | INFO | FAISS query completed in 32.8ms: 'JavaScript execution browser scripting cross-site ...' → 3 results
+2026-04-15 19:51:31,100 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'JavaScript execution browser scripting cross-site scripting ...'
+2026-04-15 19:51:31,100 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Reflected Cross-Site Scripting (XSS)' → ['T1059.007', 'T1189']
+2026-04-15 19:51:31,134 | red_elisar.faiss_store | INFO | FAISS query completed in 33.0ms: 'JavaScript execution browser scripting cross-site ...' → 3 results
+2026-04-15 19:51:31,134 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'JavaScript execution browser scripting cross-site scripting ...'
+2026-04-15 19:51:31,134 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Reflected Cross-Site Scripting (XSS)' → ['T1059.007', 'T1189']
+2026-04-15 19:51:31,165 | red_elisar.faiss_store | INFO | FAISS query completed in 30.1ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 19:51:31,166 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 19:51:31,166 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Error / Stack Trace Information Leakage' → ['T1592', 'T1596.002']
+2026-04-15 19:51:31,199 | red_elisar.faiss_store | INFO | FAISS query completed in 32.3ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 19:51:31,199 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 19:51:31,200 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (Banner)' → ['T1592', 'T1596.002']
+2026-04-15 19:51:31,230 | red_elisar.faiss_store | INFO | FAISS query completed in 30.0ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 19:51:31,233 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 19:51:31,237 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (Banner)' → ['T1592', 'T1596.002']
+2026-04-15 19:51:32,326 | red_elisar.faiss_store | INFO | FAISS query completed in 1073.7ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 19:51:32,371 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 19:51:32,399 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (Banner)' → ['T1592', 'T1596.002']
+2026-04-15 19:51:33,481 | red_elisar.faiss_store | INFO | FAISS query completed in 1046.2ms: 'user execution malicious link phishing redirect...' → 3 results
+2026-04-15 19:51:33,515 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'user execution malicious link phishing redirect...'
+2026-04-15 19:51:33,551 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Open Redirect' → ['T1204', 'T1204.001']
+2026-04-15 19:51:34,708 | red_elisar.faiss_store | INFO | FAISS query completed in 1100.0ms: 'browser session hijacking clickjacking iframe...' → 3 results
+2026-04-15 19:51:34,732 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'browser session hijacking clickjacking iframe...'
+2026-04-15 19:51:34,762 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Insecure Cookie Configuration' → ['T1550.004', 'T1539']
+2026-04-15 19:51:35,653 | red_elisar.faiss_store | INFO | FAISS query completed in 876.1ms: 'browser session hijacking clickjacking iframe...' → 3 results
+2026-04-15 19:51:35,673 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'browser session hijacking clickjacking iframe...'
+2026-04-15 19:51:35,696 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Insecure Cookie Configuration' → ['T1550.004', 'T1539']
+2026-04-15 19:51:37,111 | red_elisar.faiss_store | INFO | FAISS query completed in 1396.6ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 19:51:37,185 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 19:51:37,246 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 19:51:38,428 | red_elisar.faiss_store | INFO | FAISS query completed in 1130.8ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 19:51:38,468 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 19:51:38,505 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 19:51:38,536 | red_elisar.mitre_mapper | INFO | [MITREMapper] Built attack chain with 4 steps across 4 tactics
+2026-04-15 19:51:38,902 | red_elisar.report_generator | INFO | [Report] JSON saved: C:\mini project\red_agent\output\vuln_report_20260415_142138.json
+2026-04-15 19:51:38,934 | red_elisar.report_generator | INFO | [Report] Markdown saved: C:\mini project\red_agent\output\vuln_report_20260415_142138.md
+2026-04-15 20:23:51,671 | red_elisar.vuln_scanner | INFO | [Scanner] Starting vulnerability scan for: http://127.0.0.1:5000
+2026-04-15 20:23:51,673 | red_elisar.vuln_scanner | INFO | [Scanner] Found 16 vulnerabilities — CRITICAL:4 HIGH:4 MEDIUM:4 LOW:3
+2026-04-15 20:23:51,678 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:52,504 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:52,759 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:53,030 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:53,285 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:54,181 | red_elisar.live_vuln_checker | ERROR | Target unreachable: HTTPConnectionPool(host='127.0.0.1', port=5000): Max retries exceeded with url: /error_test (Caused by ResponseError('too many 500 error responses'))
+2026-04-15 20:23:54,187 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:54,500 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:54,792 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:55,087 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:55,483 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:55,832 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:58,534 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:58,876 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:59,155 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:23:59,547 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:24:02,526 | red_elisar.faiss_store | INFO | Loading FAISS index from C:\mini project\red_agent\faiss_index\hnsw_index.faiss
+2026-04-15 20:24:02,550 | red_elisar.faiss_store | INFO | FAISS index loaded: 691 vectors in 0.02s
+2026-04-15 20:24:02,550 | red_elisar.faiss_store | INFO | Loading FAISS index from C:\mini project\red_agent\faiss_index\hnsw_index.faiss
+2026-04-15 20:24:02,563 | red_elisar.faiss_store | INFO | FAISS index loaded: 691 vectors in 0.01s
+2026-04-15 20:24:02,564 | red_elisar.mitre_mapper | INFO | [MITREMapper] Mapping 74 vulnerabilities to MITRE ATT&CK...
+2026-04-15 20:24:02,564 | red_elisar.faiss_store | INFO | Loading embedding model: all-MiniLM-L6-v2
+2026-04-15 20:24:06,645 | red_elisar.faiss_store | INFO | Embedding model loaded in 4.08s
+2026-04-15 20:24:06,838 | red_elisar.faiss_store | INFO | FAISS query completed in 4273.5ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 20:24:06,838 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 20:24:06,838 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1552', 'T1552.001']
+2026-04-15 20:24:06,849 | red_elisar.faiss_store | INFO | FAISS query completed in 10.5ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 20:24:06,849 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 20:24:06,850 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1552', 'T1552.001']
+2026-04-15 20:24:06,866 | red_elisar.faiss_store | INFO | FAISS query completed in 16.5ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:24:06,867 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:24:06,867 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1078.002', 'T1078']
+2026-04-15 20:24:06,887 | red_elisar.faiss_store | INFO | FAISS query completed in 19.5ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 20:24:06,887 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 20:24:06,887 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'No HTTPS / Plain HTTP' → ['T1599', 'T1090.003']
+2026-04-15 20:24:06,905 | red_elisar.faiss_store | INFO | FAISS query completed in 17.8ms: 'JavaScript execution browser scripting cross-site ...' → 3 results
+2026-04-15 20:24:06,905 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'JavaScript execution browser scripting cross-site scripting ...'
+2026-04-15 20:24:06,905 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1059.007', 'T1189']
+2026-04-15 20:24:06,923 | red_elisar.faiss_store | INFO | FAISS query completed in 16.8ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 20:24:06,923 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 20:24:06,923 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1599', 'T1090.003']
+2026-04-15 20:24:06,937 | red_elisar.faiss_store | INFO | FAISS query completed in 13.7ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:24:06,937 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:24:06,937 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1078.002', 'T1078']
+2026-04-15 20:24:06,955 | red_elisar.faiss_store | INFO | FAISS query completed in 17.5ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 20:24:06,955 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 20:24:06,956 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'CORS Misconfiguration' → ['T1599', 'T1090.003']
+2026-04-15 20:24:06,972 | red_elisar.faiss_store | INFO | FAISS query completed in 16.6ms: 'browser session hijacking clickjacking iframe...' → 3 results
+2026-04-15 20:24:06,973 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'browser session hijacking clickjacking iframe...'
+2026-04-15 20:24:06,973 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1550.004', 'T1539']
+2026-04-15 20:24:06,990 | red_elisar.faiss_store | INFO | FAISS query completed in 17.2ms: 'user execution malicious link phishing redirect...' → 3 results
+2026-04-15 20:24:06,991 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'user execution malicious link phishing redirect...'
+2026-04-15 20:24:06,991 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1204', 'T1204.001']
+2026-04-15 20:24:07,013 | red_elisar.faiss_store | INFO | FAISS query completed in 21.6ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,013 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,014 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (HTTP Header)' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,030 | red_elisar.faiss_store | INFO | FAISS query completed in 16.5ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,031 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,031 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (HTTP Header)' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,046 | red_elisar.faiss_store | INFO | FAISS query completed in 14.8ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,047 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,048 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,063 | red_elisar.faiss_store | INFO | FAISS query completed in 14.6ms: 'impair defenses disable security controls bypass...' → 3 results
+2026-04-15 20:24:07,063 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'impair defenses disable security controls bypass...'
+2026-04-15 20:24:07,063 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1562', 'T1562.013']
+2026-04-15 20:24:07,078 | red_elisar.faiss_store | INFO | FAISS query completed in 14.6ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,079 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,079 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (HTTP Header)' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,097 | red_elisar.faiss_store | INFO | FAISS query completed in 17.7ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,097 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,097 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,121 | red_elisar.faiss_store | INFO | FAISS query completed in 23.6ms: 'Sensitive File / Path Disclosure Path '/.env' retu...' → 3 results
+2026-04-15 20:24:07,121 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'Sensitive File / Path Disclosure Path '/.env' returned HTTP ...'
+2026-04-15 20:24:07,122 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1552.001', 'T1552']
+2026-04-15 20:24:07,140 | red_elisar.faiss_store | INFO | FAISS query completed in 18.3ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 20:24:07,140 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 20:24:07,141 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1552', 'T1552.001']
+2026-04-15 20:24:07,155 | red_elisar.faiss_store | INFO | FAISS query completed in 13.8ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:24:07,155 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:24:07,155 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1078.002', 'T1078']
+2026-04-15 20:24:07,173 | red_elisar.faiss_store | INFO | FAISS query completed in 17.9ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:24:07,174 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:24:07,174 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:24:07,189 | red_elisar.faiss_store | INFO | FAISS query completed in 15.0ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:24:07,190 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:24:07,190 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:24:07,208 | red_elisar.faiss_store | INFO | FAISS query completed in 18.2ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:24:07,210 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:24:07,210 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:24:07,230 | red_elisar.faiss_store | INFO | FAISS query completed in 19.9ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:24:07,231 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:24:07,231 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:24:07,249 | red_elisar.faiss_store | INFO | FAISS query completed in 18.3ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:24:07,250 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:24:07,250 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:24:07,268 | red_elisar.faiss_store | INFO | FAISS query completed in 17.6ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:24:07,268 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:24:07,268 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (UNION — Data Exfiltrated)' → ['T1203', 'T1190']
+2026-04-15 20:24:07,288 | red_elisar.faiss_store | INFO | FAISS query completed in 19.4ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:24:07,288 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:24:07,289 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:24:07,305 | red_elisar.faiss_store | INFO | FAISS query completed in 15.8ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:24:07,305 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:24:07,305 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:24:07,318 | red_elisar.faiss_store | INFO | FAISS query completed in 12.9ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:24:07,319 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:24:07,320 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:24:07,335 | red_elisar.faiss_store | INFO | FAISS query completed in 15.5ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:24:07,338 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:24:07,338 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Authentication Bypass via SQL Injection' → ['T1078.002', 'T1078']
+2026-04-15 20:24:07,355 | red_elisar.faiss_store | INFO | FAISS query completed in 16.0ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:24:07,356 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:24:07,356 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Unauthenticated Admin Panel Access' → ['T1078.002', 'T1078']
+2026-04-15 20:24:07,376 | red_elisar.faiss_store | INFO | FAISS query completed in 19.4ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 20:24:07,376 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 20:24:07,376 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Unencrypted HTTP (No TLS)' → ['T1599', 'T1090.003']
+2026-04-15 20:24:07,390 | red_elisar.faiss_store | INFO | FAISS query completed in 13.3ms: 'JavaScript execution browser scripting cross-site ...' → 3 results
+2026-04-15 20:24:07,390 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'JavaScript execution browser scripting cross-site scripting ...'
+2026-04-15 20:24:07,390 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1059.007', 'T1189']
+2026-04-15 20:24:07,411 | red_elisar.faiss_store | INFO | FAISS query completed in 20.6ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 20:24:07,411 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 20:24:07,412 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1599', 'T1090.003']
+2026-04-15 20:24:07,431 | red_elisar.faiss_store | INFO | FAISS query completed in 18.8ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 20:24:07,431 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 20:24:07,431 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'CORS Wildcard Misconfiguration' → ['T1599', 'T1090.003']
+2026-04-15 20:24:07,447 | red_elisar.faiss_store | INFO | FAISS query completed in 15.5ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:24:07,447 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:24:07,447 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1078.002', 'T1078']
+2026-04-15 20:24:07,465 | red_elisar.faiss_store | INFO | FAISS query completed in 17.6ms: 'JavaScript execution browser scripting cross-site ...' → 3 results
+2026-04-15 20:24:07,466 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'JavaScript execution browser scripting cross-site scripting ...'
+2026-04-15 20:24:07,466 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Reflected Cross-Site Scripting (XSS)' → ['T1059.007', 'T1189']
+2026-04-15 20:24:07,477 | red_elisar.faiss_store | INFO | FAISS query completed in 10.9ms: 'JavaScript execution browser scripting cross-site ...' → 3 results
+2026-04-15 20:24:07,477 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'JavaScript execution browser scripting cross-site scripting ...'
+2026-04-15 20:24:07,477 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Reflected Cross-Site Scripting (XSS)' → ['T1059.007', 'T1189']
+2026-04-15 20:24:07,492 | red_elisar.faiss_store | INFO | FAISS query completed in 14.1ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,493 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,493 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Error / Stack Trace Information Leakage' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,507 | red_elisar.faiss_store | INFO | FAISS query completed in 14.0ms: 'browser session hijacking clickjacking iframe...' → 3 results
+2026-04-15 20:24:07,507 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'browser session hijacking clickjacking iframe...'
+2026-04-15 20:24:07,508 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1550.004', 'T1539']
+2026-04-15 20:24:07,523 | red_elisar.faiss_store | INFO | FAISS query completed in 14.8ms: 'user execution malicious link phishing redirect...' → 3 results
+2026-04-15 20:24:07,523 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'user execution malicious link phishing redirect...'
+2026-04-15 20:24:07,523 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1204', 'T1204.001']
+2026-04-15 20:24:07,537 | red_elisar.faiss_store | INFO | FAISS query completed in 13.7ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,537 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,538 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (Banner)' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,553 | red_elisar.faiss_store | INFO | FAISS query completed in 15.3ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,554 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,554 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (Banner)' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,571 | red_elisar.faiss_store | INFO | FAISS query completed in 16.8ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,571 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,571 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (Banner)' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,587 | red_elisar.faiss_store | INFO | FAISS query completed in 15.5ms: 'user execution malicious link phishing redirect...' → 3 results
+2026-04-15 20:24:07,587 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'user execution malicious link phishing redirect...'
+2026-04-15 20:24:07,588 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Open Redirect' → ['T1204', 'T1204.001']
+2026-04-15 20:24:07,604 | red_elisar.faiss_store | INFO | FAISS query completed in 16.3ms: 'browser session hijacking clickjacking iframe...' → 3 results
+2026-04-15 20:24:07,604 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'browser session hijacking clickjacking iframe...'
+2026-04-15 20:24:07,605 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Insecure Cookie Configuration' → ['T1550.004', 'T1539']
+2026-04-15 20:24:07,620 | red_elisar.faiss_store | INFO | FAISS query completed in 15.4ms: 'browser session hijacking clickjacking iframe...' → 3 results
+2026-04-15 20:24:07,621 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'browser session hijacking clickjacking iframe...'
+2026-04-15 20:24:07,621 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Insecure Cookie Configuration' → ['T1550.004', 'T1539']
+2026-04-15 20:24:07,633 | red_elisar.faiss_store | INFO | FAISS query completed in 12.2ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,633 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,634 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,649 | red_elisar.faiss_store | INFO | FAISS query completed in 14.7ms: 'impair defenses disable security controls bypass...' → 3 results
+2026-04-15 20:24:07,649 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'impair defenses disable security controls bypass...'
+2026-04-15 20:24:07,650 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1562', 'T1562.013']
+2026-04-15 20:24:07,665 | red_elisar.faiss_store | INFO | FAISS query completed in 14.7ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,665 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,665 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,680 | red_elisar.faiss_store | INFO | FAISS query completed in 14.8ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,681 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,681 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,694 | red_elisar.faiss_store | INFO | FAISS query completed in 13.0ms: 'data from information repositories exposed source ...' → 3 results
+2026-04-15 20:24:07,694 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'data from information repositories exposed source code...'
+2026-04-15 20:24:07,695 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1593.003', 'T1213.003']
+2026-04-15 20:24:07,707 | red_elisar.faiss_store | INFO | FAISS query completed in 12.0ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:24:07,707 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:24:07,707 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1203', 'T1190']
+2026-04-15 20:24:07,722 | red_elisar.faiss_store | INFO | FAISS query completed in 14.3ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,723 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,723 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,737 | red_elisar.faiss_store | INFO | FAISS query completed in 14.1ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:24:07,737 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:24:07,738 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1203', 'T1190']
+2026-04-15 20:24:07,752 | red_elisar.faiss_store | INFO | FAISS query completed in 14.0ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 20:24:07,752 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 20:24:07,752 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1552', 'T1552.001']
+2026-04-15 20:24:07,765 | red_elisar.faiss_store | INFO | FAISS query completed in 12.3ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,765 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,765 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,779 | red_elisar.faiss_store | INFO | FAISS query completed in 13.8ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,780 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,780 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,791 | red_elisar.faiss_store | INFO | FAISS query completed in 10.1ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,791 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,791 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,805 | red_elisar.faiss_store | INFO | FAISS query completed in 13.5ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,805 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,805 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (Banner)' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,820 | red_elisar.faiss_store | INFO | FAISS query completed in 14.2ms: 'user execution malicious link phishing redirect...' → 3 results
+2026-04-15 20:24:07,820 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'user execution malicious link phishing redirect...'
+2026-04-15 20:24:07,820 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Open Redirect' → ['T1204', 'T1204.001']
+2026-04-15 20:24:07,841 | red_elisar.faiss_store | INFO | FAISS query completed in 20.8ms: 'Sensitive Path Redirect Path '/.env' redirects (ma...' → 3 results
+2026-04-15 20:24:07,842 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'Sensitive Path Redirect Path '/.env' redirects (may be acces...'
+2026-04-15 20:24:07,842 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1552.001', 'T1574.009']
+2026-04-15 20:24:07,854 | red_elisar.faiss_store | INFO | FAISS query completed in 11.7ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 20:24:07,854 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 20:24:07,854 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1552', 'T1552.001']
+2026-04-15 20:24:07,866 | red_elisar.faiss_store | INFO | FAISS query completed in 11.0ms: 'data from information repositories exposed source ...' → 3 results
+2026-04-15 20:24:07,866 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'data from information repositories exposed source code...'
+2026-04-15 20:24:07,866 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1593.003', 'T1213.003']
+2026-04-15 20:24:07,882 | red_elisar.faiss_store | INFO | FAISS query completed in 15.6ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:24:07,883 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:24:07,883 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1078.002', 'T1078']
+2026-04-15 20:24:07,894 | red_elisar.faiss_store | INFO | FAISS query completed in 10.8ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:24:07,894 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:24:07,894 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1078.002', 'T1078']
+2026-04-15 20:24:07,907 | red_elisar.faiss_store | INFO | FAISS query completed in 12.7ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,907 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,908 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,921 | red_elisar.faiss_store | INFO | FAISS query completed in 13.1ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,921 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,921 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,936 | red_elisar.faiss_store | INFO | FAISS query completed in 14.7ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,937 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,937 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,953 | red_elisar.faiss_store | INFO | FAISS query completed in 16.3ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:24:07,954 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:24:07,954 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1203', 'T1190']
+2026-04-15 20:24:07,969 | red_elisar.faiss_store | INFO | FAISS query completed in 14.8ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:24:07,969 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:24:07,969 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1203', 'T1190']
+2026-04-15 20:24:07,985 | red_elisar.faiss_store | INFO | FAISS query completed in 15.6ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,985 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,986 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1592', 'T1596.002']
+2026-04-15 20:24:07,997 | red_elisar.faiss_store | INFO | FAISS query completed in 11.4ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:07,997 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:07,998 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1592', 'T1596.002']
+2026-04-15 20:24:08,013 | red_elisar.faiss_store | INFO | FAISS query completed in 15.2ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:24:08,015 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:24:08,015 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1592', 'T1596.002']
+2026-04-15 20:24:08,029 | red_elisar.faiss_store | INFO | FAISS query completed in 13.5ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 20:24:08,030 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 20:24:08,030 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1552', 'T1552.001']
+2026-04-15 20:24:08,030 | red_elisar.mitre_mapper | INFO | [MITREMapper] Built attack chain with 4 steps across 4 tactics
+2026-04-15 20:24:08,033 | red_elisar.report_generator | INFO | [Report] JSON saved: C:\mini project\red_agent\output\vuln_report_20260415_145408.json
+2026-04-15 20:24:08,034 | red_elisar.report_generator | INFO | [Report] Markdown saved: C:\mini project\red_agent\output\vuln_report_20260415_145408.md
+2026-04-15 20:43:10,003 | red_elisar.vuln_scanner | INFO | [Scanner] Starting vulnerability scan for: http://127.0.0.1:5000
+2026-04-15 20:43:10,004 | red_elisar.vuln_scanner | INFO | [Scanner] Found 16 vulnerabilities — CRITICAL:4 HIGH:4 MEDIUM:4 LOW:3
+2026-04-15 20:43:10,073 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:43:11,843 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:43:12,448 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:43:18,863 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:43:26,839 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:43:33,658 | red_elisar.live_vuln_checker | ERROR | Target unreachable: HTTPConnectionPool(host='127.0.0.1', port=5000): Max retries exceeded with url: /error_test (Caused by ResponseError('too many 500 error responses'))
+2026-04-15 20:43:33,791 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:43:35,179 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:43:36,246 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:43:40,708 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:43:45,789 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:43:49,694 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:43:55,023 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:43:59,711 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:44:02,329 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:44:03,173 | red_elisar.live_vuln_checker | INFO | Target reachable — HTTP 200
+2026-04-15 20:44:06,623 | red_elisar.faiss_store | INFO | Loading FAISS index from C:\mini project\red_agent\faiss_index\hnsw_index.faiss
+2026-04-15 20:44:06,681 | red_elisar.faiss_store | INFO | FAISS index loaded: 691 vectors in 0.02s
+2026-04-15 20:44:06,702 | red_elisar.faiss_store | INFO | Loading FAISS index from C:\mini project\red_agent\faiss_index\hnsw_index.faiss
+2026-04-15 20:44:06,726 | red_elisar.faiss_store | INFO | FAISS index loaded: 691 vectors in 0.01s
+2026-04-15 20:44:06,739 | red_elisar.mitre_mapper | INFO | [MITREMapper] Mapping 74 vulnerabilities to MITRE ATT&CK...
+2026-04-15 20:44:06,749 | red_elisar.faiss_store | INFO | Loading embedding model: all-MiniLM-L6-v2
+2026-04-15 20:44:11,945 | red_elisar.faiss_store | INFO | Embedding model loaded in 5.20s
+2026-04-15 20:44:13,086 | red_elisar.faiss_store | INFO | FAISS query completed in 6336.3ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 20:44:13,096 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 20:44:13,117 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1552', 'T1552.001']
+2026-04-15 20:44:13,856 | red_elisar.faiss_store | INFO | FAISS query completed in 721.9ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 20:44:13,875 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 20:44:13,888 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1552', 'T1552.001']
+2026-04-15 20:44:14,173 | red_elisar.faiss_store | INFO | FAISS query completed in 268.5ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:44:14,174 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:44:14,180 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1078.002', 'T1078']
+2026-04-15 20:44:14,274 | red_elisar.faiss_store | INFO | FAISS query completed in 91.1ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 20:44:14,275 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 20:44:14,276 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'No HTTPS / Plain HTTP' → ['T1599', 'T1090.003']
+2026-04-15 20:44:14,322 | red_elisar.faiss_store | INFO | FAISS query completed in 44.5ms: 'JavaScript execution browser scripting cross-site ...' → 3 results
+2026-04-15 20:44:14,323 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'JavaScript execution browser scripting cross-site scripting ...'
+2026-04-15 20:44:14,324 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1059.007', 'T1189']
+2026-04-15 20:44:14,371 | red_elisar.faiss_store | INFO | FAISS query completed in 46.9ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 20:44:14,371 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 20:44:14,372 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1599', 'T1090.003']
+2026-04-15 20:44:14,424 | red_elisar.faiss_store | INFO | FAISS query completed in 52.6ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:44:14,425 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:44:14,426 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1078.002', 'T1078']
+2026-04-15 20:44:14,492 | red_elisar.faiss_store | INFO | FAISS query completed in 66.1ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 20:44:14,493 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 20:44:14,493 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'CORS Misconfiguration' → ['T1599', 'T1090.003']
+2026-04-15 20:44:14,594 | red_elisar.faiss_store | INFO | FAISS query completed in 100.0ms: 'browser session hijacking clickjacking iframe...' → 3 results
+2026-04-15 20:44:14,595 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'browser session hijacking clickjacking iframe...'
+2026-04-15 20:44:14,595 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1550.004', 'T1539']
+2026-04-15 20:44:14,709 | red_elisar.faiss_store | INFO | FAISS query completed in 113.9ms: 'user execution malicious link phishing redirect...' → 3 results
+2026-04-15 20:44:14,713 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'user execution malicious link phishing redirect...'
+2026-04-15 20:44:14,715 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1204', 'T1204.001']
+2026-04-15 20:44:14,779 | red_elisar.faiss_store | INFO | FAISS query completed in 62.5ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:14,781 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:14,782 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (HTTP Header)' → ['T1592', 'T1596.002']
+2026-04-15 20:44:14,823 | red_elisar.faiss_store | INFO | FAISS query completed in 40.3ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:14,825 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:14,826 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (HTTP Header)' → ['T1592', 'T1596.002']
+2026-04-15 20:44:14,870 | red_elisar.faiss_store | INFO | FAISS query completed in 42.2ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:14,870 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:14,871 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1592', 'T1596.002']
+2026-04-15 20:44:14,903 | red_elisar.faiss_store | INFO | FAISS query completed in 31.4ms: 'impair defenses disable security controls bypass...' → 3 results
+2026-04-15 20:44:14,904 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'impair defenses disable security controls bypass...'
+2026-04-15 20:44:14,904 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1562', 'T1562.013']
+2026-04-15 20:44:14,932 | red_elisar.faiss_store | INFO | FAISS query completed in 27.5ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:14,932 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:14,933 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (HTTP Header)' → ['T1592', 'T1596.002']
+2026-04-15 20:44:14,962 | red_elisar.faiss_store | INFO | FAISS query completed in 28.7ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:14,962 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:14,962 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Exposed Sensitive Resource' → ['T1592', 'T1596.002']
+2026-04-15 20:44:14,997 | red_elisar.faiss_store | INFO | FAISS query completed in 35.0ms: 'Sensitive File / Path Disclosure Path '/.env' retu...' → 3 results
+2026-04-15 20:44:14,998 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'Sensitive File / Path Disclosure Path '/.env' returned HTTP ...'
+2026-04-15 20:44:14,998 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1552.001', 'T1552']
+2026-04-15 20:44:15,027 | red_elisar.faiss_store | INFO | FAISS query completed in 29.0ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 20:44:15,028 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 20:44:15,028 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1552', 'T1552.001']
+2026-04-15 20:44:15,055 | red_elisar.faiss_store | INFO | FAISS query completed in 27.0ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:44:15,055 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:44:15,056 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1078.002', 'T1078']
+2026-04-15 20:44:15,083 | red_elisar.faiss_store | INFO | FAISS query completed in 27.6ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:44:15,084 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:44:15,085 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:44:15,113 | red_elisar.faiss_store | INFO | FAISS query completed in 26.9ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:44:15,113 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:44:15,113 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:44:15,143 | red_elisar.faiss_store | INFO | FAISS query completed in 29.0ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:44:15,143 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:44:15,144 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:44:15,170 | red_elisar.faiss_store | INFO | FAISS query completed in 25.5ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:44:15,170 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:44:15,171 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:44:15,196 | red_elisar.faiss_store | INFO | FAISS query completed in 25.5ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:44:15,197 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:44:15,197 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:44:15,225 | red_elisar.faiss_store | INFO | FAISS query completed in 27.6ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:44:15,225 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:44:15,225 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (UNION — Data Exfiltrated)' → ['T1203', 'T1190']
+2026-04-15 20:44:15,246 | red_elisar.faiss_store | INFO | FAISS query completed in 20.6ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:44:15,246 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:44:15,247 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:44:15,274 | red_elisar.faiss_store | INFO | FAISS query completed in 27.2ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:44:15,275 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:44:15,275 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:44:15,297 | red_elisar.faiss_store | INFO | FAISS query completed in 21.6ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:44:15,297 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:44:15,297 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'SQL Injection (Error-Based)' → ['T1203', 'T1190']
+2026-04-15 20:44:15,321 | red_elisar.faiss_store | INFO | FAISS query completed in 23.7ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:44:15,322 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:44:15,322 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Authentication Bypass via SQL Injection' → ['T1078.002', 'T1078']
+2026-04-15 20:44:15,342 | red_elisar.faiss_store | INFO | FAISS query completed in 20.0ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:44:15,342 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:44:15,343 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Unauthenticated Admin Panel Access' → ['T1078.002', 'T1078']
+2026-04-15 20:44:15,373 | red_elisar.faiss_store | INFO | FAISS query completed in 29.7ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 20:44:15,373 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 20:44:15,373 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Unencrypted HTTP (No TLS)' → ['T1599', 'T1090.003']
+2026-04-15 20:44:15,680 | red_elisar.faiss_store | INFO | FAISS query completed in 306.0ms: 'JavaScript execution browser scripting cross-site ...' → 3 results
+2026-04-15 20:44:15,701 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'JavaScript execution browser scripting cross-site scripting ...'
+2026-04-15 20:44:15,730 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1059.007', 'T1189']
+2026-04-15 20:44:16,763 | red_elisar.faiss_store | INFO | FAISS query completed in 983.9ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 20:44:16,786 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 20:44:16,860 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1599', 'T1090.003']
+2026-04-15 20:44:18,079 | red_elisar.faiss_store | INFO | FAISS query completed in 1150.4ms: 'adversary in the middle man-in-the-middle MITM net...' → 3 results
+2026-04-15 20:44:18,118 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'adversary in the middle man-in-the-middle MITM network inter...'
+2026-04-15 20:44:18,144 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'CORS Wildcard Misconfiguration' → ['T1599', 'T1090.003']
+2026-04-15 20:44:19,034 | red_elisar.faiss_store | INFO | FAISS query completed in 823.3ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:44:19,050 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:44:19,079 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1078.002', 'T1078']
+2026-04-15 20:44:20,060 | red_elisar.faiss_store | INFO | FAISS query completed in 966.3ms: 'JavaScript execution browser scripting cross-site ...' → 3 results
+2026-04-15 20:44:20,103 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'JavaScript execution browser scripting cross-site scripting ...'
+2026-04-15 20:44:20,142 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Reflected Cross-Site Scripting (XSS)' → ['T1059.007', 'T1189']
+2026-04-15 20:44:21,043 | red_elisar.faiss_store | INFO | FAISS query completed in 870.5ms: 'JavaScript execution browser scripting cross-site ...' → 3 results
+2026-04-15 20:44:21,069 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'JavaScript execution browser scripting cross-site scripting ...'
+2026-04-15 20:44:21,104 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Reflected Cross-Site Scripting (XSS)' → ['T1059.007', 'T1189']
+2026-04-15 20:44:22,018 | red_elisar.faiss_store | INFO | FAISS query completed in 875.3ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:22,052 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:22,085 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Error / Stack Trace Information Leakage' → ['T1592', 'T1596.002']
+2026-04-15 20:44:23,269 | red_elisar.faiss_store | INFO | FAISS query completed in 1136.6ms: 'browser session hijacking clickjacking iframe...' → 3 results
+2026-04-15 20:44:23,325 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'browser session hijacking clickjacking iframe...'
+2026-04-15 20:44:23,348 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1550.004', 'T1539']
+2026-04-15 20:44:24,323 | red_elisar.faiss_store | INFO | FAISS query completed in 947.9ms: 'user execution malicious link phishing redirect...' → 3 results
+2026-04-15 20:44:24,358 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'user execution malicious link phishing redirect...'
+2026-04-15 20:44:24,390 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1204', 'T1204.001']
+2026-04-15 20:44:25,961 | red_elisar.faiss_store | INFO | FAISS query completed in 1513.9ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:26,002 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:26,019 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (Banner)' → ['T1592', 'T1596.002']
+2026-04-15 20:44:27,265 | red_elisar.faiss_store | INFO | FAISS query completed in 1234.7ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:27,305 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:27,359 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (Banner)' → ['T1592', 'T1596.002']
+2026-04-15 20:44:28,472 | red_elisar.faiss_store | INFO | FAISS query completed in 1078.4ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:28,491 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:28,521 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (Banner)' → ['T1592', 'T1596.002']
+2026-04-15 20:44:29,504 | red_elisar.faiss_store | INFO | FAISS query completed in 953.0ms: 'user execution malicious link phishing redirect...' → 3 results
+2026-04-15 20:44:29,530 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'user execution malicious link phishing redirect...'
+2026-04-15 20:44:29,568 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Open Redirect' → ['T1204', 'T1204.001']
+2026-04-15 20:44:30,707 | red_elisar.faiss_store | INFO | FAISS query completed in 1096.7ms: 'browser session hijacking clickjacking iframe...' → 3 results
+2026-04-15 20:44:30,744 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'browser session hijacking clickjacking iframe...'
+2026-04-15 20:44:30,773 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Insecure Cookie Configuration' → ['T1550.004', 'T1539']
+2026-04-15 20:44:31,795 | red_elisar.faiss_store | INFO | FAISS query completed in 974.8ms: 'browser session hijacking clickjacking iframe...' → 3 results
+2026-04-15 20:44:31,821 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'browser session hijacking clickjacking iframe...'
+2026-04-15 20:44:31,869 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Insecure Cookie Configuration' → ['T1550.004', 'T1539']
+2026-04-15 20:44:33,020 | red_elisar.faiss_store | INFO | FAISS query completed in 1121.7ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:33,040 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:33,065 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1592', 'T1596.002']
+2026-04-15 20:44:33,911 | red_elisar.faiss_store | INFO | FAISS query completed in 818.4ms: 'impair defenses disable security controls bypass...' → 3 results
+2026-04-15 20:44:33,947 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'impair defenses disable security controls bypass...'
+2026-04-15 20:44:33,983 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Missing Security Header' → ['T1562', 'T1562.013']
+2026-04-15 20:44:35,080 | red_elisar.faiss_store | INFO | FAISS query completed in 1074.3ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:35,097 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:35,128 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 20:44:35,838 | red_elisar.faiss_store | INFO | FAISS query completed in 697.5ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:35,849 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:35,873 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 20:44:36,166 | red_elisar.faiss_store | INFO | FAISS query completed in 267.7ms: 'data from information repositories exposed source ...' → 3 results
+2026-04-15 20:44:36,171 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'data from information repositories exposed source code...'
+2026-04-15 20:44:36,179 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1593.003', 'T1213.003']
+2026-04-15 20:44:36,346 | red_elisar.faiss_store | INFO | FAISS query completed in 160.5ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:44:36,352 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:44:36,356 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1203', 'T1190']
+2026-04-15 20:44:36,601 | red_elisar.faiss_store | INFO | FAISS query completed in 235.5ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:36,612 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:36,622 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 20:44:36,899 | red_elisar.faiss_store | INFO | FAISS query completed in 263.9ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:44:36,906 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:44:36,914 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1203', 'T1190']
+2026-04-15 20:44:37,091 | red_elisar.faiss_store | INFO | FAISS query completed in 169.5ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 20:44:37,094 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 20:44:37,097 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1552', 'T1552.001']
+2026-04-15 20:44:37,244 | red_elisar.faiss_store | INFO | FAISS query completed in 140.9ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:37,247 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:37,248 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 20:44:37,381 | red_elisar.faiss_store | INFO | FAISS query completed in 130.3ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:37,382 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:37,382 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 20:44:37,500 | red_elisar.faiss_store | INFO | FAISS query completed in 117.6ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:37,503 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:37,507 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive File / Path Disclosure' → ['T1592', 'T1596.002']
+2026-04-15 20:44:37,631 | red_elisar.faiss_store | INFO | FAISS query completed in 114.9ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:37,632 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:37,632 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Information Disclosure (Banner)' → ['T1592', 'T1596.002']
+2026-04-15 20:44:37,682 | red_elisar.faiss_store | INFO | FAISS query completed in 48.0ms: 'user execution malicious link phishing redirect...' → 3 results
+2026-04-15 20:44:37,683 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'user execution malicious link phishing redirect...'
+2026-04-15 20:44:37,683 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Open Redirect' → ['T1204', 'T1204.001']
+2026-04-15 20:44:38,528 | red_elisar.faiss_store | INFO | FAISS query completed in 844.2ms: 'Sensitive Path Redirect Path '/.env' redirects (ma...' → 3 results
+2026-04-15 20:44:38,561 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'Sensitive Path Redirect Path '/.env' redirects (may be acces...'
+2026-04-15 20:44:38,601 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1552.001', 'T1574.009']
+2026-04-15 20:44:39,503 | red_elisar.faiss_store | INFO | FAISS query completed in 873.2ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 20:44:39,525 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 20:44:39,546 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1552', 'T1552.001']
+2026-04-15 20:44:40,662 | red_elisar.faiss_store | INFO | FAISS query completed in 1088.2ms: 'data from information repositories exposed source ...' → 3 results
+2026-04-15 20:44:40,673 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'data from information repositories exposed source code...'
+2026-04-15 20:44:40,688 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1593.003', 'T1213.003']
+2026-04-15 20:44:41,520 | red_elisar.faiss_store | INFO | FAISS query completed in 815.6ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:44:41,574 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:44:41,604 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1078.002', 'T1078']
+2026-04-15 20:44:42,631 | red_elisar.faiss_store | INFO | FAISS query completed in 1006.7ms: 'valid accounts credential access unauthorized admi...' → 3 results
+2026-04-15 20:44:42,671 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'valid accounts credential access unauthorized admin access...'
+2026-04-15 20:44:42,704 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1078.002', 'T1078']
+2026-04-15 20:44:43,590 | red_elisar.faiss_store | INFO | FAISS query completed in 859.6ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:43,632 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:43,661 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1592', 'T1596.002']
+2026-04-15 20:44:44,748 | red_elisar.faiss_store | INFO | FAISS query completed in 1065.1ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:44,786 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:44,818 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1592', 'T1596.002']
+2026-04-15 20:44:45,687 | red_elisar.faiss_store | INFO | FAISS query completed in 819.5ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:45,720 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:45,746 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1592', 'T1596.002']
+2026-04-15 20:44:46,819 | red_elisar.faiss_store | INFO | FAISS query completed in 1034.9ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:44:46,848 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:44:46,922 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1203', 'T1190']
+2026-04-15 20:44:48,298 | red_elisar.faiss_store | INFO | FAISS query completed in 1317.6ms: 'exploit public-facing application web server vulne...' → 3 results
+2026-04-15 20:44:48,355 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'exploit public-facing application web server vulnerability...'
+2026-04-15 20:44:48,386 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1203', 'T1190']
+2026-04-15 20:44:49,517 | red_elisar.faiss_store | INFO | FAISS query completed in 1077.8ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:49,563 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:49,619 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1592', 'T1596.002']
+2026-04-15 20:44:50,644 | red_elisar.faiss_store | INFO | FAISS query completed in 989.7ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:50,664 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:50,708 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1592', 'T1596.002']
+2026-04-15 20:44:51,584 | red_elisar.faiss_store | INFO | FAISS query completed in 841.0ms: 'gathering victim host information server fingerpri...' → 3 results
+2026-04-15 20:44:51,643 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'gathering victim host information server fingerprinting reco...'
+2026-04-15 20:44:51,676 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1592', 'T1596.002']
+2026-04-15 20:44:52,822 | red_elisar.faiss_store | INFO | FAISS query completed in 1082.6ms: 'unsecured credentials exposed configuration files ...' → 3 results
+2026-04-15 20:44:52,851 | red_elisar.rag_engine | INFO | Retrieved 3 techniques for scenario: 'unsecured credentials exposed configuration files secrets...'
+2026-04-15 20:44:52,894 | red_elisar.mitre_mapper | INFO | [MITREMapper] 'Sensitive Path Redirect' → ['T1552', 'T1552.001']

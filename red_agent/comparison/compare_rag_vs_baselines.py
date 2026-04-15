@@ -28,18 +28,27 @@ import json
 import logging
 import re
 import statistics
+import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+# Allow running as a script (python red_agent/comparison/compare_rag_vs_baselines.py)
+# while still supporting package imports (from comparison import ...).
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 import requests
 
 import config
-from attack_chain_generator import AttackChainGenerator
-from baseline_runner import compute_metrics
-from vector_store_faiss import FAISSVectorStore
-from llm_client import groq_chat_json, mistral_chat_json
+from llm.attack_chain_generator import AttackChainGenerator
+try:
+    from .baseline_runner import compute_metrics
+except ImportError:  # pragma: no cover
+    from baseline_runner import compute_metrics
+from rag.vector_store_faiss import FAISSVectorStore
+from llm.llm_client import groq_chat_json, mistral_chat_json
 
 logger = logging.getLogger("red_elisar.compare")
 
