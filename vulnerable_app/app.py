@@ -323,10 +323,15 @@ def products():
 
 @app.route("/error_test")
 def error_test():
-    """VULNERABILITY 13: Stack trace exposed in error response."""
-    # Intentionally cause an error to show stack trace
-    result = 1 / 0
-    return str(result)
+    """Return a controlled error response without crashing the app."""
+    try:
+        _ = 1 / 0
+        return "OK"
+    except ZeroDivisionError:
+        return jsonify({
+            "status": "error",
+            "message": "Internal test error was handled safely."
+        }), 500
 
 
 @app.route("/robots.txt")

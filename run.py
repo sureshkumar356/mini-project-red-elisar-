@@ -383,16 +383,33 @@ def parse_html_links_and_forms(base_url: str, html: str) -> tuple[set[str], list
         if href and not href.startswith(("javascript:", "mailto:", "#")):
             links.add(urljoin(base_url + "/", href))
 
-    for method, action in re.findall(
-        r"<form[^>]*method=[\"']?([^\"' >]+)[\"']?[^>]*action=[\"']?([^\"' >]+)[\"']?[^>]*>",
-        html,
-        flags=re.IGNORECASE,
-    ):
+    for match in re.finditer(r"<form\b([^>]*)>(.*?)</form>", html, flags=re.IGNORECASE | re.DOTALL):
+        form_attrs = match.group(1) or ""
+        form_body = match.group(2) or ""
+
+        method_m = re.search(r"\bmethod\s*=\s*[\"']?([^\"' >]+)", form_attrs, flags=re.IGNORECASE)
+        action_m = re.search(r"\baction\s*=\s*[\"']?([^\"' >]+)", form_attrs, flags=re.IGNORECASE)
+
+        method = (method_m.group(1) if method_m else "GET").upper()
+        action = (action_m.group(1) if action_m else "").strip() or base_url
+
+        params = sorted(
+            {
+                p.strip()
+                for p in re.findall(
+                    r"<(?:input|textarea|select)[^>]*\bname\s*=\s*[\"']?([^\"' >]+)",
+                    form_body,
+                    flags=re.IGNORECASE,
+                )
+                if p.strip()
+            }
+        )
+
         forms.append(
             {
                 "action": urljoin(base_url + "/", action),
-                "method": method.upper(),
-                "params": [],
+                "method": method,
+                "params": params,
             }
         )
 
