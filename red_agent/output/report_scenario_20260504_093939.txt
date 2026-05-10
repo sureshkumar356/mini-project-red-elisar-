@@ -1,0 +1,557 @@
+===============================
+RED AGENT REPORT
+===============================
+
+Timestamp: 2026-05-04 09:39
+Mode: Generate Attack Scenario (No URL)
+Target URL: N/A
+Scenario: Credential theft and lateral movement in enterprise network.
+
+--------------------------------
+[ITEM #1]
+Type: Scenario Attack Step
+Severity: MEDIUM
+
+Affected URL:
+N/A
+
+Evidence:
+- 
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1199
+Technique Name: Trusted Relationship
+Tactics: execution, initial-access, reconnaissance
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Reconnaissance:
+   Technique: T1591 - Gather Victim Org Information
+   Tools: curl, browser
+   Description: Adversaries may gather information about the victim's organization that can be used during targeting. Information about an organization may include a variety of details, including the names of divisio
+
+2. Initial Access:
+   Technique: T1199 - Trusted Relationship
+   Tools: curl, browser
+   Description: Adversaries may breach or otherwise leverage organizations who have access to intended victims. Access through trusted third party relationship abuses an existing connection that may not be protected
+
+3. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+4. Reconnaissance:
+   Technique: T1590.003 - Network Trust Dependencies
+   Tools: curl, browser
+   Description: Adversaries may gather information about the victim's network trust dependencies that can be used during targeting. Information about network trusts may include a variety of details, including second
+
+5. Reconnaissance:
+   Technique: T1590.004 - Network Topology
+   Tools: curl, browser
+   Description: Adversaries may gather information about the victim's network topology that can be used during targeting. Information about network topologies may include a variety of details, including the physical
+
+--------------------------------
+RECOMMENDATION:
+- General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.
+
+================================
+
+--------------------------------
+[ITEM #2]
+Type: Scenario Attack Step
+Severity: MEDIUM
+
+Affected URL:
+N/A
+
+Evidence:
+- 
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1649
+Technique Name: Steal or Forge Authentication Certificates
+Tactics: collection, credential-access, execution, lateral-movement
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Execution:
+   Technique: T1204 - User Execution
+   Tools: curl, browser
+   Description: An adversary may rely upon specific actions by a user in order to gain execution. Users may be subjected to social engineering to get them to execute malicious code by, for example, opening a maliciou
+
+2. Credential Access:
+   Technique: T1649 - Steal or Forge Authentication Certificates
+   Tools: curl, browser
+   Description: Adversaries may steal or forge certificates used for authentication to access remote systems or resources. Digital certificates are often used to sign and encrypt messages and/or files. Certificates a
+
+3. Lateral Movement:
+   Technique: T1550.004 - Web Session Cookie
+   Tools: curl, browser
+   Description: Adversaries can use stolen session cookies to authenticate to web applications and services. This technique bypasses some multi-factor authentication protocols since the session is already authenticat
+
+4. Collection:
+   Technique: T1557.004 - Evil Twin
+   Tools: curl, browser
+   Description: Adversaries may host seemingly genuine Wi-Fi access points to deceive users into connecting to malicious networks as a way of supporting follow-on behaviors such as Network Sniffing, Transmitted Data
+
+5. Credential Access:
+   Technique: T1606 - Forge Web Credentials
+   Tools: curl, browser
+   Description: Adversaries may forge credential materials that can be used to gain access to web applications or Internet services. Web applications and services (hosted in cloud SaaS environments or on-premise serv
+
+--------------------------------
+RECOMMENDATION:
+- General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.
+
+================================
+
+--------------------------------
+[ITEM #3]
+Type: Scenario Attack Step
+Severity: MEDIUM
+
+Affected URL:
+N/A
+
+Evidence:
+- 
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1078
+Technique Name: Valid Accounts
+Tactics: credential-access, execution, initial-access, lateral-movement, reconnaissance
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Reconnaissance:
+   Technique: T1589.001 - Credentials
+   Tools: curl, browser
+   Description: Adversaries may gather credentials that can be used during targeting. Account credentials gathered by adversaries may be those directly associated with the target victim organization or attempt to tak
+
+2. Initial Access:
+   Technique: T1078 - Valid Accounts
+   Tools: curl, browser
+   Description: Adversaries may obtain and abuse credentials of existing accounts as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Compromised credentials may be used to by
+
+3. Execution:
+   Technique: T1204 - User Execution
+   Tools: curl, browser
+   Description: An adversary may rely upon specific actions by a user in order to gain execution. Users may be subjected to social engineering to get them to execute malicious code by, for example, opening a maliciou
+
+4. Credential Access:
+   Technique: T1110 - Brute Force
+   Tools: curl, browser
+   Description: Adversaries may use brute force techniques to gain access to accounts when passwords are unknown or when password hashes are obtained. Without knowledge of the password for an account or set of accoun
+
+5. Lateral Movement:
+   Technique: T1550.001 - Application Access Token
+   Tools: curl, browser
+   Description: Adversaries may use stolen application access tokens to bypass the typical authentication process and access restricted accounts, information, or services on remote systems. These tokens are typically
+
+--------------------------------
+RECOMMENDATION:
+- Multi-factor Authentication: Enforce MFA for all remote access and privileged accounts
+- Monitor for anomalous login patterns, impossible travel, and credential stuffing.
+
+================================
+
+--------------------------------
+[ITEM #4]
+Type: Scenario Attack Step
+Severity: MEDIUM
+
+Affected URL:
+N/A
+
+Evidence:
+- 
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1110
+Technique Name: Brute Force
+Tactics: collection, credential-access, execution, lateral-movement
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+2. Credential Access:
+   Technique: T1110 - Brute Force
+   Tools: curl, browser
+   Description: Adversaries may use brute force techniques to gain access to accounts when passwords are unknown or when password hashes are obtained. Without knowledge of the password for an account or set of accoun
+
+3. Lateral Movement:
+   Technique: T1550.001 - Application Access Token
+   Tools: curl, browser
+   Description: Adversaries may use stolen application access tokens to bypass the typical authentication process and access restricted accounts, information, or services on remote systems. These tokens are typically
+
+4. Collection:
+   Technique: T1185 - Browser Session Hijacking
+   Tools: curl, browser
+   Description: Adversaries may take advantage of security vulnerabilities and inherent functionality in browser software to change content, modify user-behaviors, and intercept information as part of various browser
+
+5. Credential Access:
+   Technique: T1212 - Exploitation for Credential Access
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in an attempt to collect credentials. Exploitation of a software vulnerability occurs when an adversary takes advantage of a programming error in a pro
+
+--------------------------------
+RECOMMENDATION:
+- General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.
+
+================================
+
+--------------------------------
+[ITEM #5]
+Type: Scenario Attack Step
+Severity: MEDIUM
+
+Affected URL:
+N/A
+
+Evidence:
+- 
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1550
+Technique Name: Use Alternate Authentication Material
+Tactics: collection, impact, lateral-movement
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Lateral Movement:
+   Technique: T1550 - Use Alternate Authentication Material
+   Tools: curl, browser
+   Description: Adversaries may use alternate authentication material, such as password hashes, Kerberos tickets, and application access tokens, in order to move laterally within an environment and bypass normal syst
+
+2. Collection:
+   Technique: T1557 - Adversary-in-the-Middle
+   Tools: curl, browser
+   Description: Adversaries may attempt to position themselves between two or more networked devices using an adversary-in-the-middle (AiTM) technique to support follow-on behaviors such as Network Sniffing, Transmit
+
+3. Impact:
+   Technique: T1499.002 - Service Exhaustion Flood
+   Tools: curl, browser
+   Description: Adversaries may target the different network services provided by systems to conduct a denial of service (DoS). Adversaries often target the availability of DNS and web services, however others have b
+
+4. Lateral Movement:
+   Technique: T1210 - Exploitation of Remote Services
+   Tools: curl, browser
+   Description: Adversaries may exploit remote services to gain unauthorized access to internal systems once inside of a network. Exploitation of a software vulnerability occurs when an adversary takes advantage of a
+
+5. Impact:
+   Technique: T1499 - Endpoint Denial of Service
+   Tools: curl, browser
+   Description: Adversaries may perform Endpoint Denial of Service (DoS) attacks to degrade or block the availability of services to users. Endpoint DoS can be performed by exhausting the system resources those servi
+
+--------------------------------
+RECOMMENDATION:
+- General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.
+
+================================
+
+--------------------------------
+[ITEM #6]
+Type: Scenario Attack Step
+Severity: MEDIUM
+
+Affected URL:
+N/A
+
+Evidence:
+- 
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1021
+Technique Name: Remote Services
+Tactics: impact, lateral-movement
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Lateral Movement:
+   Technique: T1021 - Remote Services
+   Tools: curl, browser
+   Description: Adversaries may use Valid Accounts to log into a service that accepts remote connections, such as telnet, SSH, and VNC. The adversary may then perform actions as the logged-on user.
+
+In an enterprise
+
+2. Impact:
+   Technique: T1499.002 - Service Exhaustion Flood
+   Tools: curl, browser
+   Description: Adversaries may target the different network services provided by systems to conduct a denial of service (DoS). Adversaries often target the availability of DNS and web services, however others have b
+
+3. Lateral Movement:
+   Technique: T1210 - Exploitation of Remote Services
+   Tools: curl, browser
+   Description: Adversaries may exploit remote services to gain unauthorized access to internal systems once inside of a network. Exploitation of a software vulnerability occurs when an adversary takes advantage of a
+
+4. Lateral Movement:
+   Technique: T1021.001 - Remote Desktop Protocol
+   Tools: curl, browser
+   Description: Adversaries may use Valid Accounts to log into a computer using the Remote Desktop Protocol (RDP). The adversary may then perform actions as the logged-on user.
+
+Remote desktop is a common feature in
+
+5. Lateral Movement:
+   Technique: T1563 - Remote Service Session Hijacking
+   Tools: curl, browser
+   Description: Adversaries may take control of preexisting sessions with remote services to move laterally in an environment. Users may use valid credentials to log into a service specifically designed to accept rem
+
+--------------------------------
+RECOMMENDATION:
+- Multi-factor Authentication: Enforce MFA for remote services (SMB, RDP, WinRM)
+- Restrict lateral movement paths using network segmentation and privileged access workstations.
+
+================================
+
+--------------------------------
+[ITEM #7]
+Type: Scenario Attack Step
+Severity: MEDIUM
+
+Affected URL:
+N/A
+
+Evidence:
+- 
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1657
+Technique Name: Financial Theft
+Tactics: impact, reconnaissance
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Impact:
+   Technique: T1657 - Financial Theft
+   Tools: curl, browser
+   Description: Adversaries may steal monetary resources from targets through extortion, social engineering, technical theft, or other methods aimed at their own financial gain at the expense of the availability of t
+
+2. Reconnaissance:
+   Technique: T1597.002 - Purchase Technical Data
+   Tools: curl, browser
+   Description: Adversaries may purchase technical information about victims that can be used during targeting. Information about victims may be available for purchase within reputable private sources and databases,
+
+3. Reconnaissance:
+   Technique: T1590.006 - Network Security Appliances
+   Tools: curl, browser
+   Description: Adversaries may gather information about the victim's network security appliances that can be used during targeting. Information about network security appliances may include a variety of details, suc
+
+4. Reconnaissance:
+   Technique: T1591.002 - Business Relationships
+   Tools: curl, browser
+   Description: Adversaries may gather information about the victim's business relationships that can be used during targeting. Information about an organization’s business relationships may include a variety of deta
+
+5. Reconnaissance:
+   Technique: T1594 - Search Victim-Owned Websites
+   Tools: curl, browser
+   Description: Adversaries may search websites owned by the victim for information that can be used during targeting. Victim-owned websites may contain a variety of details, including names of departments/divisions,
+
+--------------------------------
+RECOMMENDATION:
+- General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.
+
+================================
+
+--------------------------------
+[ITEM #8]
+Type: Scenario Attack Step
+Severity: MEDIUM
+
+Affected URL:
+N/A
+
+Evidence:
+- 
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1550
+Technique Name: Use Alternate Authentication Material
+Tactics: collection, credential-access, impact, lateral-movement
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Lateral Movement:
+   Technique: T1550 - Use Alternate Authentication Material
+   Tools: curl, browser
+   Description: Adversaries may use alternate authentication material, such as password hashes, Kerberos tickets, and application access tokens, in order to move laterally within an environment and bypass normal syst
+
+2. Collection:
+   Technique: T1557 - Adversary-in-the-Middle
+   Tools: curl, browser
+   Description: Adversaries may attempt to position themselves between two or more networked devices using an adversary-in-the-middle (AiTM) technique to support follow-on behaviors such as Network Sniffing, Transmit
+
+3. Impact:
+   Technique: T1499.002 - Service Exhaustion Flood
+   Tools: curl, browser
+   Description: Adversaries may target the different network services provided by systems to conduct a denial of service (DoS). Adversaries often target the availability of DNS and web services, however others have b
+
+4. Collection:
+   Technique: T1185 - Browser Session Hijacking
+   Tools: curl, browser
+   Description: Adversaries may take advantage of security vulnerabilities and inherent functionality in browser software to change content, modify user-behaviors, and intercept information as part of various browser
+
+5. Credential Access:
+   Technique: T1110.002 - Password Cracking
+   Tools: curl, browser
+   Description: Adversaries may use password cracking to attempt to recover usable credentials, such as plaintext passwords, when credential material such as password hashes are obtained. OS Credential Dumping can be
+
+--------------------------------
+RECOMMENDATION:
+- General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.
+
+================================
+
+--------------------------------
+[ITEM #9]
+Type: Scenario Attack Step
+Severity: MEDIUM
+
+Affected URL:
+N/A
+
+Evidence:
+- 
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1021
+Technique Name: Remote Services
+Tactics: collection, impact, lateral-movement
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Lateral Movement:
+   Technique: T1021 - Remote Services
+   Tools: curl, browser
+   Description: Adversaries may use Valid Accounts to log into a service that accepts remote connections, such as telnet, SSH, and VNC. The adversary may then perform actions as the logged-on user.
+
+In an enterprise
+
+2. Collection:
+   Technique: T1557 - Adversary-in-the-Middle
+   Tools: curl, browser
+   Description: Adversaries may attempt to position themselves between two or more networked devices using an adversary-in-the-middle (AiTM) technique to support follow-on behaviors such as Network Sniffing, Transmit
+
+3. Impact:
+   Technique: T1499.002 - Service Exhaustion Flood
+   Tools: curl, browser
+   Description: Adversaries may target the different network services provided by systems to conduct a denial of service (DoS). Adversaries often target the availability of DNS and web services, however others have b
+
+4. Lateral Movement:
+   Technique: T1210 - Exploitation of Remote Services
+   Tools: curl, browser
+   Description: Adversaries may exploit remote services to gain unauthorized access to internal systems once inside of a network. Exploitation of a software vulnerability occurs when an adversary takes advantage of a
+
+5. Lateral Movement:
+   Technique: T1563 - Remote Service Session Hijacking
+   Tools: curl, browser
+   Description: Adversaries may take control of preexisting sessions with remote services to move laterally in an environment. Users may use valid credentials to log into a service specifically designed to accept rem
+
+--------------------------------
+RECOMMENDATION:
+- Multi-factor Authentication: Enforce MFA for remote services (SMB, RDP, WinRM)
+- Restrict lateral movement paths using network segmentation and privileged access workstations.
+
+================================
+
+--------------------------------
+[ITEM #10]
+Type: Scenario Attack Step
+Severity: MEDIUM
+
+Affected URL:
+N/A
+
+Evidence:
+- 
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1657
+Technique Name: Financial Theft
+Tactics: impact, reconnaissance
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Impact:
+   Technique: T1657 - Financial Theft
+   Tools: curl, browser
+   Description: Adversaries may steal monetary resources from targets through extortion, social engineering, technical theft, or other methods aimed at their own financial gain at the expense of the availability of t
+
+2. Reconnaissance:
+   Technique: T1596 - Search Open Technical Databases
+   Tools: curl, browser
+   Description: Adversaries may search freely available technical databases for information about victims that can be used during targeting. Information about victims may be available in online databases and reposito
+
+3. Reconnaissance:
+   Technique: T1590.001 - Domain Properties
+   Tools: curl, browser
+   Description: Adversaries may gather information about the victim's network domain(s) that can be used during targeting. Information about domains and their properties may include a variety of details, including wh
+
+4. Reconnaissance:
+   Technique: T1591.004 - Identify Roles
+   Tools: curl, browser
+   Description: Adversaries may gather information about identities and roles within the victim organization that can be used during targeting. Information about business roles may reveal a variety of targetable deta
+
+5. Reconnaissance:
+   Technique: T1593 - Search Open Websites/Domains
+   Tools: curl, browser
+   Description: Adversaries may search freely available websites and/or domains for information about victims that can be used during targeting. Information about victims may be available in various online sites, suc
+
+--------------------------------
+RECOMMENDATION:
+- General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.
+
+================================

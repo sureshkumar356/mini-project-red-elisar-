@@ -1,0 +1,274 @@
+{
+  "attack_chain": {
+    "attack_chain": [
+      {
+        "step": 1,
+        "technique_id": "T1199",
+        "technique_name": "",
+        "tactic": "initial-access",
+        "description": "Establish a trusted relationship with a contractor or business partner to gain access to the network.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 2,
+        "technique_id": "T1649",
+        "technique_name": "",
+        "tactic": "initial-access",
+        "description": "Steal or forge authentication certificates from the trusted partner to gain access to the network.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 3,
+        "technique_id": "T1078",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Use the stolen authentication certificates to obtain valid accounts on the network.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for all remote access and privileged accounts. Monitor for anomalous login patterns, impossible travel, and credential stuffing.",
+        "tool_commands": [
+          "hydra -l admin -P passwords.txt rdp://target",
+          "crackmapexec smb 10.0.0.0/24 -u user -p password",
+          "spray.sh -smb 10.0.0.0/24 user passwords.txt"
+        ]
+      },
+      {
+        "step": 4,
+        "technique_id": "T1586",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Compromise the obtained valid accounts to gain elevated privileges on the network.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 5,
+        "technique_id": "T1550",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Use alternate authentication material, such as stolen credentials, to access sensitive areas of the network.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 6,
+        "technique_id": "T1021",
+        "technique_name": "",
+        "tactic": "lateral-movement",
+        "description": "Use remote services, such as RDP or SSH, to move laterally within the network.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for remote services (SMB, RDP, WinRM). Restrict lateral movement paths using network segmentation and privileged access workstations.",
+        "tool_commands": [
+          "psexec.exe \\\\target -u admin -p password cmd.exe",
+          "crackmapexec smb target -u admin -p password -x 'whoami'",
+          "evil-winrm -i target -u admin -p password"
+        ]
+      },
+      {
+        "step": 7,
+        "technique_id": "T1657",
+        "technique_name": "",
+        "tactic": "exfiltration",
+        "description": "Use the compromised accounts to steal financial information from the network.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 8,
+        "technique_id": "T1649",
+        "technique_name": "",
+        "tactic": "exfiltration",
+        "description": "Steal or forge authentication certificates to maintain access to the network and exfiltrate data.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 9,
+        "technique_id": "T1021",
+        "technique_name": "",
+        "tactic": "lateral-movement",
+        "description": "Use remote services to maintain access to the network and move laterally to evade detection.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for remote services (SMB, RDP, WinRM). Restrict lateral movement paths using network segmentation and privileged access workstations.",
+        "tool_commands": [
+          "psexec.exe \\\\target -u admin -p password cmd.exe",
+          "crackmapexec smb target -u admin -p password -x 'whoami'",
+          "evil-winrm -i target -u admin -p password"
+        ]
+      },
+      {
+        "step": 10,
+        "technique_id": "T1078",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Use the stolen authentication certificates to maintain access to the network and obtain valid accounts.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for all remote access and privileged accounts. Monitor for anomalous login patterns, impossible travel, and credential stuffing.",
+        "tool_commands": [
+          "hydra -l admin -P passwords.txt rdp://target",
+          "crackmapexec smb 10.0.0.0/24 -u user -p password",
+          "spray.sh -smb 10.0.0.0/24 user passwords.txt"
+        ]
+      }
+    ],
+    "metadata": {}
+  },
+  "retrieval_results": [
+    {
+      "technique_id": "T1586",
+      "name": "Compromise Accounts",
+      "relevance_score": 0.4575,
+      "tactics": [
+        "resource-development"
+      ],
+      "description": "Adversaries may compromise accounts with services that can be used during targeting. For operations incorporating social engineering, the utilization of an online persona may be important. Rather than"
+    },
+    {
+      "technique_id": "T1199",
+      "name": "Trusted Relationship",
+      "relevance_score": 0.5258,
+      "tactics": [
+        "initial-access"
+      ],
+      "description": "Adversaries may breach or otherwise leverage organizations who have access to intended victims. Access through trusted third party relationship abuses an existing connection that may not be protected "
+    },
+    {
+      "technique_id": "T1078.003",
+      "name": "Local Accounts",
+      "relevance_score": 0.5047,
+      "tactics": [
+        "defense-evasion",
+        " persistence",
+        " privilege-escalation",
+        " initial-access"
+      ],
+      "description": "Adversaries may obtain and abuse credentials of a local account as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Local accounts are those configured by an o"
+    },
+    {
+      "technique_id": "T1078",
+      "name": "Valid Accounts",
+      "relevance_score": 0.4935,
+      "tactics": [
+        "defense-evasion",
+        " persistence",
+        " privilege-escalation",
+        " initial-access"
+      ],
+      "description": "Adversaries may obtain and abuse credentials of existing accounts as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Compromised credentials may be used to by"
+    },
+    {
+      "technique_id": "T1550",
+      "name": "Use Alternate Authentication Material",
+      "relevance_score": 0.4525,
+      "tactics": [
+        "defense-evasion",
+        " lateral-movement"
+      ],
+      "description": "Adversaries may use alternate authentication material, such as password hashes, Kerberos tickets, and application access tokens, in order to move laterally within an environment and bypass normal syst"
+    },
+    {
+      "technique_id": "T1649",
+      "name": "Steal or Forge Authentication Certificates",
+      "relevance_score": 0.5035,
+      "tactics": [
+        "credential-access"
+      ],
+      "description": "Adversaries may steal or forge certificates used for authentication to access remote systems or resources. Digital certificates are often used to sign and encrypt messages and/or files. Certificates a"
+    },
+    {
+      "technique_id": "T1021",
+      "name": "Remote Services",
+      "relevance_score": 0.4482,
+      "tactics": [
+        "lateral-movement"
+      ],
+      "description": "Adversaries may use Valid Accounts to log into a service that accepts remote connections, such as telnet, SSH, and VNC. The adversary may then perform actions as the logged-on user.\n\nIn an enterprise "
+    },
+    {
+      "technique_id": "T1657",
+      "name": "Financial Theft",
+      "relevance_score": 0.4529,
+      "tactics": [
+        "impact"
+      ],
+      "description": "Adversaries may steal monetary resources from targets through extortion, social engineering, technical theft, or other methods aimed at their own financial gain at the expense of the availability of t"
+    }
+  ],
+  "latency": {
+    "pipeline_start": 26803.3680303,
+    "retrieval_time_s": 12.840427200000704,
+    "augmentation_time_s": 0.0031727999994473066,
+    "llm_request_start": 26816.2556799,
+    "llm_model": "llama-3.1-8b-instant",
+    "prompt_chars": 2827,
+    "llm_request_end": 26818.5881139,
+    "llm_latency_s": 2.332433999999921,
+    "eval_count": 1151,
+    "eval_duration_ns": 0,
+    "tokens_per_second": 493.4759140022993,
+    "validation_time_s": 2.3995184999985213,
+    "pipeline_total_s": 15.699109500001214
+  },
+  "warnings": [],
+  "faithfulness_score": 1.0,
+  "scenario": "Credential theft and lateral movement in enterprise network.",
+  "target_environment": "Enterprise Windows Active Directory network",
+  "timestamp": "2026-04-29T17:41:57.920221+00:00",
+  "analysis": {
+    "total_steps": 10,
+    "unique_techniques": 7,
+    "technique_reuse": 3,
+    "tactical_coverage": {
+      "covered": [
+        "credential-access",
+        "exfiltration",
+        "initial-access",
+        "lateral-movement"
+      ],
+      "total_mitre_tactics": 14,
+      "coverage_ratio": 0.2857142857142857
+    },
+    "detection_coverage": {
+      "steps_with_detection": 0,
+      "coverage_ratio": 0.0
+    },
+    "hallucination_metrics": {
+      "hallucinated_steps": 0,
+      "total_steps": 10,
+      "faithfulness_score": 1.0
+    },
+    "latency_summary": {
+      "total_pipeline_s": 15.699109500001214,
+      "retrieval_ms": 12840.427200000704,
+      "generation_s": 2.332433999999921,
+      "tokens_per_second": 493.4759140022993
+    }
+  }
+}

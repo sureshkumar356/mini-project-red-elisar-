@@ -1,0 +1,1859 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Red Agent - AI Offensive Security Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Manrope", "ui-sans-serif", "system-ui", "sans-serif"],
+          },
+          colors: {
+            cyber: {
+              50: "#f6f9ff",
+              100: "#edf3ff",
+              200: "#d9e6ff",
+              300: "#bcd2ff",
+              400: "#90b4ff",
+              500: "#5c8fff",
+              600: "#3c6ef0",
+              700: "#2d56cc",
+            },
+            danger: {
+              500: "#d63b5c",
+            },
+            success: {
+              500: "#15a674",
+            },
+          },
+          boxShadow: {
+            glass: "0 12px 40px rgba(18, 28, 45, 0.08)",
+            lift: "0 14px 35px rgba(56, 91, 192, 0.18)",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root {
+      --bg: #f4f7fd;
+      --surface: #ffffff;
+      --surface-soft: #f8fbff;
+      --border: #dce6f8;
+      --text: #18253e;
+      --muted: #61708f;
+      --danger: #d63b5c;
+      --success: #15a674;
+      --info: #3c6ef0;
+      --glass: rgba(255, 255, 255, 0.68);
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 15% 5%, #e8f0ff 0%, rgba(232, 240, 255, 0) 38%),
+        radial-gradient(circle at 85% 0%, #ffeef3 0%, rgba(255, 238, 243, 0) 32%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+      transition: background 0.35s ease, color 0.25s ease;
+    }
+
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(220, 230, 248, 0.9);
+      box-shadow: 0 12px 40px rgba(18, 28, 45, 0.08);
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar-thumb {
+      background: #c3d3ee;
+      border-radius: 10px;
+    }
+
+    .graph-node {
+      border-radius: 12px;
+      border: 1px solid #e5eaf3;
+      min-width: 320px;
+      max-width: 360px;
+      background: #ffffff;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+      padding: 14px 16px;
+      text-align: center;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .graph-node:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
+    }
+
+    .graph-node .node-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      white-space: pre-line;
+      line-height: 1.35;
+    }
+
+    .graph-node .node-sub {
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .graph-node .node-meta {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .theme-night body {
+      background:
+        radial-gradient(circle at 15% 5%, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0) 40%),
+        radial-gradient(circle at 85% 0%, rgba(55, 48, 107, 0.6) 0%, rgba(15, 23, 42, 0) 35%),
+        #0b1220;
+      color: #e2e8f0;
+    }
+
+    .theme-night .glass {
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+      box-shadow: 0 16px 40px rgba(2, 6, 23, 0.45);
+    }
+
+    .theme-night .bg-white,
+    .theme-night .bg-white\/90,
+    .theme-night .bg-white\/70 {
+      background-color: #0f172a !important;
+    }
+
+    .theme-night .bg-slate-50 {
+      background-color: #111827 !important;
+    }
+
+    .theme-night .bg-slate-100 {
+      background-color: #1f2937 !important;
+    }
+
+    .theme-night .border-slate-200 {
+      border-color: #334155 !important;
+    }
+
+    .theme-night .border-slate-300 {
+      border-color: #475569 !important;
+    }
+
+    .theme-night .text-slate-900 {
+      color: #f8fafc !important;
+    }
+
+    .theme-night .text-slate-800 {
+      color: #e2e8f0 !important;
+    }
+
+    .theme-night .text-slate-700 {
+      color: #cbd5e1 !important;
+    }
+
+    .theme-night .text-slate-600,
+    .theme-night .text-slate-500 {
+      color: #94a3b8 !important;
+    }
+
+    .theme-night .text-slate-400 {
+      color: #64748b !important;
+    }
+
+    .react-flow__attribution {
+      display: none;
+    }
+
+    .text-clamp-2 {
+      display: -webkit-box;
+      line-clamp: 2;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .skeleton {
+      position: relative;
+      overflow: hidden;
+      background: #e9f0fb;
+    }
+
+    .skeleton::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.65) 48%, transparent 76%);
+      animation: shimmer 1.3s infinite;
+    }
+
+    @keyframes shimmer {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(100%); }
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;">
+      <div style="max-width:760px;width:100%;background:#ffffff;border:1px solid #dce6f8;border-radius:16px;box-shadow:0 12px 28px rgba(18,28,45,.08);padding:20px;font-family:Manrope,ui-sans-serif,system-ui,sans-serif;">
+        <h2 style="margin:0 0 8px;color:#1f2a44;font-size:20px;font-weight:800;">Red Agent UI is starting...</h2>
+        <p style="margin:0;color:#607091;font-size:14px;">If this message stays for more than 5 seconds, a frontend dependency may have failed to load.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__redAgentBoot = { mounted: false, errors: [] };
+
+      function esc(v) {
+        return String(v || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      function renderBootError(message) {
+        const root = document.getElementById("root");
+        if (!root) return;
+        root.innerHTML =
+          '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#f4f7fd;">' +
+            '<div style="max-width:860px;width:100%;background:#fff;border:1px solid #f2c5d0;border-radius:16px;box-shadow:0 12px 28px rgba(214,59,92,.15);padding:22px;font-family:Manrope,ui-sans-serif,system-ui,sans-serif;">' +
+              '<h2 style="margin:0 0 8px;color:#b42346;font-size:22px;font-weight:800;">Red Agent frontend failed to initialize</h2>' +
+              '<p style="margin:0 0 14px;color:#5d6b87;font-size:14px;">This is a JavaScript startup error (not a Flask backend crash). Please hard refresh (Ctrl+F5). If it persists, share the message below.</p>' +
+              '<pre style="margin:0;background:#fff5f7;border:1px solid #f6d2db;border-radius:10px;padding:12px;color:#9f1239;font-size:12px;white-space:pre-wrap;">' + esc(message) + '</pre>' +
+            '</div>' +
+          '</div>';
+      }
+
+      window.__renderRedAgentBootError = renderBootError;
+
+      window.addEventListener("error", function (event) {
+        const target = event && event.target;
+        if (target && target.tagName === "SCRIPT") {
+          const src = target.getAttribute("src") || "(inline script)";
+          renderBootError("Failed to load script: " + src);
+          return;
+        }
+        const msg = (event && event.message) || "Unknown runtime error";
+        const file = event && event.filename ? "\nFile: " + event.filename + ":" + event.lineno + ":" + event.colno : "";
+        renderBootError(msg + file);
+      }, true);
+
+      window.addEventListener("unhandledrejection", function (event) {
+        const reason = event && event.reason ? (event.reason.stack || event.reason.message || String(event.reason)) : "Unknown promise rejection";
+        renderBootError("Unhandled Promise rejection:\n" + reason);
+      });
+
+      setTimeout(function () {
+        if (!window.__redAgentBoot || !window.__redAgentBoot.mounted) {
+          renderBootError("App mount timeout: React app did not mount within expected time. Check blocked CDN scripts, browser extensions, or network restrictions.");
+        }
+      }, 20000);
+    })();
+  </script>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/framer-motion/dist/framer-motion.js"></script>
+  <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
+  <script src="https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.js"></script>
+
+  {% raw %}
+  <script type="text/babel">
+    const { useMemo, useState, useEffect, useCallback, useRef } = React;
+    const passthrough = ({ children }) => <>{children}</>;
+    const nullComp = () => null;
+    const motionFallback = new Proxy({}, {
+      get: (_, tag) => ({ children, ...props }) => React.createElement(tag, props, children),
+    });
+
+    const FM = window.framerMotion || window["framer-motion"] || window.Motion || {};
+    const motion = FM.motion || motionFallback;
+    const AnimatePresence = FM.AnimatePresence || passthrough;
+
+    const RC = window.Recharts || {};
+    const ResponsiveContainer = RC.ResponsiveContainer || (({ children }) => <div className="h-full w-full">{children}</div>);
+    const PieChart = RC.PieChart || passthrough;
+    const Pie = RC.Pie || passthrough;
+    const Cell = RC.Cell || nullComp;
+    const Tooltip = RC.Tooltip || nullComp;
+    const Legend = RC.Legend || nullComp;
+    const BarChart = RC.BarChart || passthrough;
+    const Bar = RC.Bar || nullComp;
+    const XAxis = RC.XAxis || nullComp;
+    const YAxis = RC.YAxis || nullComp;
+    const CartesianGrid = RC.CartesianGrid || nullComp;
+    const LineChart = RC.LineChart || passthrough;
+    const Line = RC.Line || nullComp;
+    const RadarChart = RC.RadarChart || passthrough;
+    const Radar = RC.Radar || nullComp;
+    const PolarGrid = RC.PolarGrid || nullComp;
+    const PolarAngleAxis = RC.PolarAngleAxis || nullComp;
+    const PolarRadiusAxis = RC.PolarRadiusAxis || nullComp;
+    const AreaChart = RC.AreaChart || passthrough;
+    const Area = RC.Area || nullComp;
+
+    const TACTIC_BORDERS = {
+      "initial-access": "#f3b4b4",
+      "credential-access": "#f3e49d",
+      exfiltration: "#a7e2c0",
+      impact: "#e1a1a1",
+      execution: "#f6d4b8",
+      "privilege-escalation": "#d8c3f4",
+      "lateral-movement": "#b8e0da",
+      collection: "#f2c2d6",
+      reconnaissance: "#c6d8ff",
+      discovery: "#c9eaf2",
+      persistence: "#d2d9f7",
+      "command-and-control": "#d8c9f7",
+      "defense-evasion": "#d7dde6",
+    };
+
+    const NODE_TONES = {
+      technique: { bg: "#ffffff", border: "#e2e8f0" },
+      condition: { bg: "#fff7ed", border: "#fed7aa" },
+    };
+
+    const TACTIC_ORDER = [
+      "preconditions",
+      "reconnaissance",
+      "resource-development",
+      "initial-access",
+      "execution",
+      "persistence",
+      "privilege-escalation",
+      "defense-evasion",
+      "credential-access",
+      "discovery",
+      "lateral-movement",
+      "collection",
+      "command-and-control",
+      "exfiltration",
+      "impact",
+      "unknown",
+    ];
+
+    const tacticLabel = (value) => String(value || "unknown").replace(/-/g, " ");
+
+    const normalizeTactic = (value) => String(value || "unknown")
+      .toLowerCase()
+      .trim()
+      .replace(/_/g, "-")
+      .replace(/\s+/g, "-");
+
+    const wrapLabel = (text, maxLen = 28) => {
+      const words = String(text || "Attack Step").split(" ");
+      const lines = [];
+      let line = "";
+      words.forEach((word) => {
+        const next = line ? `${line} ${word}` : word;
+        if (next.length > maxLen && line) {
+          lines.push(line);
+          line = word;
+        } else {
+          line = next;
+        }
+      });
+      if (line) lines.push(line);
+      return lines.join("\n");
+    };
+
+    const normalizeConfidence = (value, fallback = 0.7) => {
+      const num = Number(value);
+      if (!Number.isFinite(num)) return fallback;
+      if (num > 1) return Math.min(1, Math.max(0.1, num / 100));
+      return Math.min(1, Math.max(0.1, num));
+    };
+
+    const MAIN_CHAIN_ORDER = [
+      "reconnaissance",
+      "initial-access",
+      "execution",
+      "privilege-escalation",
+      "credential-access",
+      "persistence",
+      "lateral-movement",
+      "collection",
+      "exfiltration",
+      "impact",
+    ];
+
+    const modeConfig = {
+      dashboard: { title: "Dashboard" },
+      fullscan: { title: "Full Scan", endpoint: "/api/scan", button: "Run Full Scan" },
+      scenario: { title: "Generate Scenario", endpoint: "/api/scenario", button: "Generate Scenario" },
+      validate: { title: "Validate Scenario", endpoint: "/api/validate", button: "Validate Scenario" },
+      analyze: { title: "Analyze Scenario", endpoint: "/api/analyze", button: "Analyze Scenario" },
+    };
+
+    const sidebarItems = [
+      { key: "dashboard", label: "Dashboard", icon: "M3 13h8V3H3v10Zm10 8h8V3h-8v18ZM3 21h8v-6H3v6Z" },
+      { key: "fullscan", label: "Full Scan", icon: "M12 3l8 4v6c0 5-3.4 9.7-8 11-4.6-1.3-8-6-8-11V7l8-4Z" },
+      { key: "scenario", label: "Generate Scenario", icon: "M4 4h16v4H4V4Zm0 6h10v4H4v-4Zm0 6h16v4H4v-4Z" },
+      { key: "validate", label: "Validate Scenario", icon: "M3 12 8 17 21 4" },
+      { key: "analyze", label: "Analyze Scenario", icon: "M4 19V5m6 14V9m6 10v-6" },
+      { key: "reports", label: "Reports", icon: "M6 2h9l5 5v15H6V2Zm8 1v5h5" },
+      { key: "attack-graph", label: "Attack Graph", icon: "M4 12a2 2 0 1 0 0 .01M12 6a2 2 0 1 0 0 .01M20 12a2 2 0 1 0 0 .01M12 18a2 2 0 1 0 0 .01" },
+      { key: "settings", label: "Settings", icon: "M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm9 4-2.1.6a7.8 7.8 0 0 1-.8 1.9l1.3 1.8-1.4 1.4-1.8-1.3a7.8 7.8 0 0 1-1.9.8L14 21h-2l-.6-2.1a7.8 7.8 0 0 1-1.9-.8l-1.8 1.3-1.4-1.4 1.3-1.8a7.8 7.8 0 0 1-.8-1.9L3 14v-2l2.1-.6c.2-.7.5-1.3.8-1.9L4.6 7.7l1.4-1.4 1.8 1.3c.6-.3 1.2-.6 1.9-.8L10 3h2l.6 2.1c.7.2 1.3.5 1.9.8l1.8-1.3 1.4 1.4-1.3 1.8c.3.6.6 1.2.8 1.9L21 10v2Z" },
+    ];
+
+    function Icon({ path, className = "w-5 h-5" }) {
+      return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d={path}></path>
+        </svg>
+      );
+    }
+
+    function useAnimatedNumber(value, duration = 900) {
+      const [display, setDisplay] = useState(0);
+
+      useEffect(() => {
+        const start = performance.now();
+        const from = Number(display) || 0;
+        const to = Number(value) || 0;
+        let frame;
+
+        const tick = (t) => {
+          const p = Math.min(1, (t - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          const current = from + (to - from) * eased;
+          setDisplay(current);
+          if (p < 1) frame = requestAnimationFrame(tick);
+        };
+
+        frame = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(frame);
+      }, [value]);
+
+      return display;
+    }
+
+    function StatCard({ title, value, suffix = "", iconPath, accent = "#3c6ef0" }) {
+      const isNumber = typeof value === "number" && Number.isFinite(value);
+      const animated = useAnimatedNumber(isNumber ? value : 0);
+      return (
+        <motion.div
+          whileHover={{ y: -4, scale: 1.01 }}
+          transition={{ duration: 0.18 }}
+          className="glass rounded-2xl p-4"
+        >
+          <div className="flex items-center justify-between">
+            <p className="text-xs uppercase tracking-wide text-slate-500 font-semibold">{title}</p>
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${accent}18`, color: accent }}>
+              <Icon path={iconPath} className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-3 text-2xl font-extrabold text-slate-800">
+            {isNumber ? `${Math.round(animated)}${suffix}` : "--"}
+          </div>
+        </motion.div>
+      );
+    }
+
+    function SeverityBadge({ level }) {
+      const sev = String(level || "INFO").toUpperCase();
+      const styleMap = {
+        CRITICAL: "bg-red-100 text-red-700 border-red-200",
+        HIGH: "bg-rose-100 text-rose-700 border-rose-200",
+        MEDIUM: "bg-amber-100 text-amber-700 border-amber-200",
+        LOW: "bg-emerald-100 text-emerald-700 border-emerald-200",
+        INFO: "bg-slate-100 text-slate-700 border-slate-200",
+      };
+      return <span className={`px-2.5 py-1 text-xs font-semibold rounded-full border ${styleMap[sev] || styleMap.INFO}`}>{sev}</span>;
+    }
+
+    function StatusBadge({ text = "Active" }) {
+      return (
+        <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          {text}
+        </span>
+      );
+    }
+
+    const normalizeSeverityValue = (value) => {
+      const raw = String(value || "").toUpperCase();
+      if (["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO"].includes(raw)) return raw;
+      if (raw.includes("CRIT")) return "CRITICAL";
+      if (raw.includes("HIGH")) return "HIGH";
+      if (raw.includes("MED")) return "MEDIUM";
+      if (raw.includes("LOW")) return "LOW";
+      return "LOW";
+    };
+
+    function VulnerabilityList({ vulns, isLoading, selectedKey, onSelect }) {
+      const items = Array.isArray(vulns) ? vulns : [];
+      const rowKey = (v, idx) => `${v.type || v.name || "v"}|${v.endpoint || v.url || "na"}|${idx}`;
+      return (
+        <div id="attack-graph" className="glass rounded-2xl p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-bold text-slate-800">Vulnerabilities Found</h3>
+              <p className="text-xs text-slate-500 mt-1">Live findings from the current or most recent scan.</p>
+            </div>
+            {isLoading && (
+              <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold">
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                Scanning
+              </span>
+            )}
+          </div>
+
+          <div className="mt-3 space-y-2">
+            {isLoading && items.length === 0 && [...Array(4)].map((_, i) => (
+              <div key={`sk-v-${i}`} className="skeleton h-12 rounded-xl"></div>
+            ))}
+
+            {!isLoading && items.length === 0 && (
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-xs text-slate-500">
+                Run a full scan to populate vulnerabilities.
+              </div>
+            )}
+
+            {items.map((vuln, idx) => {
+              const sev = normalizeSeverityValue(vuln.severity || vuln.risk || vuln.level);
+              const key = rowKey(vuln, idx);
+              const active = selectedKey === key;
+              return (
+                <button
+                  type="button"
+                  key={`${vuln.id || vuln.name || idx}`}
+                  onClick={() => onSelect && onSelect(active ? "" : key)}
+                  className={`w-full text-left rounded-xl border px-3 py-2 ${active ? "border-cyber-300 bg-cyber-50/60" : "border-slate-200 bg-white"}`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-800">{vuln.name || vuln.title || vuln.type || "Unknown vulnerability"}</p>
+                      <p className="text-xs text-slate-500 mt-1 break-all">{vuln.url || vuln.location || vuln.endpoint || "Target surface"}</p>
+                    </div>
+                    <SeverityBadge level={sev} />
+                  </div>
+                  <div className="mt-2 text-xs text-slate-600">
+                    {vuln.description || vuln.detail || "Finding captured from automated recon and validation."}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    function TooltipBox({ active, payload, label }) {
+      if (!active || !payload || !payload.length) return null;
+      return (
+        <div className="bg-white border border-slate-200 rounded-xl shadow-lg px-3 py-2 text-xs text-slate-700">
+          <p className="font-semibold text-slate-800 mb-1">{label || payload[0].name}</p>
+          {payload.map((p, idx) => (
+            <p key={idx}>{p.name}: <span className="font-semibold">{Math.round(Number(p.value) * 100) / 100}</span></p>
+          ))}
+        </div>
+      );
+    }
+
+    function ChartEmpty({ message }) {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center text-xs text-slate-500">
+          {message}
+        </div>
+      );
+    }
+
+        const buildPrimarySteps = (graph, attackChain, maxSteps = 12) => {
+      const chain = Array.isArray(attackChain) ? attackChain : [];
+      const steps = [];
+      const seen = new Set();
+
+      chain.forEach((c, idx) => {
+        const techniqueId = String(c.technique_id || c.id || "");
+        if (techniqueId && seen.has(techniqueId)) return;
+        if (techniqueId) seen.add(techniqueId);
+        const name = String(c.technique_name || c.name || c.label || c.technique_id || "Attack Step");
+        steps.push({
+          id: techniqueId || `step-${idx + 1}`,
+          techniqueId: techniqueId || `S${idx + 1}`,
+          name,
+          tactic: normalizeTactic(c.tactic || c.phase || "unknown"),
+          confidence: normalizeConfidence(c.confidence || c.confidence_score || c.probability, 0.72),
+          risk: String(c.severity || c.risk || "MEDIUM").toUpperCase(),
+          description: String(c.description || c.detail || ""),
+          mitigation: String(c.mitigation || ""),
+          vulnerabilityName: String(c.vulnerability_name || c.source_vulnerability?.type || ""),
+          stepNo: idx + 1,
+        });
+      });
+
+      if (!steps.length) {
+        const nodes = Array.isArray(graph?.nodes) ? graph.nodes : [];
+        nodes.slice(0, maxSteps).forEach((n, idx) => {
+          const techniqueId = String(n.technique_id || n.id || "");
+          const name = String(n.label || n.name || n.id || "Attack Step");
+          steps.push({
+            id: techniqueId || `step-${idx + 1}`,
+            techniqueId: techniqueId || `S${idx + 1}`,
+            name,
+            tactic: normalizeTactic(n.tactic || "unknown"),
+            confidence: normalizeConfidence(n.base_probability, 0.6),
+            risk: String(n.severity || n.risk || "MEDIUM").toUpperCase(),
+            description: String(n.description || ""),
+            mitigation: String(n.mitigation || ""),
+            vulnerabilityName: String(n.vulnerability_name || ""),
+            stepNo: idx + 1,
+          });
+        });
+      }
+
+      return steps.slice(0, maxSteps);
+    };
+
+    const buildZigZagLayout = (steps) => {
+      const cols = 3;
+      const cardW = 300;
+      const cardH = 198;
+      const gapX = 56;
+      const gapY = 84;
+      const marginX = 38;
+      const marginY = 44;
+      const rows = Math.max(1, Math.ceil(steps.length / cols));
+      const nodes = steps.map((step, idx) => {
+        const row = Math.floor(idx / cols);
+        const colInRow = idx % cols;
+        const reversed = row % 2 === 1;
+        const col = reversed ? (cols - 1 - colInRow) : colInRow;
+        return {
+          ...step,
+          x: marginX + col * (cardW + gapX),
+          y: marginY + row * (cardH + gapY),
+          w: cardW,
+          h: cardH,
+        };
+      });
+      const width = marginX * 2 + cols * cardW + (cols - 1) * gapX;
+      const height = marginY * 2 + rows * cardH + (rows - 1) * gapY + 18;
+      return { nodes, width, height };
+    };
+
+    const wrapWords = (value, maxChars = 30) => {
+      const words = String(value || "").trim().split(/\s+/).filter(Boolean);
+      const lines = [];
+      let line = "";
+      words.forEach((w) => {
+        const next = line ? `${line} ${w}` : w;
+        if (next.length > maxChars && line) {
+          lines.push(line);
+          line = w;
+        } else {
+          line = next;
+        }
+      });
+      if (line) lines.push(line);
+      return lines.slice(0, 3);
+    };
+
+    function AttackGraphPanel({ graph, attackChain }) {
+      const graphRef = useRef(null);
+      const primarySteps = useMemo(() => buildPrimarySteps(graph, attackChain, 12), [graph, attackChain]);
+      const layout = useMemo(() => buildZigZagLayout(primarySteps), [primarySteps]);
+      const lines = useMemo(() => {
+        const arr = [];
+        for (let i = 0; i < layout.nodes.length - 1; i += 1) {
+          const a = layout.nodes[i];
+          const b = layout.nodes[i + 1];
+          const ax = a.x + a.w / 2;
+          const ay = a.y + a.h;
+          const bx = b.x + b.w / 2;
+          const by = b.y;
+          const midY = ay + (by - ay) / 2;
+          arr.push(`M ${ax} ${ay} L ${ax} ${midY} L ${bx} ${midY} L ${bx} ${by}`);
+        }
+        return arr;
+      }, [layout]);
+
+      const onDownloadPng = useCallback(async () => {
+        if (!graphRef.current || !window.htmlToImage?.toPng) return;
+        const dataUrl = await window.htmlToImage.toPng(graphRef.current, {
+          backgroundColor: "#ffffff",
+          pixelRatio: 2,
+          width: layout.width,
+          height: layout.height,
+        });
+        const link = document.createElement("a");
+        link.download = `attack-map-${new Date().toISOString().slice(0, 10)}.png`;
+        link.href = dataUrl;
+        link.click();
+      }, [layout]);
+
+      const onDownloadSvg = useCallback(() => {
+        const svgEl = graphRef.current?.querySelector("svg");
+        if (!svgEl) return;
+        const serializer = new XMLSerializer();
+        const svgText = serializer.serializeToString(svgEl);
+        const blob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `attack-map-${new Date().toISOString().slice(0, 10)}.svg`;
+        link.click();
+        URL.revokeObjectURL(url);
+      }, []);
+
+      const onCopyImage = useCallback(async () => {
+        if (!graphRef.current || !window.htmlToImage?.toBlob || !navigator.clipboard?.write) return;
+        const blob = await window.htmlToImage.toBlob(graphRef.current, {
+          backgroundColor: "#ffffff",
+          pixelRatio: 2,
+          width: layout.width,
+          height: layout.height,
+        });
+        if (!blob) return;
+        await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+      }, [layout]);
+
+      return (
+        <div className="glass rounded-2xl p-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h3 className="text-base font-bold text-slate-800">Attack Chain Diagram</h3>
+              <p className="text-xs text-slate-500 mt-1">Static premium zig-zag attack map for presentation and executive review.</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button onClick={onDownloadPng} className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white hover:bg-slate-800">Download PNG</button>
+              <button onClick={onDownloadSvg} className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-300 text-slate-700">Download SVG</button>
+              <button onClick={onCopyImage} className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-300 text-slate-700">Copy Image</button>
+            </div>
+          </div>
+
+          <div className="mt-3 rounded-2xl border border-slate-200 bg-white overflow-auto hide-scrollbar p-3">
+            {layout.nodes.length === 0 ? (
+              <div className="h-[360px] flex items-center justify-center text-sm text-slate-500">
+                No attack graph data yet. Run a scan to populate the chain.
+              </div>
+            ) : (
+              <div ref={graphRef} style={{ width: `${layout.width}px`, height: `${layout.height}px`, margin: "0 auto" }}>
+                <svg width={layout.width} height={layout.height} viewBox={`0 0 ${layout.width} ${layout.height}`} xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <marker id="arrowHead" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+                      <path d="M0,0 L10,4 L0,8 z" fill="#6b7280" />
+                    </marker>
+                    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="160%">
+                      <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#94a3b8" floodOpacity="0.22" />
+                    </filter>
+                  </defs>
+
+                  {lines.map((d, i) => (
+                    <path key={`p-${i}`} d={d} fill="none" stroke="#94a3b8" strokeWidth="2.2" markerEnd="url(#arrowHead)" strokeLinecap="round" strokeLinejoin="round" />
+                  ))}
+
+                  {layout.nodes.map((n) => {
+                    const border = TACTIC_BORDERS[n.tactic] || "#cbd5e1";
+                    const labelLines = wrapWords(n.name, 30);
+                    const detailLine = wrapWords(n.vulnerabilityName || n.description || n.mitigation || "No additional detail available.", 44)[0] || "";
+                    return (
+                      <g key={n.id}>
+                        <rect x={n.x} y={n.y} width={n.w} height={n.h} rx="16" ry="16" fill="#ffffff" stroke={border} strokeWidth="2.2" filter="url(#cardShadow)" />
+                        <text x={n.x + 16} y={n.y + 26} fontSize="13" fill="#1e40af" fontWeight="700">[{n.techniqueId || `S${n.stepNo}`}]</text>
+                        {labelLines.map((line, idx) => (
+                          <text key={idx} x={n.x + 16} y={n.y + 52 + idx * 18} fontSize="15" fill="#0f172a" fontWeight="700">{line}</text>
+                        ))}
+                        <text x={n.x + 16} y={n.y + 126} fontSize="12" fill="#475569" fontWeight="600">{tacticLabel(n.tactic)}</text>
+                        <text x={n.x + 16} y={n.y + 148} fontSize="12" fill="#64748b">Confidence: {Math.round((n.confidence || 0.6) * 100)}%</text>
+                        <text x={n.x + 16} y={n.y + 172} fontSize="11" fill="#64748b">{detailLine}</text>
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+function ScenarioNarrativePanel({ result, chain }) {
+      const readable = result?.readable_scenario || {};
+      const paragraphs = Array.isArray(readable.paragraphs) ? readable.paragraphs : [];
+      const actions = Array.isArray(readable.operator_actions) ? readable.operator_actions : [];
+      const detailedFlow = Array.isArray(readable.detailed_attack_flow) ? readable.detailed_attack_flow : [];
+      const proceed = Array.isArray(readable.how_to_proceed) ? readable.how_to_proceed : [];
+      const fallback = chain.slice(0, 8).map((step, idx) =>
+        `Step ${idx + 1}: ${step.technique_name || step.name || step.technique_id || "Step"} in ${String(step.tactic || step.phase || "unknown").replace(/-/g, " ")}.`
+      );
+      const chainDetailed = chain.slice(0, 10).map((step, idx) => {
+        const name = step.technique_name || step.name || step.technique_id || "Step";
+        const tactic = String(step.tactic || step.phase || "unknown").replace(/-/g, " ");
+        const desc = step.description || "Detailed description not provided in payload.";
+        const rationale = step.rationale || "Mapped from chain context and scenario intent.";
+        return `Step ${idx + 1} (${tactic}) - ${name}. Process detail: ${desc} Chain role: ${rationale}`;
+      });
+      const chainProceed = chain.slice(0, 10).map((step, idx) => {
+        const name = step.technique_name || step.name || step.technique_id || "Step";
+        const tactic = String(step.tactic || step.phase || "unknown").replace(/-/g, " ");
+        const mitigation = step.mitigation || "Apply controls and validation checks relevant to this stage.";
+        return `Step ${idx + 1} execution guidance: Validate prerequisites for ${name} in ${tactic}, run controlled checks, capture observable evidence, and confirm completion criteria. Quality note: ${mitigation}`;
+      });
+      const paraList = paragraphs.length ? paragraphs : [];
+      const actionList = actions.length ? actions : (fallback.length ? fallback : []);
+      const detailList = detailedFlow.length ? detailedFlow : (chainDetailed.length ? chainDetailed : []);
+      const proceedList = proceed.length ? proceed : (chainProceed.length ? chainProceed : []);
+      return (
+        <div className="glass rounded-2xl p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h3 className="text-base font-bold text-slate-800">Readable Scenario Narrative</h3>
+              <p className="text-xs text-slate-500 mt-1">Meaningful plain-language explanation of chain flow and execution guidance.</p>
+            </div>
+          </div>
+          <div className="mt-3 space-y-2">
+            {paraList.map((p, idx) => (
+              <p key={idx} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-700 leading-relaxed">{p}</p>
+            ))}
+            {actionList.length > 0 && (
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-3">
+                <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Execution Plan</p>
+                <div className="mt-2 space-y-1">
+                  {actionList.map((line, idx) => (
+                    <p key={idx} className="text-sm text-slate-700">{line}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {detailList.length > 0 && (
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-3">
+                <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Detailed Attack Flow</p>
+                <div className="mt-2 space-y-1">
+                  {detailList.map((line, idx) => (
+                    <p key={idx} className="text-sm text-slate-700 leading-relaxed">{line}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {proceedList.length > 0 && (
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-3">
+                <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Detailed Stage Guidance</p>
+                <div className="mt-2 space-y-1">
+                  {proceedList.map((line, idx) => (
+                    <p key={idx} className="text-sm text-slate-700 leading-relaxed">{line}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const [collapsed, setCollapsed] = useState(false);
+      const [active, setActive] = useState("dashboard");
+      const [isLoading, setIsLoading] = useState(false);
+      const [result, setResult] = useState(null);
+      const [search, setSearch] = useState("");
+      const [accentMode, setAccentMode] = useState("blue");
+      const [lightTheme, setLightTheme] = useState("frost");
+      const [error, setError] = useState("");
+      const [expandedRows, setExpandedRows] = useState({});
+      const [progressMessage, setProgressMessage] = useState("Idle");
+      const [streamEvents, setStreamEvents] = useState([]);
+      const [activeOperation, setActiveOperation] = useState("");
+      const [lastResultMode, setLastResultMode] = useState("");
+      const [selectedVulnKey, setSelectedVulnKey] = useState("");
+      const requestControllerRef = useRef(null);
+      const requestIdRef = useRef("");
+
+      const [form, setForm] = useState({
+        target_url: "http://127.0.0.1:5000",
+        scenario: "Credential theft and lateral movement in enterprise network.",
+        target_env: "Enterprise Windows Active Directory network",
+        chain_length: 10,
+        fast_mode: false,
+      });
+
+      const accentPrimary = accentMode === "blue" ? "#3c6ef0" : "#d63b5c";
+      const themeLabel = lightTheme === "night" ? "Night" : lightTheme === "pearl" ? "Pearl" : "Frost";
+
+      useEffect(() => {
+        const root = document.documentElement;
+        const isNight = lightTheme === "night";
+        root.classList.toggle("theme-night", isNight);
+        if (isNight) {
+          root.style.setProperty("--bg", "#0b1220");
+          root.style.setProperty("--surface", "#0f172a");
+          root.style.setProperty("--border", "#334155");
+          root.style.setProperty("--glass", "rgba(15,23,42,0.72)");
+          root.style.setProperty("--text", "#e2e8f0");
+          root.style.setProperty("--muted", "#94a3b8");
+          return;
+        }
+        if (lightTheme === "frost") {
+          root.style.setProperty("--bg", "#f4f7fd");
+          root.style.setProperty("--surface", "#ffffff");
+          root.style.setProperty("--border", "#dce6f8");
+          root.style.setProperty("--glass", "rgba(255,255,255,0.68)");
+          root.style.setProperty("--text", "#18253e");
+          root.style.setProperty("--muted", "#61708f");
+        } else {
+          root.style.setProperty("--bg", "#f7f8fb");
+          root.style.setProperty("--surface", "#ffffff");
+          root.style.setProperty("--border", "#e5e7ef");
+          root.style.setProperty("--glass", "rgba(255,255,255,0.75)");
+          root.style.setProperty("--text", "#1e293b");
+          root.style.setProperty("--muted", "#64748b");
+        }
+      }, [lightTheme]);
+
+      const sectionTargets = {
+        dashboard: "dashboard",
+        fullscan: "controls",
+        scenario: "scenario",
+        validate: "controls",
+        analyze: "controls",
+        reports: "reports",
+        "attack-graph": "attack-graph",
+        settings: "settings",
+      };
+
+      const scrollToSection = (key) => {
+        const id = sectionTargets[key] || "dashboard";
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      };
+
+      const activeOperationLabel = activeOperation && modeConfig[activeOperation]
+        ? modeConfig[activeOperation].title
+        : (activeOperation || "");
+
+      const resolveRefreshMode = () => {
+        if (lastResultMode && modeConfig[lastResultMode]) return lastResultMode;
+        if (activeOperation && modeConfig[activeOperation]) return activeOperation;
+        if (modeConfig[active]) return active;
+        return "fullscan";
+      };
+
+      const refreshLatest = async () => {
+        const modeKey = resolveRefreshMode();
+        setIsLoading(true);
+        setError("");
+        setProgressMessage("Fetching latest result...");
+        try {
+          const resp = await fetch(`/api/latest?mode=${encodeURIComponent(modeKey)}`);
+          const payload = await resp.json();
+          if (!resp.ok) {
+            throw new Error(payload?.error || "No cached result available");
+          }
+          if (payload && payload.result) {
+            setResult(payload.result);
+            setLastResultMode(modeKey);
+            setProgressMessage(`Loaded last ${modeConfig[modeKey]?.title || modeKey} result`);
+          } else {
+            setError("No cached result available.");
+            setProgressMessage("No cached result");
+          }
+        } catch (e) {
+          const msg = String((e && e.message) || "");
+          setError(msg || "Failed to fetch cached result");
+          setProgressMessage("Refresh failed");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      const runAction = async (modeKey) => {
+        const cfg = modeConfig[modeKey];
+        if (!cfg || !cfg.endpoint) return;
+
+        if (requestControllerRef.current) {
+          requestControllerRef.current.abort();
+          requestControllerRef.current = null;
+        }
+
+        const controller = new AbortController();
+        requestControllerRef.current = controller;
+        const requestId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+        requestIdRef.current = requestId;
+        const timeoutByMode = {
+          fullscan: 20 * 60 * 1000,
+          scenario: 12 * 60 * 1000,
+          validate: 12 * 60 * 1000,
+          analyze: 8 * 60 * 1000,
+        };
+        const timeoutMs = timeoutByMode[modeKey] || (12 * 60 * 1000);
+        const timeoutLabel = Math.round(timeoutMs / 60000);
+        const timeoutId = setTimeout(() => controller.abort(`Request timed out after ${timeoutLabel} minutes`), timeoutMs);
+
+        setIsLoading(true);
+        setError("");
+        setProgressMessage("Starting pipeline...");
+        setStreamEvents([]);
+        setActiveOperation(modeKey);
+        setSelectedVulnKey("");
+
+        let payload = {};
+        if (modeKey === "fullscan") payload = { target_url: form.target_url.trim(), request_id: requestId };
+        if (modeKey === "scenario") {
+          payload = {
+            scenario: form.scenario.trim(),
+            target_env: form.target_env.trim(),
+            chain_length: String(form.chain_length),
+            fast_mode: false,
+            request_id: requestId,
+          };
+        }
+        if (modeKey === "validate") payload = { scenario: form.scenario.trim(), target_url: form.target_url.trim(), request_id: requestId };
+        if (modeKey === "analyze") {
+          payload = {
+            scenario: form.scenario.trim(),
+            chain_length: String(form.chain_length),
+            fast_mode: false,
+            request_id: requestId,
+          };
+        }
+
+        try {
+          const resp = await fetch(cfg.endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+            signal: controller.signal,
+          });
+
+          if (!resp.ok || !resp.body) {
+            const txt = await resp.text();
+            throw new Error(txt || "Request failed");
+          }
+
+          const reader = resp.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = "";
+          let doneAll = false;
+          let gotResult = false;
+          let gotError = false;
+
+          while (!doneAll) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const chunks = buffer.split("\n\n");
+            buffer = chunks.pop() || "";
+
+            for (const c of chunks) {
+              if (!c.startsWith("data:")) continue;
+              const msg = c.replace(/^data:\s*/, "").trim();
+              if (msg === "__DONE__") {
+                doneAll = true;
+                break;
+              }
+              if (msg.startsWith("__RESULT__:")) {
+                try {
+                  const parsed = JSON.parse(msg.slice(11));
+                  setResult(parsed);
+                  setLastResultMode(modeKey);
+                  gotResult = true;
+                  setProgressMessage("Result received");
+                  setIsLoading(false);
+                  doneAll = true;
+                  await reader.cancel();
+                  break;
+                } catch {
+                  setError("Failed to parse backend result payload.");
+                  setIsLoading(false);
+                  doneAll = true;
+                  await reader.cancel();
+                  break;
+                }
+              }
+              if (msg.includes("[ERROR]")) {
+                const clean = msg.replace(/\[ERROR\]\s*/, "");
+                setError(clean);
+                setProgressMessage("Pipeline failed");
+                setIsLoading(false);
+                gotError = true;
+                doneAll = true;
+                await reader.cancel();
+                break;
+              }
+              if (msg.startsWith("[STEP") || msg.startsWith("[INFO]") || msg.startsWith("[OK]") || msg.startsWith("[WARN]")) {
+                setProgressMessage(msg);
+                setStreamEvents((prev) => [msg, ...prev].slice(0, 8));
+              }
+            }
+          }
+
+          if (!gotResult && !gotError) {
+            setProgressMessage("Pipeline finished without structured result.");
+          }
+        } catch (e) {
+          const msg = String((e && e.message) || "");
+          const lower = msg.toLowerCase();
+          if (e && (e.name === "AbortError" || lower.includes("aborted"))) {
+            setError(msg);
+            setProgressMessage(msg);
+          } else if (lower.includes("body stream buffer")) {
+            setError("Stream interrupted. Backend may still be running - click Refresh Data.");
+            setProgressMessage("Stream interrupted");
+          } else {
+            setError(msg || "Unknown error");
+            setProgressMessage("Pipeline failed");
+          }
+        } finally {
+          clearTimeout(timeoutId);
+          requestControllerRef.current = null;
+          requestIdRef.current = "";
+          setIsLoading(false);
+        }
+      };
+
+      const cancelRunningRequest = async () => {
+        const rid = requestIdRef.current;
+        if (rid) {
+          try {
+            await fetch("/api/cancel", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ request_id: rid }),
+            });
+          } catch {}
+        }
+        if (requestControllerRef.current) {
+          requestControllerRef.current.abort();
+          requestControllerRef.current = null;
+          requestIdRef.current = "";
+          setIsLoading(false);
+          setProgressMessage("Operation cancelled by user");
+        }
+      };
+
+      const chain = Array.isArray(result?.attack_chain) ? result.attack_chain : [];
+      const vulns = Array.isArray(result?.vulnerabilities) ? result.vulnerabilities : [];
+      const vulnRowKey = (v, idx) => `${v.type || v.name || "v"}|${v.endpoint || v.url || "na"}|${idx}`;
+      const selectedVulnerability = useMemo(() => {
+        if (!selectedVulnKey) return null;
+        for (let i = 0; i < vulns.length; i += 1) {
+          const v = vulns[i];
+          if (vulnRowKey(v, i) === selectedVulnKey) return v;
+        }
+        return null;
+      }, [selectedVulnKey, vulns]);
+      const chainForView = useMemo(() => {
+        if (!selectedVulnerability) return chain;
+        const targetName = String(selectedVulnerability.type || selectedVulnerability.name || "").toLowerCase();
+        const targetDetail = String(selectedVulnerability.detail || selectedVulnerability.description || "").toLowerCase();
+        const targetEndpoint = String(selectedVulnerability.endpoint || selectedVulnerability.url || "").toLowerCase();
+        const filtered = chain.filter((step) => {
+          const src = step.source_vulnerability || {};
+          const stepVName = String(step.vulnerability_name || src.type || "").toLowerCase();
+          const stepVDetail = String(step.vulnerability_detail || src.detail || "").toLowerCase();
+          const stepDesc = String(step.description || "").toLowerCase();
+          return (
+            (targetName && (stepVName.includes(targetName) || targetName.includes(stepVName))) ||
+            (targetDetail && stepVDetail && (stepVDetail.includes(targetDetail.slice(0, 24)) || targetDetail.includes(stepVDetail.slice(0, 24)))) ||
+            (targetEndpoint && stepDesc.includes(targetEndpoint))
+          );
+        });
+        return filtered.length ? filtered : chain;
+      }, [chain, selectedVulnerability]);
+      const hasResult = !!result;
+
+      const severityData = useMemo(() => {
+        const counts = { ...(result?.severity_counts || {}) };
+        if (vulns.length && Object.keys(counts).length === 0) {
+          vulns.forEach((v) => {
+            const sev = normalizeSeverityValue(v.severity || v.risk || v.level);
+            counts[sev] = (counts[sev] || 0) + 1;
+          });
+        }
+        if (!vulns.length && chain.length && Object.keys(counts).length === 0) {
+          chain.forEach((c) => {
+            const sev = normalizeSeverityValue(c.severity || c.risk || "MEDIUM");
+            counts[sev] = (counts[sev] || 0) + 1;
+          });
+        }
+        return [
+          { name: "Critical", value: Number(counts.CRITICAL || 0), color: "#d63b5c" },
+          { name: "High", value: Number(counts.HIGH || 0), color: "#f97316" },
+          { name: "Medium", value: Number(counts.MEDIUM || 0), color: "#f59e0b" },
+          { name: "Low", value: Number(counts.LOW || 0), color: "#15a674" },
+        ];
+      }, [result, vulns, chain]);
+
+      const tacticCoverage = useMemo(() => {
+        const map = {};
+        const source = chain.length ? chain : Array.isArray(result?.attack_graph?.nodes) ? result.attack_graph.nodes : [];
+        source.forEach((c) => {
+          const k = String(c.tactic || c.phase || "unknown").replace(/-/g, " ");
+          map[k] = (map[k] || 0) + 1;
+        });
+        return Object.entries(map).map(([name, value]) => ({ name, value }));
+      }, [chain, result]);
+
+      const trendData = useMemo(() => {
+        const base = Number(result?.what_if_simulation?.global_metrics?.baseline_path_probability || 0) || (vulns.length ? 0.66 : 0.54);
+        const adjusted = Number(result?.what_if_simulation?.global_metrics?.best_attack_path_probability || 0) || Math.max(0.2, base - 0.12);
+        return [
+          { t: "T-4", risk: base * 100 },
+          { t: "T-3", risk: (base * 0.94) * 100 },
+          { t: "T-2", risk: (base * 0.86) * 100 },
+          { t: "T-1", risk: (base * 0.8) * 100 },
+          { t: "Now", risk: adjusted * 100 },
+        ];
+      }, [result, vulns.length]);
+
+      const radarData = useMemo(() => {
+        const faith = Number(result?.faithfulness_score || 0) * 100 || Math.min(92, 65 + chain.length * 2);
+        const tac = Number(result?.tactical_coverage || 0) * 100 || Math.min(88, 55 + chain.length * 3);
+        const residual = Number(result?.what_if_simulation?.global_metrics?.residual_risk_score || 0) * 100 || Math.max(25, 70 - chain.length * 2);
+        const confidence = result?.attack_chain_attribution?.length
+          ? Math.round(result.attack_chain_attribution.reduce((a, b) => a + Number(b.confidence_score || 0), 0) / result.attack_chain_attribution.length * 100)
+          : Math.min(90, 58 + chain.length * 3);
+        return [
+          { metric: "Faithfulness", value: faith },
+          { metric: "Coverage", value: tac },
+          { metric: "Confidence", value: confidence },
+          { metric: "Defenses", value: Math.max(40, 100 - residual) },
+          { metric: "Readiness", value: Math.min(95, (faith + tac) / 2) },
+        ];
+      }, [result, chain.length]);
+
+      const timelineData = useMemo(() => {
+        if (chain.length) {
+          return chain.slice(0, 12).map((c, i) => ({
+            step: `S${i + 1}`,
+            impact: Math.max(15, 90 - i * 6),
+            confidence: Math.max(35, 94 - i * 4),
+          }));
+        }
+        if (vulns.length) {
+          return vulns.slice(0, 10).map((v, i) => ({
+            step: `V${i + 1}`,
+            impact: Math.max(20, 85 - i * 5),
+            confidence: Math.max(40, 88 - i * 4),
+          }));
+        }
+        return [];
+      }, [chain, vulns]);
+
+      const hasSeverity = severityData.some((d) => d.value > 0);
+      const hasTacticCoverage = tacticCoverage.some((d) => d.value > 0);
+      const hasTrend = trendData.some((d) => Number(d.risk || 0) > 0);
+      const hasRadar = radarData.length > 0;
+      const hasTimeline = timelineData.length > 0;
+
+      const stats = useMemo(() => {
+        if (!hasResult) {
+          return { totalVulns: null, crit: null, high: null, faith: null, techs: null, cov: null, risk: null, nodes: null, edges: null };
+        }
+        const nodes = Array.isArray(result?.attack_graph?.nodes) ? result.attack_graph.nodes.length : 0;
+        const edges = Array.isArray(result?.attack_graph?.edges) ? result.attack_graph.edges.length : 0;
+        const totalVulns = Number(result?.total_vulns || vulns.length || 0);
+        const crit = Number(result?.severity_counts?.CRITICAL || 0);
+        const high = Number(result?.severity_counts?.HIGH || 0);
+        const faith = result?.faithfulness_score !== undefined ? Math.round(Number(result.faithfulness_score || 0) * 100) : null;
+        const derivedTechs = new Set(chain.map((c) => c.technique_id).filter(Boolean)).size;
+        const techs = derivedTechs || (result?.unique_techniques !== undefined ? Number(result.unique_techniques || 0) : null);
+        const cov = result?.tactical_coverage !== undefined ? Math.round(Number(result.tactical_coverage || 0) * 100) : null;
+        const risk = result?.what_if_simulation?.global_metrics?.residual_risk_score !== undefined
+          ? Math.round(Number(result.what_if_simulation.global_metrics.residual_risk_score || 0) * 100)
+          : null;
+        return { totalVulns, crit, high, faith, techs, cov, risk, nodes, edges };
+      }, [result, chain, vulns, hasResult]);
+
+      const reportDisplay = (value) => {
+        if (!value || value === "Not generated") return "Not generated";
+        if (/^https?:\/\//i.test(value)) return value;
+        const parts = String(value).split(/[\\/]/);
+        return parts[parts.length - 1] || value;
+      };
+
+      const reportDownloadUrl = (value) => {
+        if (!value || value === "Not generated") return "";
+        if (/^https?:\/\//i.test(value)) return value;
+        return `/api/report/download?path=${encodeURIComponent(value)}`;
+      };
+
+      const reportCards = useMemo(() => {
+        const r = result?.reports || {};
+        const mdValue = r.md || r.txt || "";
+        const derivedPdf = (!r.pdf && mdValue && mdValue !== "Not generated" && !/^https?:\/\//i.test(mdValue))
+          ? String(mdValue).replace(/\.(md|txt)$/i, ".pdf")
+          : "";
+        return [
+          { key: "pdf", title: "PDF Report", value: r.pdf || derivedPdf || "Not generated", icon: "M6 2h9l5 5v15H6V2Z", tone: "rose" },
+          { key: "json", title: "JSON Chain", value: r.json || "Not generated", icon: "M9 5H4v14h5M15 5h5v14h-5M13 8l-2 4 2 4", tone: "blue" },
+          { key: "md", title: "Markdown Summary", value: mdValue || "Not generated", icon: "M4 4h16v16H4z M8 8l2 3 2-3 2 3 2-3", tone: "emerald" },
+        ];
+      }, [result]);
+
+      const filteredSteps = chainForView.filter((c) => {
+        const q = search.trim().toLowerCase();
+        if (!q) return true;
+        return `${c.technique_id || ""} ${c.technique_name || c.name || ""} ${c.tactic || c.phase || ""} ${c.vulnerability_name || ""}`.toLowerCase().includes(q);
+      });
+      const selectedExpandedStep = useMemo(() => {
+        if (!filteredSteps.length) return null;
+        for (let idx = 0; idx < filteredSteps.length; idx += 1) {
+          const step = filteredSteps[idx];
+          const rowKey = `${step.technique_id || idx}-${idx}`;
+          if (expandedRows[rowKey]) return step;
+        }
+        return null;
+      }, [filteredSteps, expandedRows]);
+
+      const severityForStep = (step) => {
+        const text = `${step.technique_name || ""} ${step.description || ""}`.toLowerCase();
+        if (text.includes("credential") || text.includes("privilege") || text.includes("exfiltration")) return "CRITICAL";
+        if (text.includes("injection") || text.includes("execution") || text.includes("persistence")) return "HIGH";
+        if (text.includes("discovery") || text.includes("recon")) return "MEDIUM";
+        return "LOW";
+      };
+
+      const confidenceForStep = (idx) => Math.max(44, 92 - idx * 5);
+
+      const toggleExpandRow = (key) => {
+        setExpandedRows((prev) => ({ ...prev, [key]: !prev[key] }));
+      };
+
+      const handleReportAction = (value) => {
+        if (!value || value === "Not generated") return;
+        const url = reportDownloadUrl(value);
+        if (url) {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "";
+          a.rel = "noopener noreferrer";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          return;
+        }
+      };
+
+      return (
+        <div className="min-h-screen text-slate-800">
+          <div className="flex min-h-screen">
+            <motion.aside
+              animate={{ width: collapsed ? 90 : 270 }}
+              transition={{ type: "spring", stiffness: 220, damping: 24 }}
+              className="h-screen sticky top-0 glass border-r border-white/80 px-3 py-4 flex flex-col"
+            >
+              <div className="flex items-center justify-between px-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyber-600 to-danger-500 text-white flex items-center justify-center font-extrabold">RA</div>
+                  {!collapsed && (
+                    <div>
+                      <p className="font-extrabold text-slate-800 text-lg leading-none">Red Agent</p>
+                      <p className="text-xs text-slate-500 mt-1">Offensive Security AI</p>
+                    </div>
+                  )}
+                </div>
+                <button
+                  onClick={() => setCollapsed((p) => !p)}
+                  className="w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700"
+                  aria-label="Toggle sidebar"
+                >
+                  {collapsed ? ">" : "<"}
+                </button>
+              </div>
+
+              <div className="mt-6 space-y-1.5 overflow-y-auto hide-scrollbar pr-1">
+                {sidebarItems.map((item) => {
+                  const activeItem = active === item.key;
+                  return (
+                    <motion.button
+                      key={item.key}
+                      whileHover={{ x: 3 }}
+                      onClick={() => {
+                        setActive(item.key);
+                        scrollToSection(item.key);
+                      }}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all border ${activeItem ? "bg-cyber-50 border-cyber-200 text-cyber-700 shadow-sm" : "bg-white/70 border-white text-slate-600 hover:border-slate-200 hover:bg-white"}`}
+                    >
+                      <Icon path={item.icon} className="w-4 h-4" />
+                      {!collapsed && <span className="text-sm font-semibold">{item.label}</span>}
+                    </motion.button>
+                  );
+                })}
+              </div>
+
+              <div className="mt-auto px-2 pt-4">
+                <div className="rounded-xl p-3 bg-gradient-to-br from-cyber-50 to-white border border-cyber-100">
+                  {!collapsed && (
+                    <>
+                      <p className="text-xs text-slate-500 font-semibold">System Health</p>
+                      <p className="text-sm font-bold text-slate-800 mt-1">Operational 99.9%</p>
+                      <div className="mt-3 h-2 rounded-full bg-slate-100 overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-emerald-400 to-cyber-500" style={{ width: "92%" }}></div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </motion.aside>
+
+            <main className="flex-1 px-5 lg:px-7 py-5">
+              <header className="glass rounded-2xl px-5 py-3 flex items-center justify-between gap-4 sticky top-3 z-20">
+                <div className="flex items-center gap-3 min-w-0 w-full max-w-xl">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyber-600 to-cyber-400 text-white flex items-center justify-center shadow-lift">
+                    <Icon path="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" className="w-5 h-5" />
+                  </div>
+                  <div className="relative flex-1">
+                    <input
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      placeholder="Search techniques, tactics, reports..."
+                      className="w-full rounded-xl border border-slate-200 bg-white/90 px-10 py-2.5 text-sm outline-none focus:ring-2 focus:ring-cyber-200"
+                    />
+                    <span className="absolute left-3 top-2.5 text-slate-400" aria-hidden="true">Search</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                  <StatusBadge text="Systems Healthy" />
+                  <button className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-600 hover:shadow-sm text-xs font-semibold">AL</button>
+                  <button
+                    onClick={() => setLightTheme((p) => (p === "frost" ? "pearl" : p === "pearl" ? "night" : "frost"))}
+                    className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-600 hover:shadow-sm"
+                    title={`Theme: ${themeLabel}`}
+                  >
+                    Th
+                  </button>
+                  <button
+                    onClick={() => setAccentMode((p) => (p === "blue" ? "red" : "blue"))}
+                    className="px-3 h-10 rounded-xl bg-white border border-slate-200 text-slate-600 hover:shadow-sm text-xs font-semibold"
+                    title="Accent toggle"
+                  >
+                    Accent
+                  </button>
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 to-slate-500 text-white font-bold flex items-center justify-center">RA</div>
+                </div>
+              </header>
+
+              <section id="dashboard" className="mt-5 glass rounded-2xl p-6">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs tracking-[0.14em] uppercase text-slate-500 font-bold">AI-Powered Offensive Security Platform</p>
+                    <h1 className="mt-2 text-3xl lg:text-4xl font-extrabold text-slate-900">AI Offensive Security Command Center</h1>
+                    <p className="mt-3 text-sm lg:text-base text-slate-600 max-w-3xl">
+                      Automated adversary simulation, MITRE ATT&CK mapping, threat chain intelligence, and defense validation.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2"></div>
+                </div>
+              </section>
+
+              <section className="mt-5 grid grid-cols-1 xl:grid-cols-4 gap-4">
+                <div className="xl:col-span-3">
+                  <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                    <StatCard title="Total Vulnerabilities" value={stats.totalVulns} iconPath="M12 2 2 22h20L12 2Zm0 7v5m0 4h.01" accent="#d63b5c" />
+                    <StatCard title="Critical Threats" value={stats.crit} iconPath="M12 6v6l4 2" accent="#d63b5c" />
+                    <StatCard title="High Risk Issues" value={stats.high} iconPath="M12 3l8 4v6c0 5-3.4 9.7-8 11-4.6-1.3-8-6-8-11V7l8-4Z" accent="#f97316" />
+                    <StatCard title="Faithfulness Score" value={stats.faith} suffix="%" iconPath="M5 12l4 4L19 6" accent="#3c6ef0" />
+                    <StatCard title="Techniques Mapped" value={stats.techs} iconPath="M4 4h16v4H4V4Zm0 6h10v4H4v-4Zm0 6h16v4H4v-4Z" accent="#3c6ef0" />
+                    <StatCard title="Tactical Coverage" value={stats.cov} suffix="%" iconPath="M4 19V5m6 14V9m6 10v-6" accent="#15a674" />
+                    <StatCard title="Residual Risk" value={stats.risk} suffix="%" iconPath="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9Z" accent="#d63b5c" />
+                    <StatCard title="Graph Nodes / Edges" value={stats.nodes !== null && stats.edges !== null ? (stats.nodes + stats.edges) : null} iconPath="M4 12a2 2 0 1 0 0 .01M12 6a2 2 0 1 0 0 .01M20 12a2 2 0 1 0 0 .01M12 18a2 2 0 1 0 0 .01" accent="#3c6ef0" />
+                  </div>
+                </div>
+
+                <div id="scenario" className="glass rounded-2xl p-4">
+                  <h3 className="text-sm font-bold text-slate-800">Scenario Generator</h3>
+                  <p className="text-xs text-slate-500 mt-1">Design and generate adversary chains with AI intelligence.</p>
+
+                  <div className="mt-3 space-y-2">
+                    <textarea
+                      value={form.scenario}
+                      onChange={(e) => setForm((f) => ({ ...f, scenario: e.target.value }))}
+                      className="w-full h-24 rounded-xl border border-slate-200 bg-white p-3 text-sm outline-none focus:ring-2 focus:ring-cyber-200"
+                      placeholder="Describe attacker objective and environment"
+                    ></textarea>
+
+                    <select
+                      value={form.target_env}
+                      onChange={(e) => setForm((f) => ({ ...f, target_env: e.target.value }))}
+                      className="w-full rounded-xl border border-slate-200 bg-white p-2.5 text-sm outline-none"
+                    >
+                      <option>Enterprise Windows Active Directory network</option>
+                      <option>Cloud-native Kubernetes environment</option>
+                      <option>Hybrid on-prem + cloud enterprise</option>
+                      <option>Financial services segmented network</option>
+                    </select>
+
+                    <div>
+                      <div className="flex justify-between text-xs text-slate-500 mb-1">
+                        <span>Chain Length</span>
+                        <span>{form.chain_length}</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="8"
+                        max="14"
+                        value={form.chain_length}
+                        onChange={(e) => setForm((f) => ({ ...f, chain_length: Number(e.target.value) }))}
+                        className="w-full"
+                      />
+                    </div>
+
+                    <motion.button
+                      whileHover={{ y: -1 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => runAction("scenario")}
+                      className="w-full rounded-xl py-2.5 text-sm font-bold text-white"
+                      style={{ background: accentPrimary }}
+                    >
+                      Generate Scenario
+                    </motion.button>
+                  </div>
+                </div>
+              </section>
+
+              <section className="mt-5 grid grid-cols-1 xl:grid-cols-5 gap-4">
+                <div className="xl:col-span-3 space-y-4">
+                  <div id="controls" className="glass rounded-2xl p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-base font-bold text-slate-800">Attack Chain Intelligence Table</h3>
+                        {selectedVulnerability && (
+                          <p className="text-xs text-slate-500 mt-1">
+                            Filtered by vulnerability: {selectedVulnerability.type || selectedVulnerability.name || "Selected finding"}
+                          </p>
+                        )}
+                      </div>
+                      <button
+                        onClick={refreshLatest}
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 hover:shadow-sm"
+                      >
+                        Refresh Data
+                      </button>
+                    </div>
+
+                    <div className="mt-3 overflow-auto hide-scrollbar">
+                      <table className="min-w-full text-sm">
+                        <thead>
+                          <tr className="text-left bg-slate-50 border-y border-slate-200 text-slate-600 text-xs uppercase tracking-wide">
+                            <th className="px-3 py-2">Step</th>
+                            <th className="px-3 py-2">Technique ID</th>
+                            <th className="px-3 py-2">Technique Name</th>
+                            <th className="px-3 py-2">Vulnerability</th>
+                            <th className="px-3 py-2">Tactic</th>
+                            <th className="px-3 py-2">Risk</th>
+                            <th className="px-3 py-2">Confidence</th>
+                            <th className="px-3 py-2">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {isLoading && [...Array(5)].map((_, i) => (
+                            <tr key={`sk-${i}`} className="border-b border-slate-100">
+                              {[...Array(8)].map((__, j) => (
+                                <td key={j} className="px-3 py-3"><div className="skeleton h-4 rounded-md"></div></td>
+                              ))}
+                            </tr>
+                          ))}
+
+                          {!isLoading && filteredSteps.length === 0 && (
+                            <tr>
+                              <td colSpan={8} className="px-3 py-6 text-center text-slate-500">Run an action to populate attack chain details.</td>
+                            </tr>
+                          )}
+
+                          {!isLoading && filteredSteps.map((step, idx) => {
+                            const risk = severityForStep(step);
+                            const conf = confidenceForStep(idx);
+                            const rowKey = `${step.technique_id || idx}-${idx}`;
+                            const isOpen = !!expandedRows[rowKey];
+                            return (
+                              <React.Fragment key={rowKey}>
+                                <tr className="border-b border-slate-100 hover:bg-slate-50/70 transition-colors cursor-pointer" onClick={() => toggleExpandRow(rowKey)}>
+                                  <td className="px-3 py-3 font-semibold text-slate-700">
+                                    <span className="inline-flex items-center gap-2">
+                                      {idx + 1}
+                                      <span className="text-slate-400 text-xs">{isOpen ? "v" : ">"}</span>
+                                    </span>
+                                  </td>
+                                  <td className="px-3 py-3 font-mono text-xs text-cyan-700">{step.technique_id || "N/A"}</td>
+                                  <td className="px-3 py-3 font-semibold text-slate-800">{step.technique_name || step.name || "Unknown"}</td>
+                                  <td className="px-3 py-3 text-slate-600">{step.vulnerability_name || step.source_vulnerability?.type || "N/A"}</td>
+                                  <td className="px-3 py-3 text-slate-600">{String(step.tactic || step.phase || "unknown").replace(/-/g, " ")}</td>
+                                  <td className="px-3 py-3"><SeverityBadge level={risk} /></td>
+                                  <td className="px-3 py-3">
+                                    <span className="text-xs font-bold text-slate-700">{conf}%</span>
+                                  </td>
+                                  <td className="px-3 py-3">
+                                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs border bg-emerald-50 border-emerald-200 text-emerald-700">Mapped</span>
+                                  </td>
+                                </tr>
+
+                              </React.Fragment>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {selectedExpandedStep && (
+                      <div className="mt-3 grid md:grid-cols-3 gap-3 text-xs">
+                        <div className="rounded-lg border border-slate-200 bg-white p-2.5">
+                          <p className="font-semibold text-slate-700 mb-1">Technique Detail</p>
+                          <p className="text-slate-600">{selectedExpandedStep.description || "Detailed technique description not available in payload."}</p>
+                        </div>
+                        <div className="rounded-lg border border-slate-200 bg-white p-2.5">
+                          <p className="font-semibold text-slate-700 mb-1">Execution Rationale</p>
+                          <p className="text-slate-600">{selectedExpandedStep.rationale || "Mapped using ATT&CK context, retrieval evidence, and scenario intent."}</p>
+                        </div>
+                        <div className="rounded-lg border border-slate-200 bg-white p-2.5">
+                          <p className="font-semibold text-slate-700 mb-1">Mitigation Hint</p>
+                          <p className="text-slate-600">{selectedExpandedStep.mitigation || "Apply layered controls and detection rules mapped to this tactic."}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  
+                    <AttackGraphPanel graph={result?.attack_graph || { nodes: [], edges: [] }} attackChain={chainForView} />
+                  
+
+                  <ScenarioNarrativePanel result={result} chain={chainForView} />
+                </div>
+
+                <div className="xl:col-span-2 space-y-4">
+                  <div id="reports" className="glass rounded-2xl p-4">
+                    <h3 className="text-sm font-bold text-slate-800">Controls</h3>
+                    <p className="text-xs text-slate-500 mt-1">Run core pipelines from a single command center.</p>
+
+                    <div className="mt-3 space-y-2">
+                      <input
+                        value={form.target_url}
+                        onChange={(e) => setForm((f) => ({ ...f, target_url: e.target.value }))}
+                        className="w-full rounded-xl border border-slate-200 bg-white p-2.5 text-sm outline-none"
+                        placeholder="Target URL"
+                      />
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <button onClick={() => runAction("fullscan")} className="rounded-xl py-2 text-sm font-semibold bg-cyber-600 text-white hover:bg-cyber-700">Full Scan</button>
+                        <button onClick={() => runAction("validate")} className="rounded-xl py-2 text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-700">Validate</button>
+                        <button onClick={() => runAction("scenario")} className="rounded-xl py-2 text-sm font-semibold bg-rose-600 text-white hover:bg-rose-700">Scenario</button>
+                        <button onClick={() => runAction("analyze")} className="rounded-xl py-2 text-sm font-semibold bg-slate-700 text-white hover:bg-slate-800">Analyze</button>
+                      </div>
+
+                      {error && (
+                        <div className="mt-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700 font-semibold">
+                          {error}
+                        </div>
+                      )}
+
+                      {streamEvents.length > 0 && (
+                        <div className="mt-3 rounded-xl border border-slate-200 bg-white p-2.5">
+                          <p className="text-xs font-semibold text-slate-600">Live Stream</p>
+                          <div className="mt-2 space-y-1 max-h-32 overflow-auto text-xs text-slate-600">
+                            {streamEvents.map((evt, idx) => (
+                              <div key={`${evt}-${idx}`} className="border-b border-slate-100 pb-1 last:border-b-0">
+                                {evt}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {(active === "fullscan" || vulns.length > 0 || isLoading) && (
+                    <VulnerabilityList vulns={vulns} isLoading={isLoading} selectedKey={selectedVulnKey} onSelect={setSelectedVulnKey} />
+                  )}
+
+                  <div className="glass rounded-2xl p-4">
+                    <h3 className="text-sm font-bold text-slate-800">Reports</h3>
+                    <p className="text-xs text-slate-500 mt-1">Download-ready artifacts generated from active run.</p>
+                    <div className="mt-3 space-y-2">
+                      {reportCards.map((r) => (
+                        <motion.div key={r.key} whileHover={{ y: -2 }} className="rounded-xl border border-slate-200 bg-white p-3">
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <p className="text-sm font-semibold text-slate-800">{r.title}</p>
+                              <p className="text-xs text-slate-500 mt-1 break-all">{reportDisplay(r.value)}</p>
+                            </div>
+                            <button
+                              onClick={() => handleReportAction(r.value)}
+                              disabled={!r.value || r.value === "Not generated"}
+                              className="text-xs px-2 py-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {/^https?:\/\//i.test(r.value || "") ? "Open" : "Download"}
+                            </button>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section id="settings" className="mt-5 grid grid-cols-1 xl:grid-cols-3 gap-4">
+                <div className="xl:col-span-2 glass rounded-2xl p-4">
+                  <h3 className="text-base font-bold text-slate-800">Settings</h3>
+                  <p className="text-xs text-slate-500 mt-1">Customize the interface and view preferences.</p>
+
+                  <div className="mt-4 grid md:grid-cols-2 gap-3">
+                    <div className="rounded-xl border border-slate-200 bg-white p-3">
+                      <p className="text-xs font-semibold text-slate-600">Theme</p>
+                      <select
+                        value={lightTheme}
+                        onChange={(e) => setLightTheme(e.target.value)}
+                        className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-sm"
+                      >
+                        <option value="frost">Frost (Light)</option>
+                        <option value="pearl">Pearl (Light)</option>
+                        <option value="night">Night (Dark)</option>
+                      </select>
+                    </div>
+
+                    <div className="rounded-xl border border-slate-200 bg-white p-3">
+                      <p className="text-xs font-semibold text-slate-600">Accent</p>
+                      <div className="mt-2 flex gap-2">
+                        <button
+                          onClick={() => setAccentMode("blue")}
+                          className={`px-3 py-2 rounded-lg text-xs font-semibold border ${accentMode === "blue" ? "bg-cyber-600 text-white border-cyber-700" : "bg-white border-slate-200 text-slate-600"}`}
+                        >
+                          Blue
+                        </button>
+                        <button
+                          onClick={() => setAccentMode("red")}
+                          className={`px-3 py-2 rounded-lg text-xs font-semibold border ${accentMode === "red" ? "bg-rose-600 text-white border-rose-700" : "bg-white border-slate-200 text-slate-600"}`}
+                        >
+                          Red
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="glass rounded-2xl p-4">
+                  <h3 className="text-sm font-bold text-slate-800">Quick Actions</h3>
+                  <p className="text-xs text-slate-500 mt-1">Reset UI preferences and zoom.</p>
+                  <div className="mt-3 space-y-2">
+                    <button
+                      onClick={() => {
+                        setLightTheme("frost");
+                        setAccentMode("blue");
+                      }}
+                      className="w-full rounded-xl py-2 text-sm font-semibold bg-white border border-slate-200 hover:shadow-sm"
+                    >
+                      Reset Theme
+                    </button>
+                    <button
+                      onClick={() => {
+                        const el = document.getElementById("attack-graph");
+                        if (el) {
+                          el.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }
+                      }}
+                      className="w-full rounded-xl py-2 text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800"
+                    >
+                      Jump to Graph
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+            </main>
+          </div>
+
+          <AnimatePresence>
+            {isLoading && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-white/55 backdrop-blur-[2px] z-50 flex items-center justify-center"
+              >
+                <motion.div
+                  initial={{ y: 8, scale: 0.96 }}
+                  animate={{ y: 0, scale: 1 }}
+                  className="glass rounded-2xl px-5 py-4"
+                >
+                  <p className="text-sm font-semibold text-slate-700">Running {activeOperationLabel || "AI security"} pipeline...</p>
+                  <p className="text-xs text-slate-500 mt-1">{progressMessage}</p>
+                  <div className="mt-3 h-2.5 w-64 rounded-full bg-slate-100 overflow-hidden">
+                    <motion.div
+                      initial={{ x: "-100%" }}
+                      animate={{ x: "100%" }}
+                      transition={{ duration: 1.1, repeat: Infinity, ease: "linear" }}
+                      className="h-full w-1/2 bg-gradient-to-r from-cyber-500 via-cyber-300 to-emerald-400"
+                    ></motion.div>
+                  </div>
+                  <button onClick={cancelRunningRequest} className="mt-3 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:shadow-sm">
+                    Cancel Request
+                  </button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      );
+    }
+
+    class ErrorBoundary extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = { hasError: false, error: null };
+      }
+
+      static getDerivedStateFromError(error) {
+        return { hasError: true, error };
+      }
+
+      componentDidCatch(error, info) {
+        console.error("Red Agent UI runtime error:", error, info);
+      }
+
+      render() {
+        if (this.state.hasError) {
+          return (
+            <div className="min-h-screen flex items-center justify-center p-6" style={{ background: "#f4f7fd" }}>
+              <div className="max-w-2xl w-full rounded-2xl border border-red-200 bg-white shadow-xl p-6">
+                <h1 className="text-xl font-extrabold text-red-700">Red Agent UI failed to load</h1>
+                <p className="mt-2 text-sm text-slate-600">A browser runtime error occurred. Open Developer Tools (F12) and check the console for details.</p>
+                <pre className="mt-3 text-xs bg-red-50 border border-red-100 text-red-700 rounded-lg p-3 overflow-auto">
+                  {String(this.state.error && this.state.error.message ? this.state.error.message : this.state.error)}
+                </pre>
+              </div>
+            </div>
+          );
+        }
+        return this.props.children;
+      }
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    );
+    if (window.__redAgentBoot) {
+      window.__redAgentBoot.mounted = true;
+    }
+  </script>
+  {% endraw %}
+</body>
+</html>
+

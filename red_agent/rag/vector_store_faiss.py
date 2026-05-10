@@ -182,6 +182,7 @@ class FAISSVectorStore:
 
             # Convert L2 distance → cosine similarity (normalized vectors)
             cosine_sim = 1.0 - (float(dist) / 2.0)
+            cosine_sim = max(0.0, min(1.0, cosine_sim))
             metadata = self._metadata[idx]
             document = self._documents[idx] if idx < len(self._documents) else ""
 

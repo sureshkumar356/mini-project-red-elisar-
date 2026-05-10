@@ -1,0 +1,244 @@
+{
+  "attack_chain": {
+    "attack_chain": [
+      {
+        "step": 1,
+        "technique_id": "T1190",
+        "technique_name": "",
+        "tactic": "initial-access",
+        "description": "Exploit Public-Facing Application to inject malicious SQL code into the login page",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Update Software: Apply security patches promptly, especially for internet-facing applications. Deploy WAF rules. Conduct regular vulnerability scanning and penetration testing.",
+        "tool_commands": [
+          "sqlmap -u 'http://target/page?id=1' --dbs --batch",
+          "msfconsole -x 'use exploit/multi/http/apache_log4j; set RHOSTS target; exploit'",
+          "nuclei -u http://target -t cves/"
+        ]
+      },
+      {
+        "step": 2,
+        "technique_id": "T1204.004",
+        "technique_name": "",
+        "tactic": "execution",
+        "description": "Malicious Copy and Paste of injected SQL code into the login form",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 3,
+        "technique_id": "T1556.001",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Domain Controller Authentication to obtain valid login credentials",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 4,
+        "technique_id": "T1550.004",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Web Session Cookie extraction to obtain session ID",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 5,
+        "technique_id": "T1606.001",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Web Cookies analysis to identify session ID and other sensitive information",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 6,
+        "technique_id": "T1056",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Input Capture to obtain login credentials and session ID",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 7,
+        "technique_id": "T1078.003",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Local Accounts creation to maintain persistence",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for all remote access and privileged accounts. Monitor for anomalous login patterns, impossible travel, and credential stuffing.",
+        "tool_commands": [
+          "hydra -l admin -P passwords.txt rdp://target",
+          "crackmapexec smb 10.0.0.0/24 -u user -p password",
+          "spray.sh -smb 10.0.0.0/24 user passwords.txt"
+        ]
+      },
+      {
+        "step": 8,
+        "technique_id": "T1037",
+        "technique_name": "",
+        "tactic": "persistence",
+        "description": "Boot or Logon Initialization Scripts modification to maintain persistence",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      }
+    ],
+    "metadata": {}
+  },
+  "retrieval_results": [
+    {
+      "technique_id": "T1078.003",
+      "name": "Local Accounts",
+      "relevance_score": 0.2824,
+      "tactics": [
+        "defense-evasion",
+        " persistence",
+        " privilege-escalation",
+        " initial-access"
+      ],
+      "description": "Adversaries may obtain and abuse credentials of a local account as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Local accounts are those configured by an o"
+    },
+    {
+      "technique_id": "T1204.004",
+      "name": "Malicious Copy and Paste",
+      "relevance_score": 0.2965,
+      "tactics": [
+        "execution"
+      ],
+      "description": "An adversary may rely upon a user copying and pasting code in order to gain execution. Users may be subjected to social engineering to get them to copy and paste code directly into a Command and Scrip"
+    },
+    {
+      "technique_id": "T1556.001",
+      "name": "Domain Controller Authentication",
+      "relevance_score": 0.3281,
+      "tactics": [
+        "credential-access",
+        " defense-evasion",
+        " persistence"
+      ],
+      "description": "Adversaries may patch the authentication process on a domain controller to bypass the typical authentication mechanisms and enable access to accounts. \n\nMalware may be used to inject false credentials"
+    },
+    {
+      "technique_id": "T1037",
+      "name": "Boot or Logon Initialization Scripts",
+      "relevance_score": 0.3226,
+      "tactics": [
+        "persistence",
+        " privilege-escalation"
+      ],
+      "description": "Adversaries may use scripts automatically executed at boot or logon initialization to establish persistence. Initialization scripts can be used to perform administrative functions, which may often exe"
+    },
+    {
+      "technique_id": "T1550.004",
+      "name": "Web Session Cookie",
+      "relevance_score": 0.3503,
+      "tactics": [
+        "defense-evasion",
+        " lateral-movement"
+      ],
+      "description": "Adversaries can use stolen session cookies to authenticate to web applications and services. This technique bypasses some multi-factor authentication protocols since the session is already authenticat"
+    },
+    {
+      "technique_id": "T1056.003",
+      "name": "Web Portal Capture",
+      "relevance_score": 0.353,
+      "tactics": [
+        "collection",
+        " credential-access"
+      ],
+      "description": "Adversaries may install code on externally facing portals, such as a VPN login page, to capture and transmit credentials of users who attempt to log into the service. For example, a compromised login "
+    },
+    {
+      "technique_id": "T1056",
+      "name": "Input Capture",
+      "relevance_score": 0.3055,
+      "tactics": [
+        "collection",
+        " credential-access"
+      ],
+      "description": "Adversaries may use methods of capturing user input to obtain credentials or collect information. During normal system usage, users often provide credentials to various different locations, such as lo"
+    },
+    {
+      "technique_id": "T1606.001",
+      "name": "Web Cookies",
+      "relevance_score": 0.3415,
+      "tactics": [
+        "credential-access"
+      ],
+      "description": "Adversaries may forge web cookies that can be used to gain access to web applications or Internet services. Web applications and services (hosted in cloud SaaS environments or on-premise servers) ofte"
+    }
+  ],
+  "latency": {
+    "pipeline_start": 27882.6248905,
+    "retrieval_time_s": 0.022598300001845928,
+    "augmentation_time_s": 0.0018638000001374166,
+    "llm_request_start": 27882.6496852,
+    "llm_model": "llama-3.1-8b-instant",
+    "prompt_chars": 2798,
+    "llm_request_end": 27883.9598571,
+    "llm_latency_s": 1.3101719000005687,
+    "eval_count": 1033,
+    "eval_duration_ns": 0,
+    "tokens_per_second": 788.4461573321421,
+    "validation_time_s": 1.3385217000031844,
+    "pipeline_total_s": 1.365458899999794
+  },
+  "warnings": [],
+  "faithfulness_score": 0.875,
+  "scenario": "sql injection in login page",
+  "target_environment": "Enterprise Windows Active Directory network",
+  "timestamp": "2026-04-29T17:59:42.841947+00:00",
+  "analysis": {
+    "total_steps": 8,
+    "unique_techniques": 8,
+    "technique_reuse": 0,
+    "tactical_coverage": {
+      "covered": [
+        "credential-access",
+        "execution",
+        "initial-access",
+        "persistence"
+      ],
+      "total_mitre_tactics": 14,
+      "coverage_ratio": 0.2857142857142857
+    },
+    "detection_coverage": {
+      "steps_with_detection": 0,
+      "coverage_ratio": 0.0
+    },
+    "hallucination_metrics": {
+      "hallucinated_steps": 0,
+      "total_steps": 8,
+      "faithfulness_score": 0.875
+    },
+    "latency_summary": {
+      "total_pipeline_s": 1.365458899999794,
+      "retrieval_ms": 22.598300001845928,
+      "generation_s": 1.3101719000005687,
+      "tokens_per_second": 788.4461573321421
+    }
+  }
+}

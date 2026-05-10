@@ -29,13 +29,13 @@ CHUNK_TOKENIZER      = EMBEDDING_MODEL_NAME
 FAISS_HNSW_M               = 48
 FAISS_HNSW_EF_SEARCH       = 32
 FAISS_HNSW_EF_CONSTRUCTION = 200
-RAG_TOP_K                  = 5
+RAG_TOP_K                  = 8
 RELEVANCE_THRESHOLD        = 2.0
-DIVERSITY_TOP_K_WIDE       = 30
+DIVERSITY_TOP_K_WIDE       = 20
 
 # Retrieve a wider candidate set, then select a small context budget for the prompt.
 # This keeps prompts small while improving multi-step coverage.
-RAG_RETRIEVAL_TOP_K_WIDE   = DIVERSITY_TOP_K_WIDE
+RAG_RETRIEVAL_TOP_K_WIDE   = 18
 DIVERSITY_KEY_TACTICS = [
     "reconnaissance", "resource-development", "initial-access",
     "execution", "persistence", "privilege-escalation",
@@ -84,19 +84,22 @@ LLM_RETRY_JITTER_S = 0.5
 LLM_MAX_429_WAIT_S = 900.0
 
 # RAG prompt budget controls
-RAG_MAX_CONTEXT_TECHNIQUES = 5
+RAG_MAX_CONTEXT_TECHNIQUES = 14
 RAG_TECHNIQUE_SUMMARY_MAX_CHARS = 420
 
 # Context selection strategy
 RAG_DIVERSIFY_CONTEXT = True
 RAG_CONTEXT_TOP_N_SIMILAR = 3
 
+# Retrieval variants (balanced speed/quality)
+RAG_MAX_QUERY_VARIANTS = 2
+
 # Optional lightweight reranking (no external model)
-RAG_ENABLE_RERANK = False
-RAG_RERANK_WEIGHT = 0.25
+RAG_ENABLE_RERANK = True
+RAG_RERANK_WEIGHT = 0.35
 
 # Retrieval mode
-RAG_USE_DIVERSE_RETRIEVAL = False
+RAG_USE_DIVERSE_RETRIEVAL = True
 
 # ── Ollama (NOT USED — kept only so legacy imports don't crash) ──────
 OLLAMA_BASE_URL   = ""         # Ollama is NOT used in this project
@@ -104,8 +107,8 @@ OLLAMA_MODEL      = GROQ_MODEL  # alias — do not rely on this
 
 # RAG pipeline
 MAX_DESCRIPTION_LENGTH = 1500
-DEFAULT_CHAIN_LENGTH   = 5
-MAX_CHAIN_LENGTH       = 6
+DEFAULT_CHAIN_LENGTH   = 14
+MAX_CHAIN_LENGTH       = 14
 
 # Evaluation
 N_EVALUATION_RUNS        = 5
@@ -117,6 +120,15 @@ N_MULTI_STEP_SCENARIOS   = 32
 AGGRESSIVE_GC            = True
 CHROMA_INSERT_BATCH_SIZE = 100
 EMBEDDING_WORKERS        = 0
+
+# Web UI performance tuning (keeps real integrations but with tighter timeouts)
+WEB_UI_DISCOVERY_MAX_PAGES = 18
+WEB_UI_DISCOVERY_TIMEOUT_S = 6.0
+WEB_UI_RECON_TIMEOUT_S      = 6.0
+WEB_UI_FORM_TIMEOUT_S       = 5.0
+WEB_UI_LIVE_TIMEOUT_S       = 6.0
+WEB_UI_PROBE_TIMEOUT_S      = 5.0
+WEB_UI_STREAM_HEARTBEAT_S   = 12.0
 
 # Logging
 LOG_LEVEL  = "INFO"

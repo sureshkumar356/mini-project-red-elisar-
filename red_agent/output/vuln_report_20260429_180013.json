@@ -1,0 +1,248 @@
+{
+  "report_title": "Red ELISAR \u2014 Autonomous Web Vulnerability Assessment",
+  "target_url": "http://127.0.0.1:5000",
+  "scan_date": "2026-04-29 18:00 UTC",
+  "overall_risk": "CRITICAL",
+  "total_vulns": 3,
+  "severity_counts": {
+    "CRITICAL": 3,
+    "HIGH": 0,
+    "MEDIUM": 0,
+    "LOW": 0,
+    "INFO": 0
+  },
+  "tech_stack": {
+    "server": "Werkzeug/3.1.6 Python/3.13.3, Apache/2.2.8 (Ubuntu)",
+    "language": "PHP/7.2.1",
+    "versions": {
+      "server": "Werkzeug/3.1.6 Python/3.13.3, Apache/2.2.8 (Ubuntu)",
+      "x_powered_by": "PHP/7.2.1"
+    }
+  },
+  "recon_summary": {
+    "domain": "127.0.0.1:5000",
+    "status_code": 200,
+    "ssl_enabled": false,
+    "exposed_paths": 5,
+    "missing_headers": 6,
+    "leaked_headers": 3
+  },
+  "vulnerabilities": [
+    {
+      "type": "Targeted Validation (sql_injection)",
+      "detail": "SQLi at /search \u2014 shows all results \u2014 authentication bypass. Response length: 10610 bytes",
+      "severity": "CRITICAL",
+      "cwe_id": "CWE-20",
+      "mitre_hint": "",
+      "recommendation": "Use parameterised queries / prepared statements. Never concatenate user input into SQL strings.",
+      "evidence": "http://127.0.0.1:5000/search?q=' OR '1'='1 | ' OR '1'='1",
+      "confirmed_live": true
+    },
+    {
+      "type": "Targeted Validation (sql_injection)",
+      "detail": "SQLi at /search \u2014 comments out password check. Response length: 10613 bytes",
+      "severity": "CRITICAL",
+      "cwe_id": "CWE-20",
+      "mitre_hint": "",
+      "recommendation": "Use parameterised queries / prepared statements. Never concatenate user input into SQL strings.",
+      "evidence": "http://127.0.0.1:5000/search?q=' OR '1'='1'-- | ' OR '1'='1'--",
+      "confirmed_live": true
+    },
+    {
+      "type": "Targeted Validation (sql_injection)",
+      "detail": "SQL injection bypasses login authentication entirely",
+      "severity": "CRITICAL",
+      "cwe_id": "CWE-20",
+      "mitre_hint": "",
+      "recommendation": "Use parameterised queries / prepared statements. Never concatenate user input into SQL strings.",
+      "evidence": "http://127.0.0.1:5000/login | ' OR '1'='1'-- (POST login)",
+      "confirmed_live": true
+    }
+  ],
+  "attack_chain": [
+    {
+      "step": 1,
+      "tactic": "reconnaissance",
+      "technique_id": "T1593.002",
+      "technique_name": "Search Engines",
+      "relevance_score": 0.3783,
+      "description": "Adversaries may use search engines to collect information about victims that can be used during targeting. Search engine services typical crawl online sites to index context and may provide users with",
+      "source_vulnerability": {
+        "type": "Targeted Validation (sql_injection)",
+        "detail": "SQLi at /search \u2014 shows all results \u2014 authentication bypass. Response length: 10610 bytes",
+        "severity": "CRITICAL"
+      },
+      "recommendation": "Use parameterised queries / prepared statements. Never concatenate user input into SQL strings."
+    },
+    {
+      "step": 2,
+      "tactic": "resource-development",
+      "technique_id": "T1587.004",
+      "technique_name": "Exploits",
+      "relevance_score": 0.4504,
+      "description": "Adversaries may develop exploits that can be used during targeting. An exploit takes advantage of a bug or vulnerability in order to cause unintended or unanticipated behavior to occur on computer har",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: resource-development",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    },
+    {
+      "step": 3,
+      "tactic": "initial-access",
+      "technique_id": "T1189",
+      "technique_name": "Drive-by Compromise",
+      "relevance_score": 0.4413,
+      "description": "Adversaries may gain access to a system through a user visiting a website over the normal course of browsing. Multiple ways of delivering exploit code to a browser exist (i.e., Drive-by Target), inclu",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: initial-access",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    },
+    {
+      "step": 4,
+      "tactic": "execution",
+      "technique_id": "T1204.004",
+      "technique_name": "Malicious Copy and Paste",
+      "relevance_score": 0.3794,
+      "description": "An adversary may rely upon a user copying and pasting code in order to gain execution. Users may be subjected to social engineering to get them to copy and paste code directly into a Command and Scrip",
+      "source_vulnerability": {
+        "type": "Targeted Validation (sql_injection)",
+        "detail": "SQLi at /search \u2014 comments out password check. Response length: 10613 bytes",
+        "severity": "CRITICAL"
+      },
+      "recommendation": "Use parameterised queries / prepared statements. Never concatenate user input into SQL strings."
+    },
+    {
+      "step": 5,
+      "tactic": "persistence",
+      "technique_id": "T1505.004",
+      "technique_name": "IIS Components",
+      "relevance_score": 0.4361,
+      "description": "Adversaries may install malicious components that run on Internet Information Services (IIS) web servers to establish persistence. IIS provides several mechanisms to extend the functionality of the we",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: persistence",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    },
+    {
+      "step": 6,
+      "tactic": "privilege-escalation",
+      "technique_id": "T1068",
+      "technique_name": "Exploitation for Privilege Escalation",
+      "relevance_score": 0.5378,
+      "description": "Adversaries may exploit software vulnerabilities in an attempt to elevate privileges. Exploitation of a software vulnerability occurs when an adversary takes advantage of a programming error in a prog",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: privilege-escalation",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    },
+    {
+      "step": 7,
+      "tactic": "defense-evasion",
+      "technique_id": "T1550.004",
+      "technique_name": "Web Session Cookie",
+      "relevance_score": 0.4653,
+      "description": "Adversaries can use stolen session cookies to authenticate to web applications and services. This technique bypasses some multi-factor authentication protocols since the session is already authenticat",
+      "source_vulnerability": {
+        "type": "Targeted Validation (sql_injection)",
+        "detail": "SQL injection bypasses login authentication entirely",
+        "severity": "CRITICAL"
+      },
+      "recommendation": "Use parameterised queries / prepared statements. Never concatenate user input into SQL strings."
+    },
+    {
+      "step": 8,
+      "tactic": "credential-access",
+      "technique_id": "T1606.001",
+      "technique_name": "Web Cookies",
+      "relevance_score": 0.4369,
+      "description": "Adversaries may forge web cookies that can be used to gain access to web applications or Internet services. Web applications and services (hosted in cloud SaaS environments or on-premise servers) ofte",
+      "source_vulnerability": {
+        "type": "Targeted Validation (sql_injection)",
+        "detail": "SQL injection bypasses login authentication entirely",
+        "severity": "CRITICAL"
+      },
+      "recommendation": "Use parameterised queries / prepared statements. Never concatenate user input into SQL strings."
+    },
+    {
+      "step": 9,
+      "tactic": "discovery",
+      "technique_id": "T1016.001",
+      "technique_name": "Internet Connection Discovery",
+      "relevance_score": 0.4872,
+      "description": "Adversaries may check for Internet connectivity on compromised systems. This may be performed during automated discovery and can be accomplished in numerous ways such as using Ping, tracert, and GET r",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: discovery",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    },
+    {
+      "step": 10,
+      "tactic": "lateral-movement",
+      "technique_id": "T1210",
+      "technique_name": "Exploitation of Remote Services",
+      "relevance_score": 0.5169,
+      "description": "Adversaries may exploit remote services to gain unauthorized access to internal systems once inside of a network. Exploitation of a software vulnerability occurs when an adversary takes advantage of a",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: lateral-movement",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    },
+    {
+      "step": 11,
+      "tactic": "collection",
+      "technique_id": "T1056.002",
+      "technique_name": "GUI Input Capture",
+      "relevance_score": 0.3324,
+      "description": "Adversaries may mimic common operating system GUI components to prompt users for credentials with a seemingly legitimate prompt. When programs are executed that need additional privileges than are pre",
+      "source_vulnerability": {
+        "type": "Targeted Validation (sql_injection)",
+        "detail": "SQLi at /search \u2014 comments out password check. Response length: 10613 bytes",
+        "severity": "CRITICAL"
+      },
+      "recommendation": "Use parameterised queries / prepared statements. Never concatenate user input into SQL strings."
+    },
+    {
+      "step": 12,
+      "tactic": "exfiltration",
+      "technique_id": "T1048.003",
+      "technique_name": "Exfiltration Over Unencrypted Non-C2 Protocol",
+      "relevance_score": 0.5285,
+      "description": "Adversaries may steal data by exfiltrating it over an un-encrypted network protocol other than that of the existing command and control channel. The data may also be sent to an alternate network locat",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: exfiltration",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    },
+    {
+      "step": 13,
+      "tactic": "impact",
+      "technique_id": "T1499.002",
+      "technique_name": "Service Exhaustion Flood",
+      "relevance_score": 0.5099,
+      "description": "Adversaries may target the different network services provided by systems to conduct a denial of service (DoS). Adversaries often target the availability of DNS and web services, however others have b",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: impact",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    }
+  ],
+  "llm_analysis": "Scenario-driven validation completed for attack type 'sql_injection'. Status: FOUND.",
+  "disclaimer": "EDUCATIONAL USE ONLY. This assessment was performed on a deliberately vulnerable application for learning purposes. Unauthorized use of this tool against real systems is illegal."
+}

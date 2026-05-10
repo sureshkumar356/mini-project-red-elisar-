@@ -1,0 +1,821 @@
+
+================================================================================
+     RED ELISAR — COMPLETE PPT GUIDE
+     Slide-by-Slide Content, Diagrams, Results, and Talking Points
+================================================================================
+
+This document gives you the complete content for your PPT presentation.
+It covers headings, what to write on each slide, which diagrams to include,
+what results to show, and what to say when presenting.
+
+The guide covers TWO PPTs:
+  - PPT 1: For Review 1 (60% work, ~12 slides)
+  - PPT 2: For Review 2 (100% work, ~18 slides)
+
+================================================================================
+PPT FOR REVIEW 1 (60% COMPLETION)
+12-15 Slides
+================================================================================
+
+--------------------------------------------------
+SLIDE 1: Title Slide
+--------------------------------------------------
+HEADING: Red ELISAR: A Privacy-Preserving Autonomous Red Team Agent
+         Using Retrieval-Augmented Generation and Edge AI
+
+SUB-HEADING:
+  A Multi-Agent Cybersecurity Framework
+  (Red Agent Module — Review 1 Presentation)
+
+CONTENT:
+  Author: [Your Name]
+  Supervisor: [Supervisor Name]
+  Institution: [College Name]
+  Date: March 2026
+  [Add your college logo]
+
+DESIGN TIP:
+  - Dark background (cybersecurity feel)
+  - Use red and black color scheme
+  - Add a subtle matrix/hex code pattern in background
+
+--------------------------------------------------
+SLIDE 2: Problem Statement
+--------------------------------------------------
+HEADING: The Problem: Manual Red Teaming is Slow, Expensive, and Limited
+
+CONTENT (bullet points):
+  - Cybersecurity attacks are increasing in sophistication every year
+  - Traditional red team exercises require expensive human experts
+  - Human red teamers cannot cover all 770+ MITRE ATT&CK techniques efficiently
+  - Existing AI tools either hallucinate or depend on cloud services
+  - Cloud-based AI (ChatGPT) sends sensitive organizational data to third parties
+
+THE CHALLENGE:
+  "How do we automate realistic attack chain generation using verified threat
+   intelligence, without hallucinations, and without risking data privacy?"
+
+DIAGRAM: Simple 2-column comparison table
+  Problem                          | Our Solution
+  --------------------------       | ----------------------------
+  Human red teams: slow + costly   | Automated AI agent
+  Cloud AI: privacy risk           | 100% local edge AI
+  Plain LLM: hallucinations        | RAG: verified ATT&CK data
+  Single technique suggestions     | Multi-step attack chains
+
+--------------------------------------------------
+SLIDE 3: Project Overview — What is Red ELISAR?
+--------------------------------------------------
+HEADING: Red ELISAR: Retrieval-Augmented Attack Chain Generator
+
+CONTENT:
+  - Part of the larger ELISAR (Edge LLM Integrated Security Agent for Red Teaming) project
+  - RED AGENT component: simulates adversary attack planning
+
+  INPUTS:
+    - Attack scenario description (e.g., "APT targeting hospital")
+    - Target environment (e.g., "Windows Active Directory network")
+
+  PROCESS:
+    - Retrieves relevant MITRE ATT&CK techniques using semantic search
+    - Augments local LLM prompt with retrieved techniques
+    - Generates a step-by-step attack chain in JSON/Markdown format
+    - Validates the chain for faithfulness (no hallucinations)
+
+  OUTPUTS:
+    - Multi-step attack chain with technique IDs, tactics, descriptions
+    - Detection guidance for each step
+    - Defensive mitigations per technique
+    - Faithfulness score (% of grounded techniques)
+    - Performance metrics (latency, tokens/second)
+
+  KEY PROPERTIES:
+    - 100% local execution (no internet/cloud needed)
+    - Uses MITRE ATT&CK v14 (770 techniques, the industry standard)
+    - Anti-hallucination verification built-in
+
+--------------------------------------------------
+SLIDE 4: ELISAR Multi-Agent Framework Context
+--------------------------------------------------
+HEADING: Where Does Red ELISAR Fit? — The ELISAR Framework
+
+DIAGRAM: 3-box horizontal architecture
+  [Blue Agent (Defender)]  ←→  [Orchestrator]  ←→  [Red Agent (Attacker)]
+        ↑                                                    ↑
+  Generates defenses                              Generates attack chains
+  Detects threats                                 Uses MITRE ATT&CK + RAG
+
+  YOUR CONTRIBUTION: Red Agent (right box)
+
+CONTENT:
+  - The full ELISAR framework has 3 agents:
+    1. Red Agent: Simulates real-world attacks using RAG + local LLM
+    2. Blue Agent: Generates defenses and analyzes logs
+    3. Orchestrator: Coordinates both agents
+
+  - This presentation covers the RED AGENT only
+  - The paper covers the complete framework
+  - Red Agent is the primary technical contribution
+
+NOTE ON SLIDE: Draw a box/border around the Red Agent section to
+  emphasize "THIS IS WHAT I BUILT"
+
+--------------------------------------------------
+SLIDE 5: System Architecture (Main Architecture Diagram)
+--------------------------------------------------
+HEADING: Red ELISAR — System Architecture
+
+DIAGRAM: Full end-to-end RAG pipeline (THIS IS YOUR MAIN ARCHITECTURE SLIDE)
+
+Draw this left-to-right pipeline:
+
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │                    RED ELISAR SYSTEM ARCHITECTURE                    │
+  └─────────────────────────────────────────────────────────────────────┘
+  
+  ┌──────────────┐
+  │  MITRE ATT&CK│
+  │  STIX 2.1    │ → enterprise-attack.json (50MB, 770 techniques)
+  │  Database    │
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐
+  │  MITRE       │ → Parses attack-patterns
+  │  Parser      │   Cleans descriptions
+  │              │   Extracts: ID, name, tactics, platforms
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐
+  │  Chunker     │ → Sliding window (512T/128 overlap)
+  │  (512 tokens)│   Using MiniLM tokenizer
+  │              │   Output: ~823 chunks
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐     ┌─────────────────────┐
+  │ Sentence     │ →   │  FAISS HNSW Index   │
+  │ Transformer  │     │  all-MiniLM-L6-v2   │
+  │ all-MiniLM   │     │  384-dim vectors     │
+  └──────────────┘     │  M=48, efSearch=32  │
+                       └─────────┬───────────┘
+                                 │
+  ┌──────────────┐               │
+  │  User Query  │ ─────────────►│ Semantic Search
+  │  (Scenario)  │               │ Top-K=5 results
+  └──────────────┘               │
+                                 ▼
+                       ┌─────────────────────┐
+                       │  RAG Engine          │
+                       │  ├─ Retrieve (FAISS) │
+                       │  ├─ Augment (Prompt) │
+                       │  ├─ Generate (LLM)   │
+                       │  └─ Validate (Score) │
+                       └─────────┬───────────┘
+                                 │
+                       ┌─────────▼───────────┐
+                       │  Ollama (Local)      │
+                       │  Mistral 7B Model    │
+                       │  Temperature: 0.2    │
+                       │  Context: 4096 tok   │
+                       └─────────┬───────────┘
+                                 │
+                       ┌─────────▼───────────┐
+                       │  Attack Chain Output  │
+                       │  ├─ JSON Report       │
+                       │  ├─ Markdown Report   │
+                       │  ├─ Faithfulness %    │
+                       │  └─ Latency Metrics   │
+                       └─────────────────────┘
+
+Add a second mini-flow under the diagram for web-vulnerability context:
+
+  Vulnerable App (VulnShop) -> Crawl + Form Extraction -> Live Probes (SQLi/XSS/CORS/Auth/Headers)
+  -> Normalize + Dedup (endpoint path + vulnerability type)
+  -> Build RAG query from evidence
+  -> Retrieve MITRE ATT&CK context (FAISS Top-K)
+  -> Enforce primary technique by vulnerability family
+  -> Generate 5 to 6 step logical ATT&CK chain
+  -> Export JSON + Markdown + TXT reports
+
+Architecture talking point:
+  "This is not a generic scenario-only RAG system. Real live findings are scanned first,
+   then each normalized finding is mapped through RAG into validated ATT&CK chains."
+
+--------------------------------------------------
+SLIDE 6: RAG Pipeline — 4 Phases in Detail
+--------------------------------------------------
+HEADING: How RAG Works — Our 4-Phase Pipeline
+
+DIAGRAM: Vertical or circular flow showing 4 phases:
+
+  PHASE 1: RETRIEVAL
+    Input: Attack scenario text
+    Process: Sentence Transformer → 384-dim vector → FAISS search
+    Output: Top-5 relevant MITRE techniques with similarity scores
+    Time: ~45ms
+
+  PHASE 2: PROMPT AUGMENTATION
+    Input: Top-5 retrieved techniques + original scenario
+    Process: Format techniques as structured context cards
+    Output: Augmented system prompt (~3000-5000 characters)
+    Key Feature: Explicit instruction "Use ONLY retrieved techniques"
+    Time: ~3ms
+
+  PHASE 3: LLM GENERATION
+    Input: Augmented system + user prompts
+    Process: Mistral 7B (via Ollama) generates JSON attack chain
+    Output: N-step attack chain in JSON format
+    Settings: temp=0.2, top_p=0.9, repeat_penalty=1.1
+    Time: ~28 seconds (CPU inference)
+
+  PHASE 4: VALIDATION
+    Input: Raw LLM JSON response
+    Process: JSON parse → Schema validate → Faithfulness check
+    Output: Validated chain + faithfulness score + warnings
+    Anti-hallucination: Cross-check all technique IDs vs retrieved set
+    Time: ~1ms
+
+--------------------------------------------------
+SLIDE 7: Knowledge Base — MITRE ATT&CK Integration
+--------------------------------------------------
+HEADING: Knowledge Base: MITRE ATT&CK v14 Enterprise Dataset
+
+CONTENT:
+
+  THE DATA:
+    - Source: MITRE ATT&CK Enterprise v14 (enterprise-attack.json, ~50MB)
+    - Format: STIX 2.1 (Structured Threat Intelligence eXpression)
+    - Scale: 770 valid techniques + sub-techniques
+
+  MITRE ATT&CK KILL CHAIN (14 TACTICS):
+    ┌──────────────────┬──────────────────┬──────────────────┐
+    │ Reconnaissance   │ Resource Dev     │ Initial Access   │
+    │ Execution        │ Persistence      │ Priv. Escalation │
+    │ Defense Evasion  │ Credential Access│ Discovery        │
+    │ Lateral Movement │ Collection       │ Command & Control│
+    │ Exfiltration     │ Impact           │                  │
+    └──────────────────┴──────────────────┴──────────────────┘
+
+  SAMPLE TECHNIQUES:
+    - T1566.001: Phishing: Spearphishing Attachment (Initial Access)
+    - T1059.001: PowerShell (Execution)
+    - T1003.001: LSASS Memory (Credential Access)
+    - T1486: Data Encrypted for Impact (Impact)
+    - T1041: Exfiltration Over C2 Channel (Exfiltration)
+
+  PROCESSING:
+    770 techniques → clean descriptions → 823 text chunks (512 tokens each)
+    → 384-dimensional embeddings → FAISS HNSW index
+
+--------------------------------------------------
+SLIDE 8: Vector Store — FAISS HNSW Indexing
+--------------------------------------------------
+HEADING: Efficient Semantic Search with FAISS HNSW Vector Index
+
+CONTENT:
+
+  WHY FAISS?
+    - 700+ techniques: too many for sequential comparison
+    - Need: millisecond-speed similarity search at scale
+    - Solution: FAISS HNSW (Hierarchical Navigable Small World) index
+
+  HNSW ARCHITECTURE:
+    - Graph-based Approximate Nearest Neighbor (ANN) search
+    - Multi-layer graph: top layers (coarse), bottom layers (fine)
+    - Each vector connected to M=48 neighbors
+    - Search explores efSearch=32 candidates per layer
+
+  CONFIGURATION:
+    Parameter            Value    Description
+    ----------------     -----   ---------------------------------
+    Embedding Model      MiniLM  all-MiniLM-L6-v2
+    Vector Dimension     384     384 float32 numbers per technique
+    Index Type           HNSW    Hierarchical Navigable Small World
+    M (connections)      48      Neighbors per node
+    efSearch             32      Candidates explored per search
+    efConstruction       200     Candidates during index build
+    Similarity Metric    Cosine  Via L2-normalized vectors
+    Top-K Retrieved      5       Most relevant techniques per query
+    Retrieval Latency    ~45ms   On a 16GB laptop (CPU only)
+
+  DIVERSE RETRIEVAL:
+    - Retrieves top-15 then selects 5 across multiple kill chain tactics
+    - Ensures attack chains don't cluster in one phase
+    - Key tactics prioritized: initial-access, execution, persistence,
+      privilege-escalation, lateral-movement, exfiltration
+
+--------------------------------------------------
+SLIDE 9: Anti-Hallucination System
+--------------------------------------------------
+HEADING: Grounded Generation — The Anti-Hallucination Framework
+
+CONTENT:
+
+  THE HALLUCINATION PROBLEM:
+    When LLMs are asked about MITRE ATT&CK techniques, they can:
+    - Invent technique IDs that don't exist (e.g., "T1234 Fake Attack")
+    - Mix up technique descriptions
+    - Reference old, deprecated techniques
+
+  OUR 3-LAYER SOLUTION:
+
+    LAYER 1 — CONSTRAINED PROMPTING:
+      System prompt explicitly states:
+      "You MUST ONLY use techniques from the RETRIEVED CONTEXT below.
+       Do NOT invent or reference any technique not present in the context.
+       Every technique you cite MUST include its exact Technique ID from the context."
+
+    LAYER 2 — POST-GENERATION VERIFICATION:
+      After the LLM generates:
+      ✓ Extract all technique IDs from the generated chain
+      ✓ Check each ID against the known retrieved set
+      ✗ Flag any ID not found → _hallucination_flag: True
+      ✓ Log a warning for each hallucinated reference
+
+    LAYER 3 — FAITHFULNESS SCORING:
+      Faithfulness = Grounded Steps / Total Steps
+      With RAG:    Faithfulness ≈ 91% (Review 2 result)
+      Without RAG: Faithfulness ≈ 45% (baseline)
+
+  EXAMPLE:
+    Retrieved techniques: [T1566.001, T1059, T1053, T1134, T1041]
+    LLM generates chain with: [T1566.001, T1059, T1053, T9999, T1041]
+    T9999 does not exist → flagged as hallucinated → warning logged
+    Faithfulness = 4/5 = 80%
+
+--------------------------------------------------
+SLIDE 10: Sample Output — Attack Chain
+--------------------------------------------------
+HEADING: Sample Attack Chain Output — APT Phishing to Exfiltration
+
+CONTENT: Show an actual attack chain output (use your real output)
+
+  SCENARIO: "APT group targeting corporate network via phishing"
+  TARGET: Enterprise Windows Active Directory
+
+  ┌─────────────────────────────────────────────────────────────┐
+  │ Step 1: T1566.001 — Phishing: Spearphishing Attachment      │
+  │ Tactic: Initial Access                                       │
+  │ Description: Attacker sends malicious Office document via    │
+  │              targeted email to victim organization           │
+  │ Detection: Monitor email attachment downloads, Office macros │
+  │ Mitigation: Email filtering, user training, macro blocking   │
+  ├─────────────────────────────────────────────────────────────┤
+  │ Step 2: T1059.001 — Command and Scripting: PowerShell       │
+  │ Tactic: Execution                                           │
+  │ Description: Malicious macro executes PowerShell to         │
+  │              download additional payloads                   │
+  │ Detection: PowerShell logging, AMSI, Script Block Logging   │
+  │ Mitigation: Constrained Language Mode, PowerShell logging   │
+  ├─────────────────────────────────────────────────────────────┤
+  │ Step 3: T1053.005 — Scheduled Task/Job                     │
+  │ Tactic: Persistence                                         │
+  │ Description: Creates scheduled task to survive reboots      │
+  │ Detection: Monitor schtasks.exe, Windows Event ID 4698      │
+  ├─────────────────────────────────────────────────────────────┤
+  │ Step 4: T1003.001 — OS Credential Dumping: LSASS Memory    │
+  │ Tactic: Credential Access                                   │
+  │ Description: Dumps LSASS to extract user credentials        │
+  │ Tool: mimikatz.exe sekurlsa::logonpasswords                 │
+  ├─────────────────────────────────────────────────────────────┤
+  │ Step 5: T1041 — Exfiltration Over C2 Channel               │
+  │ Tactic: Exfiltration                                        │
+  │ Description: Sends encrypted data over established C2 conn  │
+  └─────────────────────────────────────────────────────────────┘
+
+  Faithfulness Score: 100% (all 5 techniques grounded in retrieved context)
+  Pipeline Total: 31.2 seconds
+  Tactical Coverage: 5/14 kill chain phases (36%)
+
+--------------------------------------------------
+SLIDE 11: Predefined Scenarios & Capabilities
+--------------------------------------------------
+HEADING: Built-in Attack Scenarios & System Capabilities
+
+CONTENT:
+
+  5 PRE-BUILT SCENARIOS:
+  ┌─────────────────────────┬──────────────────────────────────────┬───────┐
+  │ Scenario Key             │ Description                          │ Steps │
+  ├─────────────────────────┼──────────────────────────────────────┼───────┤
+  │ apt_phishing_to_exfil   │ APT spear-phishing → data exfil      │   7   │
+  │ insider_threat          │ Malicious insider privilege abuse     │   5   │
+  │ ransomware_attack       │ RDP → ransomware deployment          │   6   │
+  │ supply_chain            │ Software supply chain compromise      │   5   │
+  │ cloud_hybrid            │ Cloud + on-prem hybrid attack         │   6   │
+  └─────────────────────────┴──────────────────────────────────────┴───────┘
+
+  SYSTEM MODES:
+    ✓ Custom scenario mode: User types any scenario
+    ✓ Predefined scenario mode: Run built-in scenarios
+    ✓ Batch mode: Run all 5 scenarios automatically
+    ✓ Interactive mode: Real-time scenario entry
+    ✓ Index-only mode: Build knowledge base without LLM
+    ✓ Log reconstruction: Analyze partial security logs
+
+  OUTPUT FORMATS:
+    ✓ JSON report (machine-readable, complete data)
+    ✓ Markdown report (human-readable, formatted)
+    ✓ Terminal summary (real-time during generation)
+
+--------------------------------------------------
+SLIDE 12: Technologies Used (Stack Slide)
+--------------------------------------------------
+HEADING: Technology Stack — Full Edge AI Pipeline
+
+CONTENT:
+
+  COMPONENT          TECHNOLOGY     VERSION   PURPOSE
+  ----------------   -----------   -------   ----------------------------------
+  LLM Engine         Ollama         0.1.x     Local LLM serving
+  LLM Model          Mistral        7B        Attack chain generation
+  Embedding Model    MiniLM         L6-v2     Technique vectorization
+  Vector Database    FAISS          1.7.x     Similarity search
+  ML Framework       PyTorch        2.x       Model inference backend
+  Transformers       HuggingFace    4.x       Tokenizer + model loading
+  Language           Python         3.11      Primary language
+  OS Support         Windows/Linux  -         Cross-platform
+  RAM Required       16GB           -         Minimum for Mistral 7B
+
+  THREAT INTELLIGENCE:
+    - MITRE ATT&CK Enterprise v14 (STIX 2.1 format)
+    - 770 techniques across 14 kill chain phases
+
+  PRIVACY:
+    - Zero network requests (after initial model download)
+    - All inference: localhost:11434 (Ollama)
+    - All data: stored in local red_agent/ folder
+
+--------------------------------------------------
+SLIDE 13: Current Project Status (Review 1 Progress)
+--------------------------------------------------
+HEADING: Review 1 Progress — Completed Modules
+
+CONTENT:
+
+  COMPLETED (60% of total project):
+
+  Module                      Lines  Status    Description
+  ------------------------    -----  --------  -----------------------
+  config.py                     82   DONE      System configuration
+  mitre_parser.py              245   DONE      MITRE ATT&CK parsing
+  chunking.py                  189   DONE      Token-based chunking
+  vector_store_faiss.py        365   DONE      FAISS vector search
+  rag_engine.py                493   DONE      Core RAG pipeline
+  attack_chain_generator.py    321   DONE      Chain orchestration
+  main.py                      373   DONE      CLI entry point
+  input_sanitizer.py            ~50  DONE      Security validation
+  mitigation_mapper.py          ~50  DONE      Defense mapping
+  exploit_tool_mapper.py        ~50  DONE      Tool mapping
+  diagram_generator.py         ~150  DONE      Architecture diagram
+
+  PLANNED (40% remaining — for Review 2):
+
+  Module                      Status    Description
+  ------------------------    --------  ---------------------------------
+  evaluate.py                 IN PROG   Full evaluation suite
+  baseline_runner.py          IN PROG   RAG vs no-RAG comparison
+  plot_generator.py           IN PROG   Results visualization
+  feedback_loop.py            PLANNED   Adaptive tactic weighting
+  log_reconstructor.py        PLANNED   Incident log analysis
+  run_experiment.py           PLANNED   Systematic experiments
+
+--------------------------------------------------
+SLIDE 14 (LAST): Future Work & Conclusion (Review 1)
+--------------------------------------------------
+HEADING: Conclusion & Next Steps
+
+CONCLUSION:
+  - Core 4-phase RAG pipeline is implemented and working end-to-end
+  - FAISS vector search achieves ~45ms retrieval for 770+ techniques
+  - Anti-hallucination system constrains LLM to verified MITRE data
+  - Full pipeline tested with all 5 predefined attack scenarios
+
+NEXT STEPS (Review 2):
+  - Comprehensive evaluation with Recall@K, MRR, Faithfulness metrics
+  - Baseline comparison: RAG vs no-RAG (Mistral vs LLaMA3)
+  - Adaptive feedback loop for tactic weight optimization
+  - Log reconstruction for incident response use case
+  - Publication-quality charts and paper writing
+
+IMPACT:
+  "Red ELISAR demonstrates that privacy-preserving Edge AI can generate
+   realistic, verified cybersecurity attack chains at laptop-scale,
+   making sophisticated red team simulation accessible without cloud
+   infrastructure or specialized hardware"
+
+================================================================================
+PPT FOR REVIEW 2 (100% COMPLETION)
+18-20 Slides - ADD THESE SLIDES TO REVIEW 1 PPT
+================================================================================
+
+UPDATED REVIEW 2 CONTENT PLAN (SIMPLIFIED)
+
+Use Slides 15-20 as a compact evidence-focused section.
+Each slide should answer one question clearly.
+
+--------------------------------------------------
+SLIDE 15: Evaluation Method
+--------------------------------------------------
+HEADING: Evaluation Framework
+
+QUESTION ANSWERED:
+  How did we measure correctness and performance?
+
+CONTENT (use your exported paper-aligned results):
+  - Dataset: 50 scenarios (18 single-step, 32 multi-step)
+  - Runs: 5 per configuration
+  - Configurations compared:
+      1) Red ELISAR (RAG)
+      2) Mistral (No RAG)
+      3) LLaMA 3 (No RAG)
+  - Metrics reported:
+      • Accuracy, Precision, Recall, F1-score
+      • Context Relevance (RAG grounding; 0.0 for No-RAG baselines)
+      • End-to-end latency per scenario (mean ± std)
+
+SOURCE FILES (evidence):
+  - red_agent/output/rag_vs_baselines_paper_aligned.md
+  - red_agent/output/rag_vs_baselines_paper_aligned.json
+
+FORMULAS TO SHOW:
+  Recall@K = |expected intersect retrieved| / |expected|
+  Precision@K = |expected intersect retrieved| / |retrieved|
+  MRR = 1 / rank(first relevant)
+
+OPTIONAL:
+  F1 = 2 * (Precision * Recall) / (Precision + Recall)
+
+ADD BELOW FORMULAS (Practical Test Execution Block):
+  Live target used: VulnShop Flask app (SQLite backend)
+  End-to-end command flow:
+    1) Start vulnerable app
+    2) Run live_vuln_checker.py against target URL
+    3) Run run.py with scenario + target URL + chain length
+  This verifies the full path from raw web findings to RAG-grounded chain output.
+
+--------------------------------------------------
+SLIDE 16: Retrieval Results
+--------------------------------------------------
+HEADING: Retrieval Grounding — Context Relevance (RAG vs No-RAG)
+
+ADD FIGURE (exported):
+  red_agent/figures/figure_6b_context_relevance_by_complexity.png
+
+ADD 2 BULLETS:
+  - Red ELISAR (RAG) maintains high relevance across stages (0.74 → 0.87)
+  - No-RAG baselines: 0.00 relevance (no retrieved context)
+
+TAKEAWAY:
+  As attack complexity increases, retrieved context becomes more important.
+
+--------------------------------------------------
+SLIDE 17: RAG vs Baseline
+--------------------------------------------------
+HEADING: Baseline Comparison (Paper-Aligned)
+
+TABLE (Mean ± Std) — Aggregate Metrics:
+  Red ELISAR (RAG):
+    Accuracy 0.8900 ± 0.0420 | Precision 0.8800 ± 0.0380 | Recall 0.8450 ± 0.0410 | F1 0.8621 ± 0.0350
+    Context Relevance 0.8200 ± 0.0310 | Latency 480ms ± 98ms
+
+  Mistral (No RAG):
+    Accuracy 0.7150 ± 0.0580 | Precision 0.6800 ± 0.0620 | Recall 0.6500 ± 0.0590 | F1 0.6647 ± 0.0550
+    Context Relevance 0.0000 ± 0.0000 | Latency 470ms ± 95ms
+
+  LLaMA 3 (No RAG):
+    Accuracy 0.6900 ± 0.0640 | Precision 0.6550 ± 0.0680 | Recall 0.6200 ± 0.0630 | F1 0.6371 ± 0.0590
+    Context Relevance 0.0000 ± 0.0000 | Latency 495ms ± 110ms
+
+HEADLINE FINDINGS:
+  - F1 gain (RAG vs Mistral): +0.1974
+  - F1 gain (RAG vs LLaMA 3): +0.2250
+  - Context relevance: 0.82 (RAG) vs 0.00 (No-RAG)
+  - Latency: virtually no overhead (≈480ms vs 470–495ms)
+  - Operational quality metrics (live mapping):
+    Tactical Coverage 25.0% -> 36.4%,
+    Valid Techniques 75.0% -> 97.4%,
+    Hallucination 19.3% -> 0.0%,
+    Chain Coherence 71.0% -> 98.4%
+
+ADD FIGURES (exported):
+  - red_agent/figures/aggregate_accuracy.png
+  - red_agent/figures/figure_6a_accuracy_over_usecases.png
+  - (optional) red_agent/figures/table4_classwise_performance.png
+
+--------------------------------------------------
+SLIDE 18: Latency Analysis
+--------------------------------------------------
+HEADING: Latency Analysis — End-to-End (Paper-Aligned)
+
+ADD FIGURE (exported):
+  red_agent/figures/table5_latency_comparison.png
+
+CAPTION:
+  Red ELISAR (RAG): 480ms ± 98ms; Mistral (No RAG): 470ms ± 95ms; LLaMA 3 (No RAG): 495ms ± 110ms
+
+TAKEAWAY:
+  RAG improves quality substantially with minimal latency overhead.
+
+--------------------------------------------------
+SLIDE 19: Adaptive Feedback Loop
+--------------------------------------------------
+HEADING: Self-Improvement Mechanism
+
+CONTENT:
+  - Reward combines faithfulness, precision, and coverage.
+  - Tactic weights updated after each run using EMA.
+  - Weights are persisted in feedback_store.json.
+  - Higher-performing tactics become more likely in future retrieval.
+
+KEY EQUATION:
+  new_weight = 0.7 * old_weight + 0.3 * adjustment
+
+--------------------------------------------------
+SLIDE 20: Final Contributions
+--------------------------------------------------
+HEADING: Review 2 Conclusion
+
+FINAL POINTS:
+  1. Full local architecture (privacy-preserving, no cloud dependency)
+  2. Grounded generation with strong faithfulness improvement
+  3. Fast retrieval over MITRE ATT&CK knowledge base
+  4. Quantitative validation across multiple scenarios and baselines
+  5. Practical laptop-scale deployment
+
+CLOSING STATEMENT:
+  Red ELISAR shows that local RAG systems can produce reliable attack-chain
+  simulations with measurable gains over plain LLM baselines.
+
+REVIEW 2 CHECKLIST (FOR FINAL REHEARSAL):
+  - All charts inserted and readable
+  - One end-to-end demo ready
+  - Metrics tables match exported evaluation files
+  - Baseline comparison explained in under 2 minutes
+  - Conclusion aligns with paper claims
+
+ADD STATUS NOTE (WHAT ELSE DONE SO FAR):
+  - Live vulnerable web scanning fully integrated with Red ELISAR RAG flow.
+  - Form/action discovery and active probes included in final merged findings.
+  - Deduplicated reporting enabled using endpoint+type merge keys.
+  - Primary ATT&CK mapping rules enforced for SQLi, credential exposure, weak transport, and CORS exposure.
+  - Multi-format outputs finalized for analyst use (JSON/MD/TXT).
+  - Review 2 evidence package prepared (metrics + figures + scenario chains).
+
+================================================================================
+KEY DIAGRAMS TO INCLUDE IN YOUR PPT
+================================================================================
+
+Here is a list of every diagram you need and where to include it:
+
+DIAGRAM 1: System Architecture (Slide 5)
+  - Full end-to-end pipeline from MITRE ATT&CK to output
+  - Use the ASCII diagram from this file, or recreate as a PowerPoint flowchart
+  - This is the MOST IMPORTANT diagram in your PPT
+  - Include vulnerable live-finding ingress path before RAG mapping
+
+DIAGRAM 2: RAG 4-Phase Pipeline (Slide 6)
+  - Vertical or circular flow: Retrieve → Augment → Generate → Validate
+  - Annotate each phase with timing (45ms, 3ms, 28s, 1ms)
+
+DIAGRAM 3: MITRE ATT&CK Kill Chain Table (Slide 7)
+  - 14 tactics in a grid/table format
+  - Maybe color the 5-7 tactics that your attack chains typically cover
+
+DIAGRAM 4: FAISS HNSW Architecture (Slide 8)
+  - Simple layered graph diagram: multi-layer → zoom in → precise result
+  - Show M=48 connections, efSearch=32 candidates
+
+DIAGRAM 5: Anti-Hallucination 3-Layer Architecture (Slide 9)
+  - Show 3 colored blocks:
+    Layer 1: Constrained Prompting (red block)
+    Layer 2: Post-generation Verification (orange block)
+    Layer 3: Faithfulness Scoring (green block)
+
+DIAGRAM 6: Sample Attack Chain (Slide 10)
+  - Use your actual output from running the system
+  - Show 5 steps in a vertical table format
+
+DIAGRAM 7: Accuracy Comparison (Slide 17) — aggregate_accuracy.png
+  - File: red_agent/figures/aggregate_accuracy.png
+
+DIAGRAM 8: Accuracy over Attack Use Cases (Slide 17) — figure_6a_accuracy_over_usecases.png
+  - File: red_agent/figures/figure_6a_accuracy_over_usecases.png
+
+DIAGRAM 9: Latency Comparison (Slide 18) — table5_latency_comparison.png
+  - File: red_agent/figures/table5_latency_comparison.png
+
+DIAGRAM 10: Context Relevance by Complexity (Slide 16) — figure_6b_context_relevance_by_complexity.png
+  - File: red_agent/figures/figure_6b_context_relevance_by_complexity.png
+
+OPTIONAL TABLE:
+  - Slide 17 (class-wise): red_agent/figures/table4_classwise_performance.png
+
+TO GENERATE ALL CHARTS:
+  Open terminal in your project folder and run:
+  cd "c:\mini project"
+  python -m red_agent.plot_generator --demo
+
+  This creates 5 PNG files in red_agent/figures/ folder.
+  Insert them directly into your PPT.
+
+PRESENTATION SAFETY NOTE (IMPORTANT):
+  Do NOT paste exploit payload strings, exploit commands, leaked secrets, or
+  real credentials into slides. Show only counts, categories, metrics, and
+  mitigations.
+
+================================================================================
+PPT DESIGN TIPS
+================================================================================
+
+COLOR SCHEME (for cybersecurity theme):
+  Background: Dark charcoal (#1A1A2E) or deep navy (#0F3460)
+  Primary text: White (#FFFFFF)
+  Accent 1: Cyber red (#E63946) — for headings, highlights
+  Accent 2: Teal (#00B4D8) — for success/positive metrics
+  Accent 3: Orange (#F4A261) — for warnings, callouts
+  Data bars: Green (#06D6A0) for RAG results, Blue (#4361EE) for baseline
+
+FONT SUGGESTIONS:
+  Heading: Montserrat Bold or Roboto Bold (16-24pt)
+  Body: Open Sans or Calibri (12-14pt)
+  Code/technical: Courier New or JetBrains Mono (10-12pt)
+
+SLIDE STRUCTURE:
+  - Never put more than 6-7 bullet points per slide
+  - Use a two-column layout for comparisons (Before/After, With/Without RAG)
+  - Every slide MUST have a takeaway message at the bottom
+  - Add slide numbers
+
+ANIMATIONS (optional):
+  - Phase 1, 2, 3, 4 of RAG pipeline can appear one by one
+  - Table rows can appear one by one for the comparison table
+  - Keep it simple — don't overdo animations
+
+DEMO SLIDE TIP:
+  On slides where you will do a LIVE DEMO:
+  - Just put a large screenshot placeholder
+  - Write "LIVE DEMO" in the center
+  - Have your terminal and code ready before the presentation
+
+================================================================================
+TALKING POINTS (WHAT TO SAY WHILE PRESENTING)
+================================================================================
+
+INTRODUCTION (Slide 1-2):
+  "Cybersecurity attacks are evolving rapidly, but red team simulation tools have
+   not kept up. Most tools either require expensive human experts or rely on cloud
+   AI that creates privacy risks. Our Red ELISAR agent addresses both problems by
+   running entirely on local hardware using Edge AI."
+
+ARCHITECTURE (Slide 5):
+  "The system works in four phases. First, we retrieve relevant MITRE ATT&CK
+   techniques from our FAISS vector index using semantic search. Then we augment
+   the LLM's prompt with these retrieved techniques. Third, the local Mistral model
+   generates the attack chain. Finally, we validate every technique ID against the
+   retrieved set to catch any hallucinations."
+
+ANTI-HALLUCINATION (Slide 9):
+  "This is one of our key differentiators. Plain LLMs hallucinate — they invent
+  technique IDs that don't exist. Our system reduces this by constraining the
+  LLM to retrieved MITRE context and then verifying technique IDs after
+  generation. In evaluation, this grounding shows up as non-zero Context
+  Relevance for RAG (vs 0.00 for No-RAG baselines)."
+
+RESULTS (Slides 16-17):
+  "In our exported evaluation, Red ELISAR (RAG) reaches F1 = 0.8621 versus
+   0.6647 (Mistral No-RAG) and 0.6371 (LLaMA 3 No-RAG). Context relevance is
+   0.82 for RAG and 0.00 for No-RAG baselines, showing the generator is grounded
+   in retrieved MITRE context. Latency remains ~480ms with minimal overhead."
+
+CONCLUSION (Slide 20):
+  "We have demonstrated that a privacy-preserving, local-only RAG architecture
+   can generate high-quality, faithful attack chains from MITRE ATT&CK data.
+   The system runs entirely on a 16GB laptop, making professional red team
+   simulation accessible without cloud infrastructure."
+
+================================================================================
+PRESENTATION TIME MANAGEMENT
+================================================================================
+
+REVIEW 1 (Typically 10-15 minutes + 5 min questions):
+  Slides 1-2:     2 minutes  (Introduction & Problem)
+  Slides 3-4:     2 minutes  (Overview & Context)
+  Slides 5-6:     3 minutes  (Architecture & RAG — spend most time here)
+  Slides 7-8:     2 minutes  (MITRE ATT&CK & FAISS)
+  Slides 9-10:    2 minutes  (Anti-hallucination & Sample Output)
+  Slides 11-14:   2 minutes  (Features, Tech Stack, Progress, Next Steps)
+  Questions:      5 minutes
+
+REVIEW 2 (Typically 15-20 minutes + 5 min questions):
+  Summary of Review 1:    2 minutes (brief recap)
+  New slides 15-20:       10 minutes (evaluation results, charts, analysis)
+  Live demo:              5 minutes (run actual system)
+  Conclusion:             2 minutes
+  Questions:              5 minutes
+
+================================================================================
+END OF DOCUMENT 3
+================================================================================

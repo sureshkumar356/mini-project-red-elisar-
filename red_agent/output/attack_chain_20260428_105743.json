@@ -1,0 +1,299 @@
+{
+  "attack_chain": {
+    "attack_chain": [
+      {
+        "step": 1,
+        "technique_id": "T1199",
+        "technique_name": "",
+        "tactic": "initial-access",
+        "description": "Establish a trusted relationship with a remote service using a compromised account.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 2,
+        "technique_id": "T1021",
+        "technique_name": "",
+        "tactic": "initial-access",
+        "description": "Use Remote Services to connect to the compromised account.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for remote services (SMB, RDP, WinRM). Restrict lateral movement paths using network segmentation and privileged access workstations.",
+        "tool_commands": [
+          "psexec.exe \\\\target -u admin -p password cmd.exe",
+          "crackmapexec smb target -u admin -p password -x 'whoami'",
+          "evil-winrm -i target -u admin -p password"
+        ]
+      },
+      {
+        "step": 3,
+        "technique_id": "T1550",
+        "technique_name": "",
+        "tactic": "initial-access",
+        "description": "Use Alternate Authentication Material to bypass MFA on the compromised account.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 4,
+        "technique_id": "T1078",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Obtain valid accounts using the compromised account's credentials.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for all remote access and privileged accounts. Monitor for anomalous login patterns, impossible travel, and credential stuffing.",
+        "tool_commands": [
+          "hydra -l admin -P passwords.txt rdp://target",
+          "crackmapexec smb 10.0.0.0/24 -u user -p password",
+          "spray.sh -smb 10.0.0.0/24 user passwords.txt"
+        ]
+      },
+      {
+        "step": 5,
+        "technique_id": "T1586",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Compromise additional accounts using the obtained valid accounts.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 6,
+        "technique_id": "T1649",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Steal or forge authentication certificates to gain access to sensitive areas.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 7,
+        "technique_id": "T1657",
+        "technique_name": "",
+        "tactic": "impact",
+        "description": "Use the compromised accounts to steal financial information.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 8,
+        "technique_id": "T1199",
+        "technique_name": "",
+        "tactic": "persistence",
+        "description": "Establish a trusted relationship with a remote service using a compromised account to maintain persistence.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 9,
+        "technique_id": "T1078",
+        "technique_name": "",
+        "tactic": "persistence",
+        "description": "Use the compromised accounts to maintain access to sensitive areas.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for all remote access and privileged accounts. Monitor for anomalous login patterns, impossible travel, and credential stuffing.",
+        "tool_commands": [
+          "hydra -l admin -P passwords.txt rdp://target",
+          "crackmapexec smb 10.0.0.0/24 -u user -p password",
+          "spray.sh -smb 10.0.0.0/24 user passwords.txt"
+        ]
+      },
+      {
+        "step": 10,
+        "technique_id": "T1550",
+        "technique_name": "",
+        "tactic": "persistence",
+        "description": "Use Alternate Authentication Material to maintain access to the compromised accounts.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 11,
+        "technique_id": "T1021",
+        "technique_name": "",
+        "tactic": "command-and-control",
+        "description": "Use Remote Services to maintain command and control over the compromised accounts.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for remote services (SMB, RDP, WinRM). Restrict lateral movement paths using network segmentation and privileged access workstations.",
+        "tool_commands": [
+          "psexec.exe \\\\target -u admin -p password cmd.exe",
+          "crackmapexec smb target -u admin -p password -x 'whoami'",
+          "evil-winrm -i target -u admin -p password"
+        ]
+      },
+      {
+        "step": 12,
+        "technique_id": "T1657",
+        "technique_name": "",
+        "tactic": "impact",
+        "description": "Continue to steal financial information using the compromised accounts.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      }
+    ],
+    "metadata": {}
+  },
+  "retrieval_results": [
+    {
+      "technique_id": "T1586",
+      "name": "Compromise Accounts",
+      "relevance_score": 0.4575,
+      "tactics": [
+        "resource-development"
+      ],
+      "description": "Adversaries may compromise accounts with services that can be used during targeting. For operations incorporating social engineering, the utilization of an online persona may be important. Rather than"
+    },
+    {
+      "technique_id": "T1199",
+      "name": "Trusted Relationship",
+      "relevance_score": 0.5258,
+      "tactics": [
+        "initial-access"
+      ],
+      "description": "Adversaries may breach or otherwise leverage organizations who have access to intended victims. Access through trusted third party relationship abuses an existing connection that may not be protected "
+    },
+    {
+      "technique_id": "T1078.003",
+      "name": "Local Accounts",
+      "relevance_score": 0.5047,
+      "tactics": [
+        "defense-evasion",
+        " persistence",
+        " privilege-escalation",
+        " initial-access"
+      ],
+      "description": "Adversaries may obtain and abuse credentials of a local account as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Local accounts are those configured by an o"
+    },
+    {
+      "technique_id": "T1078",
+      "name": "Valid Accounts",
+      "relevance_score": 0.4935,
+      "tactics": [
+        "defense-evasion",
+        " persistence",
+        " privilege-escalation",
+        " initial-access"
+      ],
+      "description": "Adversaries may obtain and abuse credentials of existing accounts as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Compromised credentials may be used to by"
+    },
+    {
+      "technique_id": "T1550",
+      "name": "Use Alternate Authentication Material",
+      "relevance_score": 0.4525,
+      "tactics": [
+        "defense-evasion",
+        " lateral-movement"
+      ],
+      "description": "Adversaries may use alternate authentication material, such as password hashes, Kerberos tickets, and application access tokens, in order to move laterally within an environment and bypass normal syst"
+    },
+    {
+      "technique_id": "T1649",
+      "name": "Steal or Forge Authentication Certificates",
+      "relevance_score": 0.5035,
+      "tactics": [
+        "credential-access"
+      ],
+      "description": "Adversaries may steal or forge certificates used for authentication to access remote systems or resources. Digital certificates are often used to sign and encrypt messages and/or files. Certificates a"
+    },
+    {
+      "technique_id": "T1021",
+      "name": "Remote Services",
+      "relevance_score": 0.4482,
+      "tactics": [
+        "lateral-movement"
+      ],
+      "description": "Adversaries may use Valid Accounts to log into a service that accepts remote connections, such as telnet, SSH, and VNC. The adversary may then perform actions as the logged-on user.\n\nIn an enterprise "
+    },
+    {
+      "technique_id": "T1657",
+      "name": "Financial Theft",
+      "relevance_score": 0.4529,
+      "tactics": [
+        "impact"
+      ],
+      "description": "Adversaries may steal monetary resources from targets through extortion, social engineering, technical theft, or other methods aimed at their own financial gain at the expense of the availability of t"
+    }
+  ],
+  "latency": {
+    "pipeline_start": 88594.5214432,
+    "retrieval_time_s": 8.342436099992483,
+    "augmentation_time_s": 0.0027116999990539625,
+    "llm_request_start": 88602.8996403,
+    "llm_model": "llama-3.1-8b-instant",
+    "prompt_chars": 2829,
+    "llm_request_end": 88605.3446725,
+    "llm_latency_s": 2.445032199990237,
+    "eval_count": 1180,
+    "eval_duration_ns": 0,
+    "tokens_per_second": 482.6112310523811,
+    "validation_time_s": 2.4550940000044648,
+    "pipeline_total_s": 10.860690999994404
+  },
+  "warnings": [],
+  "faithfulness_score": 1.0,
+  "scenario": "Credential theft and lateral movement in enterprise network.",
+  "target_environment": "Enterprise Windows Active Directory network",
+  "timestamp": "2026-04-28T05:27:43.006811+00:00",
+  "analysis": {
+    "total_steps": 12,
+    "unique_techniques": 7,
+    "technique_reuse": 5,
+    "tactical_coverage": {
+      "covered": [
+        "command-and-control",
+        "credential-access",
+        "impact",
+        "initial-access",
+        "persistence"
+      ],
+      "total_mitre_tactics": 14,
+      "coverage_ratio": 0.35714285714285715
+    },
+    "detection_coverage": {
+      "steps_with_detection": 0,
+      "coverage_ratio": 0.0
+    },
+    "hallucination_metrics": {
+      "hallucinated_steps": 0,
+      "total_steps": 12,
+      "faithfulness_score": 1.0
+    },
+    "latency_summary": {
+      "total_pipeline_s": 10.860690999994404,
+      "retrieval_ms": 8342.436099992483,
+      "generation_s": 2.445032199990237,
+      "tokens_per_second": 482.6112310523811
+    }
+  }
+}

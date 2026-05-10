@@ -201,6 +201,8 @@ class RAGEngine:
         self.vector_store = vector_store
         # Model used for generation — always the Groq/Mistral API model, never Ollama
         self.model = model or config.GROQ_MODEL
+        # Fast in-memory cache for repeated retrieval calls in the same runtime.
+        self._retrieve_cache: dict[tuple, list[dict]] = {}
 
     def retrieve(
         self,
@@ -208,17 +210,94 @@ class RAGEngine:
         top_k: int = None,
         tactic_filter: Optional[str] = None,
         platform_filter: Optional[str] = None,
+        max_query_variants: Optional[int] = None,
+        use_cache: bool = True,
     ) -> list[dict]:
         if top_k is None:
             top_k = config.RAG_TOP_K
-        results = self.vector_store.query(
-            query_text=scenario,
-            top_k=top_k,
-            tactic_filter=tactic_filter,
-            platform_filter=platform_filter,
+        if max_query_variants is None:
+            max_query_variants = int(getattr(config, "RAG_MAX_QUERY_VARIANTS", 0)) or None
+
+        scenario_clean = self._clean_ws(scenario)
+        cache_key = (
+            scenario_clean.lower(),
+            int(top_k),
+            (tactic_filter or "").lower(),
+            (platform_filter or "").lower(),
+            int(max_query_variants) if max_query_variants else 0,
         )
-        logger.info(f"Retrieved {len(results)} techniques for scenario: '{scenario[:60]}...'")
+        if use_cache and cache_key in self._retrieve_cache:
+            cached = self._retrieve_cache[cache_key]
+            logger.debug(
+                "RAG retrieve cache hit: top_k=%s variants=%s query='%s...'",
+                top_k,
+                max_query_variants or "all",
+                scenario_clean[:60],
+            )
+            return [dict(x) for x in cached]
+
+        variants = self._build_query_variants(scenario_clean)
+        if max_query_variants is not None and max_query_variants > 0:
+            variants = variants[:max_query_variants]
+
+        merged: dict[str, dict] = {}
+        for q in variants:
+            hits = self.vector_store.query(
+                query_text=q,
+                top_k=top_k,
+                tactic_filter=tactic_filter,
+                platform_filter=platform_filter,
+            )
+            for h in hits:
+                tid = str(h.get("technique_id") or "").strip().upper()
+                if not tid:
+                    continue
+                prev = merged.get(tid)
+                if prev is None or float(h.get("relevance_score", 0.0) or 0.0) > float(prev.get("relevance_score", 0.0) or 0.0):
+                    merged[tid] = h
+
+        results = list(merged.values())
+        results = self._rerank_optional(scenario, results)
+        results.sort(
+            key=lambda r: float(r.get("_combined_score", r.get("relevance_score", 0.0)) or 0.0),
+            reverse=True,
+        )
+        results = results[:top_k]
+
+        if use_cache:
+            self._retrieve_cache[cache_key] = [dict(x) for x in results]
+
+        logger.info(f"Retrieved {len(results)} techniques for scenario: '{scenario[:60]}...' using {len(variants)} query variants")
         return results
+
+    def _build_query_variants(self, scenario: str) -> list[str]:
+        text = self._clean_ws(scenario)
+        low = text.lower()
+        variants = [text]
+
+        web_tokens = ["web", "http", "url", "endpoint", "form", "session", "cookie"]
+        id_tokens = ["credential", "password", "token", "account", "login", "auth"]
+        sql_tokens = ["sql", "database", "query", "injection", "union", "blind"]
+        xss_tokens = ["xss", "script", "javascript", "browser"]
+
+        if any(t in low for t in web_tokens):
+            variants.append(f"{text} web application attack technique mapping")
+        if any(t in low for t in id_tokens):
+            variants.append(f"{text} credential access valid accounts lateral movement")
+        if any(t in low for t in sql_tokens):
+            variants.append(f"{text} exploit public-facing application sql injection database")
+        if any(t in low for t in xss_tokens):
+            variants.append(f"{text} script execution browser credential theft session hijack")
+
+        # Keep unique order.
+        seen = set()
+        uniq = []
+        for q in variants:
+            if not q or q in seen:
+                continue
+            uniq.append(q)
+            seen.add(q)
+        return uniq
 
     @staticmethod
     def _clean_ws(text: str) -> str:
@@ -430,11 +509,13 @@ class RAGEngine:
                 context=context,
             )
         else:
+            max_steps = min(chain_length, 14)
+            min_steps = max(8, max_steps - 2)
             user = USER_PROMPT_TEMPLATE.format(
                 scenario=scenario,
                 context=context,
-                min_steps=8,
-                max_steps=10,
+                min_steps=min_steps,
+                max_steps=max_steps,
             )
 
         total_chars = len(system) + len(user)
@@ -737,6 +818,21 @@ class RAGEngine:
                 if t in self.MITRE_TACTICS and t not in by_tactic:
                     by_tactic[t] = tech
 
+        # Pull additional candidates for missing tactics if not present.
+        for missing in missing_tactics:
+            if missing in by_tactic:
+                continue
+            try:
+                extra = self.retrieve(
+                    scenario=f"MITRE ATT&CK techniques for tactic {missing.replace('-', ' ')}",
+                    top_k=8,
+                    tactic_filter=missing,
+                )
+                if extra:
+                    by_tactic[missing] = extra[0]
+            except Exception:
+                continue
+
         duplicate_indices = []
         seen: dict[str, int] = {}
         for idx, step in enumerate(chain):
@@ -760,6 +856,22 @@ class RAGEngine:
                 step["description"] = candidate.get("description_preview", step.get("description", ""))
                 step["rationale"] = step.get("rationale") or f"Adjusted to ensure full tactic coverage for {missing}."
                 used_ids.add(step.get("technique_id", ""))
+            elif len(chain) < chain_length:
+                chain.append(
+                    {
+                        "step": len(chain) + 1,
+                        "technique_id": candidate.get("technique_id", ""),
+                        "technique_name": candidate.get("name", "Unknown"),
+                        "tactic": missing,
+                        "description": candidate.get("description_preview", "Coverage-added tactic step."),
+                        "rationale": f"Added to maintain complete ATT&CK lifecycle coverage for {missing}.",
+                        "prerequisites": [],
+                        "detection_considerations": "",
+                        "mitigation": "",
+                        "tool_commands": [],
+                    }
+                )
+                used_ids.add(candidate.get("technique_id", ""))
 
         # Re-number steps after any replacements/appends.
         for i, step in enumerate(chain, 1):
@@ -795,7 +907,7 @@ class RAGEngine:
         if int(chain_length or 1) <= 1:
             chain_length = 1
         else:
-            chain_length = max(4, min(6, int(chain_length)))
+            chain_length = max(8, min(int(getattr(config, "MAX_CHAIN_LENGTH", 14)), int(chain_length)))
 
         pipeline_start = time.perf_counter()
         latency_metrics = {"pipeline_start": pipeline_start}
@@ -824,6 +936,7 @@ class RAGEngine:
                 top_k=wide_k,
                 tactic_filter=tactic_filter,
                 platform_filter=platform_filter,
+                max_query_variants=int(getattr(config, "RAG_MAX_QUERY_VARIANTS", 0)) or None,
             )
         latency_metrics["retrieval_time_s"] = time.perf_counter() - retrieve_start
 
@@ -870,7 +983,7 @@ class RAGEngine:
                 if attempt > 1:
                     retry_note = (
                         "\n\nRETRY: Your previous output was invalid or too short. "
-                        "Return STRICT JSON only and include 4 to 6 steps."
+                        f"Return STRICT JSON only and include {max(8, min(chain_length, 14))} to {min(chain_length, 14)} steps."
                     )
 
                 raw_response, gen_latency = self.generate(
@@ -889,7 +1002,7 @@ class RAGEngine:
                 if not isinstance(chain, list):
                     raise ValueError("Invalid attack_chain shape")
 
-                min_steps_required = 1 if chain_length <= 1 else 4
+                min_steps_required = 1 if chain_length <= 1 else max(8, min(chain_length, 14))
                 if len(chain) < min_steps_required:
                     raise ValueError(f"Generated chain too short: {len(chain)} < {min_steps_required}")
 
@@ -914,7 +1027,7 @@ class RAGEngine:
         if isinstance(chain, list) and chain_length:
             if len(chain) > chain_length:
                 parsed_chain["attack_chain"] = chain[:chain_length]
-            min_steps = 1 if chain_length <= 1 else 4
+            min_steps = 1 if chain_length <= 1 else max(8, min(chain_length, 14))
             if len(parsed_chain.get("attack_chain", [])) < min_steps:
                 raise ValueError(
                     f"Generated chain too short: {len(parsed_chain.get('attack_chain', []))} < {min_steps}"
@@ -971,12 +1084,175 @@ class RAGEngine:
                     "name": r["name"],
                     "relevance_score": r.get("relevance_score"),
                     "tactics": r.get("tactics"),
+                    "description": r.get("description_preview", ""),
                 }
                 for r in retrieved
             ],
             "latency": latency_metrics,
             "warnings": warnings,
             "faithfulness_score": faithfulness_score,
+            "scenario": scenario,
+            "target_environment": target_environment,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
+    def generate_attack_chain_fast(
+        self,
+        scenario: str,
+        target_environment: str = "Enterprise Windows Active Directory network",
+        chain_length: int = None,
+        top_k: int = None,
+        tactic_filter: Optional[str] = None,
+        platform_filter: Optional[str] = None,
+    ) -> dict:
+        pipeline_start = time.perf_counter()
+        latency_metrics = {"pipeline_start": pipeline_start}
+
+        try:
+            scenario = sanitize_scenario(scenario)
+        except ValueError as e:
+            raise ValueError(f"Input sanitization failed: {e}")
+
+        retrieve_start = time.perf_counter()
+        normalized_len = None
+        if chain_length is not None:
+            try:
+                normalized_len = int(chain_length)
+            except Exception:
+                normalized_len = None
+
+        if normalized_len is not None:
+            normalized_len = max(1, min(int(getattr(config, "MAX_CHAIN_LENGTH", 14)), normalized_len))
+
+        wide_k = top_k
+        if wide_k is None:
+            base = normalized_len or int(getattr(config, "DEFAULT_CHAIN_LENGTH", 10))
+            wide_k = max(int(getattr(config, "RAG_RETRIEVAL_TOP_K_WIDE", 18)), base * 2)
+
+        use_diverse = bool(getattr(config, "RAG_USE_DIVERSE_RETRIEVAL", False))
+        if use_diverse and not tactic_filter and not platform_filter:
+            retrieved = self.vector_store.query_diverse(query_text=scenario, top_k=wide_k)
+        else:
+            retrieved = self.retrieve(
+                scenario=scenario,
+                top_k=wide_k,
+                tactic_filter=tactic_filter,
+                platform_filter=platform_filter,
+                max_query_variants=int(getattr(config, "RAG_MAX_QUERY_VARIANTS", 0)) or None,
+            )
+
+        latency_metrics["retrieval_time_s"] = time.perf_counter() - retrieve_start
+        if not retrieved:
+            raise ValueError("No techniques retrieved. Check that the vector store is indexed.")
+
+        if normalized_len is None:
+            normalized_len = min(8, len(retrieved))
+            normalized_len = max(1, normalized_len)
+
+        candidates = self._select_context_techniques(
+            scenario=scenario,
+            techniques=retrieved,
+            desired_count=min(len(retrieved), max(normalized_len * 2, 12)),
+            chain_length=normalized_len,
+        )
+
+        def _tactics_for(tech: dict) -> list[str]:
+            tactics = tech.get("tactics", [])
+            if isinstance(tactics, str):
+                tactics = [x.strip() for x in tactics.split(",") if x.strip()]
+            return [self._normalize_tactic(t) for t in (tactics or []) if t]
+
+        def _score(tech: dict) -> float:
+            return float(tech.get("_combined_score", tech.get("relevance_score", 0.0)) or 0.0)
+
+        ranked = sorted(candidates, key=_score, reverse=True)
+        selected: list[dict] = []
+        used_ids: set[str] = set()
+
+        # Favor kill-chain ordering where possible.
+        for tactic in self.MITRE_TACTICS:
+            for tech in ranked:
+                tid = str(tech.get("technique_id") or "").strip().upper()
+                if not tid or tid in used_ids:
+                    continue
+                if tactic in _tactics_for(tech):
+                    selected.append({"tech": tech, "tactic": tactic})
+                    used_ids.add(tid)
+                    break
+            if len(selected) >= normalized_len:
+                break
+
+        # Fill remaining slots by relevance.
+        for tech in ranked:
+            if len(selected) >= normalized_len:
+                break
+            tid = str(tech.get("technique_id") or "").strip().upper()
+            if not tid or tid in used_ids:
+                continue
+            tactics = _tactics_for(tech)
+            selected.append({"tech": tech, "tactic": tactics[0] if tactics else "unknown"})
+            used_ids.add(tid)
+
+        chain_steps = []
+        for i, item in enumerate(selected, 1):
+            tech = item["tech"]
+            tid = str(tech.get("technique_id") or "").strip().upper()
+            tactic = item.get("tactic") or "unknown"
+            description = tech.get("description_preview") or tech.get("document") or "Retrieved ATT&CK technique aligned to scenario."
+            step = {
+                "step": i,
+                "technique_id": tid,
+                "technique_name": tech.get("name", "Unknown"),
+                "tactic": tactic,
+                "description": description,
+                "rationale": "Derived from RAG retrieval for the provided scenario.",
+                "prerequisites": [],
+                "detection_considerations": "",
+                "mitigation": "",
+                "tool_commands": [],
+            }
+            mit = get_mitigation(tid)
+            if mit.get("name"):
+                step["mitigation"] = f"{mit['name']}: {mit.get('description', '')}".strip()
+            tools_info = get_tools(tid)
+            step["tool_commands"] = (tools_info.get("commands", []) or [])[:3]
+            chain_steps.append(step)
+
+        warnings: list[str] = []
+        if len(chain_steps) < normalized_len:
+            warnings.append(
+                f"Only {len(chain_steps)} techniques available for fast mode; requested {normalized_len}."
+            )
+
+        latency_metrics["pipeline_total_s"] = time.perf_counter() - pipeline_start
+        latency_metrics["llm_latency_s"] = 0.0
+
+        parsed_chain = {
+            "attack_chain": chain_steps,
+            "metadata": {
+                "scenario": scenario,
+                "target_environment": target_environment,
+                "chain_length": normalized_len,
+                "techniques_used": len(chain_steps),
+                "generation_mode": "fast",
+            },
+        }
+
+        return {
+            "attack_chain": parsed_chain,
+            "retrieval_results": [
+                {
+                    "technique_id": r["technique_id"],
+                    "name": r["name"],
+                    "relevance_score": r.get("relevance_score"),
+                    "tactics": r.get("tactics"),
+                    "description": r.get("description_preview", ""),
+                }
+                for r in retrieved
+            ],
+            "latency": latency_metrics,
+            "warnings": warnings,
+            "faithfulness_score": 1.0,
             "scenario": scenario,
             "target_environment": target_environment,
             "timestamp": datetime.now(timezone.utc).isoformat(),

@@ -15,6 +15,11 @@ from pathlib import Path
 
 import config
 
+try:
+    from reporting.pdf_reporter import render_markdown_to_pdf
+except Exception:
+    render_markdown_to_pdf = None
+
 logger = logging.getLogger("red_elisar.report_generator")
 
 SEVERITY_ICONS = {
@@ -81,6 +86,14 @@ class ReportGenerator:
             f.write(md_content)
         logger.info(f"[Report] Markdown saved: {md_path}")
 
+        pdf_path = ""
+        if render_markdown_to_pdf:
+            try:
+                pdf_path = str(render_markdown_to_pdf(md_path, self.output_dir / f"{base_name}.pdf"))
+                logger.info(f"[Report] PDF saved: {pdf_path}")
+            except Exception as exc:
+                logger.warning("[Report] PDF generation failed: %s", exc)
+
         # Print summary to console
         self._print_console_summary(report)
 
@@ -90,6 +103,7 @@ class ReportGenerator:
             "md_path":      str(md_path),
             "overall_risk": report["overall_risk"],
             "total_vulns":  report["total_vulns"],
+            "pdf_path":     pdf_path,
         }
 
     # ─── Build Report Data ────────────────────────────────────────

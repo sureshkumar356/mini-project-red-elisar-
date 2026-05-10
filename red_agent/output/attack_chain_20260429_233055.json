@@ -1,0 +1,333 @@
+{
+  "attack_chain": {
+    "attack_chain": [
+      {
+        "step": 1,
+        "technique_id": "T1199",
+        "technique_name": "",
+        "tactic": "initial-access",
+        "description": "Establish a trusted relationship with a remote service using a VPN or SSH tunnel to gain access to the internal network.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 2,
+        "technique_id": "T1595",
+        "technique_name": "Active Scanning",
+        "tactic": "reconnaissance",
+        "description": "Adversaries may execute active reconnaissance scans to gather information that can be used during targeting. Active scans are those where the adversary probes victim infrastructure via network traffic",
+        "rationale": "Adjusted to ensure full tactic coverage for reconnaissance.",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 3,
+        "technique_id": "T1078",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Discover valid accounts using a password spray attack to gather credentials.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for all remote access and privileged accounts. Monitor for anomalous login patterns, impossible travel, and credential stuffing.",
+        "tool_commands": [
+          "hydra -l admin -P passwords.txt rdp://target",
+          "crackmapexec smb 10.0.0.0/24 -u user -p password",
+          "spray.sh -smb 10.0.0.0/24 user passwords.txt"
+        ]
+      },
+      {
+        "step": 4,
+        "technique_id": "T1650",
+        "technique_name": "Acquire Access",
+        "tactic": "resource-development",
+        "description": "Adversaries may purchase or otherwise acquire an existing access to a target system or network. A variety of online services and initial access broker networks are available to sell access to previous",
+        "rationale": "Adjusted to ensure full tactic coverage for resource-development.",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 5,
+        "technique_id": "T1078.003",
+        "technique_name": "Local Accounts",
+        "tactic": "persistence",
+        "description": "Adversaries may obtain and abuse credentials of a local account as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Local accounts are those configured by an o",
+        "rationale": "Adjusted to ensure full tactic coverage for persistence.",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for all remote access and privileged accounts. Monitor for anomalous login patterns, impossible travel, and credential stuffing.",
+        "tool_commands": [
+          "hydra -l admin -P passwords.txt rdp://target",
+          "crackmapexec smb 10.0.0.0/24 -u user -p password",
+          "spray.sh -smb 10.0.0.0/24 user passwords.txt"
+        ]
+      },
+      {
+        "step": 6,
+        "technique_id": "T1078.003",
+        "technique_name": "Local Accounts",
+        "tactic": "privilege-escalation",
+        "description": "Adversaries may obtain and abuse credentials of a local account as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Local accounts are those configured by an o",
+        "rationale": "Adjusted to ensure full tactic coverage for privilege-escalation.",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for all remote access and privileged accounts. Monitor for anomalous login patterns, impossible travel, and credential stuffing.",
+        "tool_commands": [
+          "hydra -l admin -P passwords.txt rdp://target",
+          "crackmapexec smb 10.0.0.0/24 -u user -p password",
+          "spray.sh -smb 10.0.0.0/24 user passwords.txt"
+        ]
+      },
+      {
+        "step": 7,
+        "technique_id": "T1078.003",
+        "technique_name": "Local Accounts",
+        "tactic": "defense-evasion",
+        "description": "Adversaries may obtain and abuse credentials of a local account as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Local accounts are those configured by an o",
+        "rationale": "Adjusted to ensure full tactic coverage for defense-evasion.",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "Multi-factor Authentication: Enforce MFA for all remote access and privileged accounts. Monitor for anomalous login patterns, impossible travel, and credential stuffing.",
+        "tool_commands": [
+          "hydra -l admin -P passwords.txt rdp://target",
+          "crackmapexec smb 10.0.0.0/24 -u user -p password",
+          "spray.sh -smb 10.0.0.0/24 user passwords.txt"
+        ]
+      },
+      {
+        "step": 8,
+        "technique_id": "T1199",
+        "technique_name": "",
+        "tactic": "lateral-movement",
+        "description": "Establish a trusted relationship with a remote service to move laterally within the network.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 9,
+        "technique_id": "T1016.001",
+        "technique_name": "Internet Connection Discovery",
+        "tactic": "discovery",
+        "description": "Adversaries may check for Internet connectivity on compromised systems. This may be performed during automated discovery and can be accomplished in numerous ways such as using Ping, tracert, and GET r",
+        "rationale": "Adjusted to ensure full tactic coverage for discovery.",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 10,
+        "technique_id": "T1074",
+        "technique_name": "Data Staged",
+        "tactic": "collection",
+        "description": "Adversaries may stage collected data in a central location or directory prior to Exfiltration. Data may be kept in separate files or combined into one file through techniques such as Archive Collected",
+        "rationale": "Adjusted to ensure full tactic coverage for collection.",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 11,
+        "technique_id": "T1001.002",
+        "technique_name": "Steganography",
+        "tactic": "command-and-control",
+        "description": "Adversaries may use steganographic techniques to hide command and control traffic to make detection efforts more difficult. Steganographic techniques can be used to hide data in digital messages that ",
+        "rationale": "Adjusted to ensure full tactic coverage for command-and-control.",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 12,
+        "technique_id": "T1020",
+        "technique_name": "Automated Exfiltration",
+        "tactic": "exfiltration",
+        "description": "Adversaries may exfiltrate data, such as sensitive documents, through the use of automated processing after being gathered during Collection. \n\nWhen automated exfiltration is used, other exfiltration ",
+        "rationale": "Adjusted to ensure full tactic coverage for exfiltration.",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 13,
+        "technique_id": "T1531",
+        "technique_name": "Account Access Removal",
+        "tactic": "impact",
+        "description": "Adversaries may interrupt availability of system and network resources by inhibiting access to accounts utilized by legitimate users. Accounts may be deleted, locked, or manipulated (ex: changed crede",
+        "rationale": "Adjusted to ensure full tactic coverage for impact.",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      },
+      {
+        "step": 14,
+        "technique_id": "T1531",
+        "technique_name": "",
+        "tactic": "credential-access",
+        "description": "Remove account access restrictions to maintain persistence on the new system.",
+        "rationale": "",
+        "prerequisites": [],
+        "detection_considerations": "",
+        "mitigation": "General Best Practices: Apply defense-in-depth principles: network segmentation, least-privilege access, endpoint detection and response (EDR), security awareness training, regular patching, and monitoring.",
+        "tool_commands": []
+      }
+    ],
+    "metadata": {}
+  },
+  "retrieval_results": [
+    {
+      "technique_id": "T1650",
+      "name": "Acquire Access",
+      "relevance_score": 0.4571,
+      "tactics": [
+        "resource-development"
+      ],
+      "description": "Adversaries may purchase or otherwise acquire an existing access to a target system or network. A variety of online services and initial access broker networks are available to sell access to previous"
+    },
+    {
+      "technique_id": "T1199",
+      "name": "Trusted Relationship",
+      "relevance_score": 0.5227,
+      "tactics": [
+        "initial-access"
+      ],
+      "description": "Adversaries may breach or otherwise leverage organizations who have access to intended victims. Access through trusted third party relationship abuses an existing connection that may not be protected "
+    },
+    {
+      "technique_id": "T1078.003",
+      "name": "Local Accounts",
+      "relevance_score": 0.508,
+      "tactics": [
+        "defense-evasion",
+        " persistence",
+        " privilege-escalation",
+        " initial-access"
+      ],
+      "description": "Adversaries may obtain and abuse credentials of a local account as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Local accounts are those configured by an o"
+    },
+    {
+      "technique_id": "T1078",
+      "name": "Valid Accounts",
+      "relevance_score": 0.5047,
+      "tactics": [
+        "defense-evasion",
+        " persistence",
+        " privilege-escalation",
+        " initial-access"
+      ],
+      "description": "Adversaries may obtain and abuse credentials of existing accounts as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Compromised credentials may be used to by"
+    },
+    {
+      "technique_id": "T1550",
+      "name": "Use Alternate Authentication Material",
+      "relevance_score": 0.47,
+      "tactics": [
+        "defense-evasion",
+        " lateral-movement"
+      ],
+      "description": "Adversaries may use alternate authentication material, such as password hashes, Kerberos tickets, and application access tokens, in order to move laterally within an environment and bypass normal syst"
+    },
+    {
+      "technique_id": "T1110.004",
+      "name": "Credential Stuffing",
+      "relevance_score": 0.5093,
+      "tactics": [
+        "credential-access"
+      ],
+      "description": "Adversaries may use credentials obtained from breach dumps of unrelated accounts to gain access to target accounts through credential overlap. Occasionally, large numbers of username and password pair"
+    },
+    {
+      "technique_id": "T1021",
+      "name": "Remote Services",
+      "relevance_score": 0.4593,
+      "tactics": [
+        "lateral-movement"
+      ],
+      "description": "Adversaries may use Valid Accounts to log into a service that accepts remote connections, such as telnet, SSH, and VNC. The adversary may then perform actions as the logged-on user.\n\nIn an enterprise "
+    },
+    {
+      "technique_id": "T1531",
+      "name": "Account Access Removal",
+      "relevance_score": 0.4538,
+      "tactics": [
+        "impact"
+      ],
+      "description": "Adversaries may interrupt availability of system and network resources by inhibiting access to accounts utilized by legitimate users. Accounts may be deleted, locked, or manipulated (ex: changed crede"
+    }
+  ],
+  "latency": {
+    "pipeline_start": 27953.5175773,
+    "retrieval_time_s": 0.020919999999023275,
+    "augmentation_time_s": 0.0007666000019526109,
+    "llm_request_start": 27955.1284888,
+    "llm_model": "llama-3.1-8b-instant",
+    "prompt_chars": 2918,
+    "llm_request_end": 27956.8541426,
+    "llm_latency_s": 1.7256538000001456,
+    "eval_count": 1327,
+    "eval_duration_ns": 0,
+    "tokens_per_second": 768.9839062736037,
+    "validation_time_s": 3.457695799999783,
+    "pipeline_total_s": 3.479493299997557
+  },
+  "warnings": [
+    "Tactic coverage after balancing is 13/14. Scenario relevance may naturally omit some tactics."
+  ],
+  "faithfulness_score": 0.6428571428571429,
+  "scenario": "credential theft and lateral movement in enterprise network",
+  "target_environment": "General enterprise environment",
+  "timestamp": "2026-04-29T18:00:55.848651+00:00",
+  "analysis": {
+    "total_steps": 14,
+    "unique_techniques": 10,
+    "technique_reuse": 4,
+    "tactical_coverage": {
+      "covered": [
+        "collection",
+        "command-and-control",
+        "credential-access",
+        "defense-evasion",
+        "discovery",
+        "exfiltration",
+        "impact",
+        "initial-access",
+        "lateral-movement",
+        "persistence",
+        "privilege-escalation",
+        "reconnaissance",
+        "resource-development"
+      ],
+      "total_mitre_tactics": 14,
+      "coverage_ratio": 0.9285714285714286
+    },
+    "detection_coverage": {
+      "steps_with_detection": 0,
+      "coverage_ratio": 0.0
+    },
+    "hallucination_metrics": {
+      "hallucinated_steps": 0,
+      "total_steps": 14,
+      "faithfulness_score": 0.6428571428571429
+    },
+    "latency_summary": {
+      "total_pipeline_s": 3.479493299997557,
+      "retrieval_ms": 20.919999999023275,
+      "generation_s": 1.7256538000001456,
+      "tokens_per_second": 768.9839062736037
+    }
+  }
+}

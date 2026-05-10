@@ -1,0 +1,1243 @@
+===============================
+RED AGENT SCAN REPORT
+===============================
+
+Target: http://127.0.0.1:5000
+Scan Time: 2026-04-28 06:02
+Discovered Routes: 13
+Discovered Forms: 2
+
+--------------------------------
+[VULNERABILITY #1]
+Type: Exposed Sensitive Resource
+Severity: CRITICAL
+
+Affected URL:
+http://127.0.0.1:5000
+
+Evidence:
+- GET /.env → 200 (181 bytes) | GET /backup → 200 (11537 bytes) | GET /api/users → 200 (418 bytes) | GET /admin → 200 (11659 bytes) | GET /robots.txt → 200 (118 bytes)
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1552
+Technique Name: Unsecured Credentials
+Tactics: collection, credential-access, execution, lateral-movement
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+2. Credential Access:
+   Technique: T1552 - Unsecured Credentials
+   Tools: curl, browser
+   Description: Adversaries may search compromised systems to find and obtain insecurely stored credentials. These credentials can be stored and/or misplaced in many locations on a system, including plaintext files (
+
+3. Lateral Movement:
+   Technique: T1210 - Exploitation of Remote Services
+   Tools: curl, browser
+   Description: Adversaries may exploit remote services to gain unauthorized access to internal systems once inside of a network. Exploitation of a software vulnerability occurs when an adversary takes advantage of a
+
+4. Collection:
+   Technique: T1039 - Data from Network Shared Drive
+   Tools: curl, browser
+   Description: Adversaries may search network shares on computers they have compromised to find files of interest. Sensitive data can be collected from remote systems via shared network drives (host shared directory
+
+5. Credential Access:
+   Technique: T1552.001 - Credentials In Files
+   Tools: curl, browser
+   Description: Adversaries may search local file systems and remote file shares for files containing insecurely stored credentials. These can be files created by users to store their own credentials, shared credenti
+
+--------------------------------
+RECOMMENDATION:
+- Avoid listing sensitive paths in robots.txt (security by obscurity is not security).
+
+================================
+
+--------------------------------
+[VULNERABILITY #2]
+Type: No HTTPS / Plain HTTP
+Severity: CRITICAL
+
+Affected URL:
+http://127.0.0.1:5000
+
+Evidence:
+- URL scheme: http://
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1606.001
+Technique Name: Web Cookies
+Tactics: collection, credential-access, execution, lateral-movement
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+2. Credential Access:
+   Technique: T1606.001 - Web Cookies
+   Tools: curl, browser
+   Description: Adversaries may forge web cookies that can be used to gain access to web applications or Internet services. Web applications and services (hosted in cloud SaaS environments or on-premise servers) ofte
+
+3. Lateral Movement:
+   Technique: T1550.004 - Web Session Cookie
+   Tools: curl, browser
+   Description: Adversaries can use stolen session cookies to authenticate to web applications and services. This technique bypasses some multi-factor authentication protocols since the session is already authenticat
+
+4. Collection:
+   Technique: T1185 - Browser Session Hijacking
+   Tools: curl, browser
+   Description: Adversaries may take advantage of security vulnerabilities and inherent functionality in browser software to change content, modify user-behaviors, and intercept information as part of various browser
+
+5. Credential Access:
+   Technique: T1539 - Steal Web Session Cookie
+   Tools: curl, browser
+   Description: An adversary may steal web application or service session cookies and use them to gain access to web applications or Internet services as an authenticated user without needing credentials. Web applica
+
+--------------------------------
+RECOMMENDATION:
+- Enable HTTPS with a valid SSL/TLS certificate
+- Use Let's Encrypt for free certificates.
+
+================================
+
+--------------------------------
+[VULNERABILITY #3]
+Type: Missing Security Header
+Severity: HIGH
+
+Affected URL:
+http://127.0.0.1:5000
+
+Evidence:
+- Response header 'Content-Security-Policy': not present | Response header 'Strict-Transport-Security': not present | Response header 'X-Frame-Options': not present | Response header 'X-Content-Type-Options': not present | Response header 'Referrer-Policy': not present | Response header 'Permissions-Policy': not present
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1059.007
+Technique Name: JavaScript
+Tactics: collection, credential-access, execution, initial-access, lateral-movement
+Tools / Software:
+- Burp Suite: Relevant web testing tool
+- browser: Relevant web testing tool
+- curl: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Initial Access:
+   Technique: T1189 - Drive-by Compromise
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may gain access to a system through a user visiting a website over the normal course of browsing. Multiple ways of delivering exploit code to a browser exist (i.e., Drive-by Target), inclu
+
+2. Execution:
+   Technique: T1059.007 - JavaScript
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may abuse various implementations of JavaScript for execution. JavaScript (JS) is a platform-independent scripting language (compiled just-in-time at runtime) commonly associated with scri
+
+3. Credential Access:
+   Technique: T1606 - Forge Web Credentials
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may forge credential materials that can be used to gain access to web applications or Internet services. Web applications and services (hosted in cloud SaaS environments or on-premise serv
+
+4. Lateral Movement:
+   Technique: T1550.001 - Application Access Token
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may use stolen application access tokens to bypass the typical authentication process and access restricted accounts, information, or services on remote systems. These tokens are typically
+
+5. Collection:
+   Technique: T1185 - Browser Session Hijacking
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may take advantage of security vulnerabilities and inherent functionality in browser software to change content, modify user-behaviors, and intercept information as part of various browser
+
+--------------------------------
+RECOMMENDATION:
+- Add a Content-Security-Policy header to whitelist trusted content sources
+- Example: Content-Security-Policy: default-src 'self'
+
+================================
+
+--------------------------------
+[VULNERABILITY #4]
+Type: CORS Misconfiguration
+Severity: HIGH
+
+Affected URL:
+http://127.0.0.1:5000
+
+Evidence:
+- Access-Control-Allow-Origin: *
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1212
+Technique Name: Exploitation for Credential Access
+Tactics: credential-access, execution, lateral-movement
+Tools / Software:
+- Burp Suite: Relevant web testing tool
+- browser: Relevant web testing tool
+- curl: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Execution:
+   Technique: T1204 - User Execution
+   Tools: Burp Suite, browser, curl
+   Description: An adversary may rely upon specific actions by a user in order to gain execution. Users may be subjected to social engineering to get them to execute malicious code by, for example, opening a maliciou
+
+2. Credential Access:
+   Technique: T1212 - Exploitation for Credential Access
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may exploit software vulnerabilities in an attempt to collect credentials. Exploitation of a software vulnerability occurs when an adversary takes advantage of a programming error in a pro
+
+3. Lateral Movement:
+   Technique: T1550.001 - Application Access Token
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may use stolen application access tokens to bypass the typical authentication process and access restricted accounts, information, or services on remote systems. These tokens are typically
+
+4. Credential Access:
+   Technique: T1606.001 - Web Cookies
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may forge web cookies that can be used to gain access to web applications or Internet services. Web applications and services (hosted in cloud SaaS environments or on-premise servers) ofte
+
+5. Credential Access:
+   Technique: T1606 - Forge Web Credentials
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may forge credential materials that can be used to gain access to web applications or Internet services. Web applications and services (hosted in cloud SaaS environments or on-premise serv
+
+--------------------------------
+RECOMMENDATION:
+- Replace 'Access-Control-Allow-Origin: *' with specific allowed origins
+- Never use wildcard CORS for authenticated endpoints.
+
+================================
+
+--------------------------------
+[VULNERABILITY #5]
+Type: Information Disclosure
+Severity: MEDIUM
+
+Affected URL:
+http://127.0.0.1:5000
+
+Evidence:
+- Server: Werkzeug/3.1.6 Python/3.13.3, Apache/2.2.8 (Ubuntu) | X-Powered-By: PHP/7.2.1 | X-App-Version: 1.0.0-dev | Live response header → Server: Werkzeug/3.1.6 Python/3.13.3, Apache/2.2.8 (Ubuntu) | Live response header → X-Powered-By: PHP/7.2.1 | Live response header → X-App-Version: 1.0.0-dev
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1596.002
+Technique Name: WHOIS
+Tactics: discovery, execution, initial-access, reconnaissance
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Reconnaissance:
+   Technique: T1596.002 - WHOIS
+   Tools: curl, browser
+   Description: Adversaries may search public WHOIS data for information about victims that can be used during targeting. WHOIS data is stored by regional Internet registries (RIR) responsible for allocating and assi
+
+2. Initial Access:
+   Technique: T1189 - Drive-by Compromise
+   Tools: curl, browser
+   Description: Adversaries may gain access to a system through a user visiting a website over the normal course of browsing. Multiple ways of delivering exploit code to a browser exist (i.e., Drive-by Target), inclu
+
+3. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+4. Discovery:
+   Technique: T1518 - Software Discovery
+   Tools: curl, browser
+   Description: Adversaries may attempt to get a listing of software and software versions that are installed on a system or in a cloud environment. Adversaries may use the information from Software Discovery during
+
+5. Reconnaissance:
+   Technique: T1592.003 - Firmware
+   Tools: curl, browser
+   Description: Adversaries may gather information about the victim's host firmware that can be used during targeting. Information about host firmware may include a variety of details such as type and versions on spe
+
+--------------------------------
+RECOMMENDATION:
+- Remove or genericize the Server header to hide version information.
+
+================================
+
+--------------------------------
+[VULNERABILITY #6]
+Type: Exposed Sensitive Resource
+Severity: CRITICAL
+
+Affected URL:
+http://127.0.0.1:5000/.env
+
+Evidence:
+- GET http://127.0.0.1:5000/.env → 200 OK | Preview: SECRET_KEY=secret123 DATABASE_URL=sqlite:///vuln_app.db ADMIN_PASSWORD=admin123 DEBUG=True FLASK_ENV=development API_KEY...
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1552
+Technique Name: Unsecured Credentials
+Tactics: credential-access, execution, lateral-movement
+Tools / Software:
+- sqlmap: Relevant web testing tool
+- Burp Suite: Relevant web testing tool
+- curl: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Execution:
+   Technique: T1059.009 - Cloud API
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may abuse cloud APIs to execute malicious commands. APIs available in cloud environments provide various functionalities and are a feature-rich method for programmatic access to nearly all
+
+2. Credential Access:
+   Technique: T1552 - Unsecured Credentials
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may search compromised systems to find and obtain insecurely stored credentials. These credentials can be stored and/or misplaced in many locations on a system, including plaintext files (
+
+3. Lateral Movement:
+   Technique: T1210 - Exploitation of Remote Services
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may exploit remote services to gain unauthorized access to internal systems once inside of a network. Exploitation of a software vulnerability occurs when an adversary takes advantage of a
+
+4. Credential Access:
+   Technique: T1552.001 - Credentials In Files
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may search local file systems and remote file shares for files containing insecurely stored credentials. These can be files created by users to store their own credentials, shared credenti
+
+5. Credential Access:
+   Technique: T1552.005 - Cloud Instance Metadata API
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may attempt to access the Cloud Instance Metadata API to collect credentials and other sensitive data.
+
+Most cloud service providers support a Cloud Instance Metadata API which is a servic
+
+--------------------------------
+RECOMMENDATION:
+- Remove or protect '/.env'
+- Ensure sensitive files are outside the web root and access-controlled.
+
+================================
+
+--------------------------------
+[VULNERABILITY #7]
+Type: Exposed Sensitive Resource
+Severity: CRITICAL
+
+Affected URL:
+http://127.0.0.1:5000/backup
+
+Evidence:
+- GET http://127.0.0.1:5000/backup → 200 OK | Preview: <!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width,initial...
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1552
+Technique Name: Unsecured Credentials
+Tactics: credential-access, execution, lateral-movement
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+2. Credential Access:
+   Technique: T1552 - Unsecured Credentials
+   Tools: curl, browser
+   Description: Adversaries may search compromised systems to find and obtain insecurely stored credentials. These credentials can be stored and/or misplaced in many locations on a system, including plaintext files (
+
+3. Lateral Movement:
+   Technique: T1080 - Taint Shared Content
+   Tools: curl, browser
+   Description: Adversaries may deliver payloads to remote systems by adding content to shared storage locations, such as network drives or internal code repositories. Content stored on network drives or in other sha
+
+4. Credential Access:
+   Technique: T1003.004 - LSA Secrets
+   Tools: curl, browser
+   Description: Adversaries with SYSTEM access to a host may attempt to access Local Security Authority (LSA) secrets, which can contain a variety of different credential materials, such as credentials for service ac
+
+5. Credential Access:
+   Technique: T1555.004 - Windows Credential Manager
+   Tools: curl, browser
+   Description: Adversaries may acquire credentials from the Windows Credential Manager. The Credential Manager stores credentials for signing into websites, applications, and/or devices that request authentication t
+
+--------------------------------
+RECOMMENDATION:
+- Remove or protect '/backup'
+- Ensure sensitive files are outside the web root and access-controlled.
+
+================================
+
+--------------------------------
+[VULNERABILITY #8]
+Type: Exposed Sensitive Resource
+Severity: CRITICAL
+
+Affected URL:
+http://127.0.0.1:5000/api/users
+
+Evidence:
+- GET http://127.0.0.1:5000/api/users → 200 OK | Preview: {   "count": 3,   "status": "ok",   "users": [     {       "email": "admin@vuln-shop.local",       "id": 1,       "passw...
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1078
+Technique Name: Valid Accounts
+Tactics: credential-access, discovery, execution, initial-access, lateral-movement, reconnaissance
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Reconnaissance:
+   Technique: T1590.001 - Domain Properties
+   Tools: curl, browser
+   Description: Adversaries may gather information about the victim's network domain(s) that can be used during targeting. Information about domains and their properties may include a variety of details, including wh
+
+2. Initial Access:
+   Technique: T1078 - Valid Accounts
+   Tools: curl, browser
+   Description: Adversaries may obtain and abuse credentials of existing accounts as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Compromised credentials may be used to by
+
+3. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+4. Credential Access:
+   Technique: T1003.006 - DCSync
+   Tools: curl, browser
+   Description: Adversaries may attempt to access credentials and other sensitive information by abusing a Windows Domain Controller's application programming interface (API) to simulate the replication process from
+
+5. Discovery:
+   Technique: T1069.003 - Cloud Groups
+   Tools: curl, browser
+   Description: Adversaries may attempt to find cloud groups and permission settings. The knowledge of cloud permission groups can help adversaries determine the particular roles of users and groups within an environ
+
+6. Lateral Movement:
+   Technique: T1550.001 - Application Access Token
+   Tools: curl, browser
+   Description: Adversaries may use stolen application access tokens to bypass the typical authentication process and access restricted accounts, information, or services on remote systems. These tokens are typically
+
+--------------------------------
+RECOMMENDATION:
+- Remove or protect '/api/users'
+- Ensure sensitive files are outside the web root and access-controlled.
+
+================================
+
+--------------------------------
+[VULNERABILITY #9]
+Type: SQL Injection
+Severity: CRITICAL
+
+Affected URL:
+http://127.0.0.1:5000/search?q='
+
+Evidence:
+- GET http://127.0.0.1:5000/search?q=' OR '1'='1 → HTTP 200 | Matched: sql | GET http://127.0.0.1:5000/search?q=' OR 1=1-- → HTTP 200 | GET http://127.0.0.1:5000/search?q=' UNION SELECT NULL-- → HTTP 200 | GET http://127.0.0.1:5000/search?q=' UNION SELECT NULL,NULL-- → HTTP 200 | GET http://127.0.0.1:5000/search?q=' UNION SELECT id,username,password,email FROM users-- → HTTP 200 | GET http://127.0.0.1:5000/search?q=1 | DROP TABLE users-- → HTTP 200 | GET http://127.0.0.1:5000/search?q=' AND SLEEP(0)-- → HTTP 200 | GET http://127.0.0.1:5000/search?q=' OR SUBSTR(username,1,1)='a'-- → HTTP 200
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1190
+Technique Name: Exploit Public-Facing Application
+Tactics: credential-access, discovery, execution, initial-access, lateral-movement, reconnaissance
+Tools / Software:
+- sqlmap: Relevant web testing tool
+- Burp Suite: Relevant web testing tool
+- curl: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Reconnaissance:
+   Technique: T1589.002 - Email Addresses
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may gather email addresses that can be used during targeting. Even if internal instances exist, organizations may have public-facing email infrastructure and addresses for employees.
+
+Adve
+
+2. Initial Access:
+   Technique: T1190 - Exploit Public-Facing Application
+   Tools: sqlmap
+   Description: Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfigur
+
+3. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+4. Credential Access:
+   Technique: T1110.003 - Password Spraying
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may use a single or small list of commonly used passwords against many different accounts to attempt to acquire valid account credentials. Password spraying uses one password (e.g. 'Passwo
+
+5. Discovery:
+   Technique: T1087 - Account Discovery
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may attempt to get a listing of valid accounts, usernames, or email addresses on a system or within a compromised environment. This information can help adversaries determine which account
+
+6. Lateral Movement:
+   Technique: T1210 - Exploitation of Remote Services
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may exploit remote services to gain unauthorized access to internal systems once inside of a network. Exploitation of a software vulnerability occurs when an adversary takes advantage of a
+
+--------------------------------
+RECOMMENDATION:
+- Use parameterised queries / prepared statements
+- NEVER concatenate user input into SQL strings.
+
+================================
+
+--------------------------------
+[VULNERABILITY #10]
+Type: SQL Injection
+Severity: CRITICAL
+
+Affected URL:
+http://127.0.0.1:5000
+
+Evidence:
+- Live response contains user credentials extracted from DB. Payload: ' UNION SELECT id,username,password,email FROM users-- | POST /login username='' OR '1'='1'--' password='anything' → HTTP 200 | Response: Logged in as: <b>' OR '1'='1'--</b> (ID=1)</div> | <form method="POST">
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1190
+Technique Name: Exploit Public-Facing Application
+Tactics: credential-access, execution, initial-access, lateral-movement
+Tools / Software:
+- sqlmap: [sqlmap](https://attack.mitre.org/software/S0225) is an open source penetration testing tool that can be used to automate the process of detecting and exploiting SQL injection flaws. (Citation: sqlmap Introduction)
+- Burp Suite: Relevant web testing tool
+- curl: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Initial Access:
+   Technique: T1190 - Exploit Public-Facing Application
+   Tools: sqlmap
+   Description: Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfigur
+
+2. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+3. Credential Access:
+   Technique: T1555.003 - Credentials from Web Browsers
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may acquire credentials from web browsers by reading files specific to the target browser. Web browsers commonly save credentials such as website usernames and passwords so that they do no
+
+4. Lateral Movement:
+   Technique: T1550.002 - Pass the Hash
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may “pass the hash” using stolen password hashes to move laterally within an environment, bypassing normal system access controls. Pass the hash (PtH) is a method of authenticating as a us
+
+5. Credential Access:
+   Technique: T1110.004 - Credential Stuffing
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may use credentials obtained from breach dumps of unrelated accounts to gain access to target accounts through credential overlap. Occasionally, large numbers of username and password pair
+
+--------------------------------
+RECOMMENDATION:
+- Use parameterised queries for all authentication checks
+- Implement account lockout and rate limiting.
+
+================================
+
+--------------------------------
+[VULNERABILITY #11]
+Type: Unauthenticated Admin Panel Access
+Severity: CRITICAL
+
+Affected URL:
+http://127.0.0.1:5000/admin
+
+Evidence:
+- GET http://127.0.0.1:5000/admin → HTTP 200 | Admin keywords confirmed in live response body
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1078
+Technique Name: Valid Accounts
+Tactics: credential-access, execution, initial-access, lateral-movement, reconnaissance
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Reconnaissance:
+   Technique: T1589.001 - Credentials
+   Tools: curl, browser
+   Description: Adversaries may gather credentials that can be used during targeting. Account credentials gathered by adversaries may be those directly associated with the target victim organization or attempt to tak
+
+2. Initial Access:
+   Technique: T1078 - Valid Accounts
+   Tools: curl, browser
+   Description: Adversaries may obtain and abuse credentials of existing accounts as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Compromised credentials may be used to by
+
+3. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+4. Credential Access:
+   Technique: T1556 - Modify Authentication Process
+   Tools: curl, browser
+   Description: Adversaries may modify authentication mechanisms and processes to access user credentials or enable otherwise unwarranted access to accounts. The authentication process is handled by mechanisms, such
+
+5. Lateral Movement:
+   Technique: T1550.004 - Web Session Cookie
+   Tools: curl, browser
+   Description: Adversaries can use stolen session cookies to authenticate to web applications and services. This technique bypasses some multi-factor authentication protocols since the session is already authenticat
+
+--------------------------------
+RECOMMENDATION:
+- Protect all admin routes with strong authentication and role-based access control.
+
+================================
+
+--------------------------------
+[VULNERABILITY #12]
+Type: Unencrypted HTTP
+Severity: CRITICAL
+
+Affected URL:
+http://'
+
+Evidence:
+- Target URL scheme is 'http://' — confirmed from http://127.0.0.1:5000
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1212
+Technique Name: Exploitation for Credential Access
+Tactics: collection, credential-access, execution, lateral-movement
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+2. Credential Access:
+   Technique: T1212 - Exploitation for Credential Access
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in an attempt to collect credentials. Exploitation of a software vulnerability occurs when an adversary takes advantage of a programming error in a pro
+
+3. Lateral Movement:
+   Technique: T1550.004 - Web Session Cookie
+   Tools: curl, browser
+   Description: Adversaries can use stolen session cookies to authenticate to web applications and services. This technique bypasses some multi-factor authentication protocols since the session is already authenticat
+
+4. Collection:
+   Technique: T1185 - Browser Session Hijacking
+   Tools: curl, browser
+   Description: Adversaries may take advantage of security vulnerabilities and inherent functionality in browser software to change content, modify user-behaviors, and intercept information as part of various browser
+
+5. Credential Access:
+   Technique: T1110.002 - Password Cracking
+   Tools: curl, browser
+   Description: Adversaries may use password cracking to attempt to recover usable credentials, such as plaintext passwords, when credential material such as password hashes are obtained. OS Credential Dumping can be
+
+--------------------------------
+RECOMMENDATION:
+- Deploy TLS (HTTPS) via a certificate authority (e.g
+- Let's Encrypt)
+- Configure HSTS after enabling HTTPS.
+
+================================
+
+--------------------------------
+[VULNERABILITY #13]
+Type: Missing Security Header
+Severity: HIGH
+
+Affected URL:
+http://127.0.0.1:5000
+
+Evidence:
+- Header 'Content-Security-Policy' absent in live response from http://127.0.0.1:5000 | Header 'Strict-Transport-Security' absent in live response from http://127.0.0.1:5000 | Header 'X-Frame-Options' absent in live response from http://127.0.0.1:5000 | Header 'X-Content-Type-Options' absent in live response from http://127.0.0.1:5000 | Header 'Referrer-Policy' absent in live response from http://127.0.0.1:5000 | Header 'Permissions-Policy' absent in live response from http://127.0.0.1:5000
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1059.007
+Technique Name: JavaScript
+Tactics: collection, credential-access, execution, initial-access, lateral-movement
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Initial Access:
+   Technique: T1189 - Drive-by Compromise
+   Tools: curl, browser
+   Description: Adversaries may gain access to a system through a user visiting a website over the normal course of browsing. Multiple ways of delivering exploit code to a browser exist (i.e., Drive-by Target), inclu
+
+2. Execution:
+   Technique: T1059.007 - JavaScript
+   Tools: curl, browser
+   Description: Adversaries may abuse various implementations of JavaScript for execution. JavaScript (JS) is a platform-independent scripting language (compiled just-in-time at runtime) commonly associated with scri
+
+3. Credential Access:
+   Technique: T1187 - Forced Authentication
+   Tools: curl, browser
+   Description: Adversaries may gather credential material by invoking or forcing a user to automatically provide authentication information through a mechanism in which they can intercept.
+
+The Server Message Block
+
+4. Lateral Movement:
+   Technique: T1550.004 - Web Session Cookie
+   Tools: curl, browser
+   Description: Adversaries can use stolen session cookies to authenticate to web applications and services. This technique bypasses some multi-factor authentication protocols since the session is already authenticat
+
+5. Collection:
+   Technique: T1185 - Browser Session Hijacking
+   Tools: curl, browser
+   Description: Adversaries may take advantage of security vulnerabilities and inherent functionality in browser software to change content, modify user-behaviors, and intercept information as part of various browser
+
+--------------------------------
+RECOMMENDATION:
+- Add 'Strict-Transport-Security' to all HTTP responses
+- Example config depends on your web server / framework.
+
+================================
+
+--------------------------------
+[VULNERABILITY #14]
+Type: CORS Wildcard Misconfiguration
+Severity: HIGH
+
+Affected URL:
+http://127.0.0.1:5000
+
+Evidence:
+- Live response: Access-Control-Allow-Origin: *
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1212
+Technique Name: Exploitation for Credential Access
+Tactics: credential-access, execution, lateral-movement
+Tools / Software:
+- Burp Suite: Relevant web testing tool
+- browser: Relevant web testing tool
+- curl: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+2. Credential Access:
+   Technique: T1212 - Exploitation for Credential Access
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may exploit software vulnerabilities in an attempt to collect credentials. Exploitation of a software vulnerability occurs when an adversary takes advantage of a programming error in a pro
+
+3. Lateral Movement:
+   Technique: T1210 - Exploitation of Remote Services
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may exploit remote services to gain unauthorized access to internal systems once inside of a network. Exploitation of a software vulnerability occurs when an adversary takes advantage of a
+
+4. Credential Access:
+   Technique: T1606.001 - Web Cookies
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may forge web cookies that can be used to gain access to web applications or Internet services. Web applications and services (hosted in cloud SaaS environments or on-premise servers) ofte
+
+5. Credential Access:
+   Technique: T1606 - Forge Web Credentials
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may forge credential materials that can be used to gain access to web applications or Internet services. Web applications and services (hosted in cloud SaaS environments or on-premise serv
+
+--------------------------------
+RECOMMENDATION:
+- Replace '*' with specific trusted origins
+- Never combine wildcard CORS with cookies/credentials.
+
+================================
+
+--------------------------------
+[VULNERABILITY #15]
+Type: Exposed Sensitive Resource
+Severity: HIGH
+
+Affected URL:
+http://127.0.0.1:5000/admin
+
+Evidence:
+- GET http://127.0.0.1:5000/admin → 200 OK | Preview: <!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width,initial...
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1078
+Technique Name: Valid Accounts
+Tactics: credential-access, execution, initial-access, lateral-movement, reconnaissance
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Reconnaissance:
+   Technique: T1590.006 - Network Security Appliances
+   Tools: curl, browser
+   Description: Adversaries may gather information about the victim's network security appliances that can be used during targeting. Information about network security appliances may include a variety of details, suc
+
+2. Initial Access:
+   Technique: T1078 - Valid Accounts
+   Tools: curl, browser
+   Description: Adversaries may obtain and abuse credentials of existing accounts as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Compromised credentials may be used to by
+
+3. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+4. Credential Access:
+   Technique: T1003.002 - Security Account Manager
+   Tools: curl, browser
+   Description: Adversaries may attempt to extract credential material from the Security Account Manager (SAM) database either through in-memory techniques or through the Windows Registry where the SAM database is st
+
+5. Lateral Movement:
+   Technique: T1550.001 - Application Access Token
+   Tools: curl, browser
+   Description: Adversaries may use stolen application access tokens to bypass the typical authentication process and access restricted accounts, information, or services on remote systems. These tokens are typically
+
+--------------------------------
+RECOMMENDATION:
+- Remove or protect '/admin'
+- Ensure sensitive files are outside the web root and access-controlled.
+
+================================
+
+--------------------------------
+[VULNERABILITY #16]
+Type: Reflected Cross-Site Scripting (XSS)
+Severity: HIGH
+
+Affected URL:
+http://127.0.0.1:5000
+
+Evidence:
+- Sent: <script>alert('XSS_1')</script> | Marker 'XSS_1' found verbatim in live HTTP response
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1059.007
+Technique Name: JavaScript
+Tactics: credential-access, execution, initial-access
+Tools / Software:
+- Burp Suite: Relevant web testing tool
+- browser: Relevant web testing tool
+- curl: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Initial Access:
+   Technique: T1189 - Drive-by Compromise
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may gain access to a system through a user visiting a website over the normal course of browsing. Multiple ways of delivering exploit code to a browser exist (i.e., Drive-by Target), inclu
+
+2. Execution:
+   Technique: T1059.007 - JavaScript
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may abuse various implementations of JavaScript for execution. JavaScript (JS) is a platform-independent scripting language (compiled just-in-time at runtime) commonly associated with scri
+
+3. Credential Access:
+   Technique: T1606.001 - Web Cookies
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may forge web cookies that can be used to gain access to web applications or Internet services. Web applications and services (hosted in cloud SaaS environments or on-premise servers) ofte
+
+4. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+5. Execution:
+   Technique: T1204.004 - Malicious Copy and Paste
+   Tools: Burp Suite, browser, curl
+   Description: An adversary may rely upon a user copying and pasting code in order to gain execution. Users may be subjected to social engineering to get them to copy and paste code directly into a Command and Scrip
+
+--------------------------------
+RECOMMENDATION:
+- HTML-escape all user input before rendering
+- Use template engines with auto-escaping (e.g., Jinja2 with |e).
+
+================================
+
+--------------------------------
+[VULNERABILITY #17]
+Type: Error / Stack Trace Information Leakage
+Severity: HIGH
+
+Affected URL:
+http://127.0.0.1:5000/search?q='
+
+Evidence:
+- GET http://127.0.0.1:5000/search?q=' AND 1=CONVERT(int,'error')-- → HTTP 200 | Pattern 'query was:' matched in live response
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1596.002
+Technique Name: WHOIS
+Tactics: execution, initial-access, reconnaissance
+Tools / Software:
+- sqlmap: Relevant web testing tool
+- Burp Suite: Relevant web testing tool
+- curl: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Reconnaissance:
+   Technique: T1596.002 - WHOIS
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may search public WHOIS data for information about victims that can be used during targeting. WHOIS data is stored by regional Internet registries (RIR) responsible for allocating and assi
+
+2. Initial Access:
+   Technique: T1190 - Exploit Public-Facing Application
+   Tools: sqlmap
+   Description: Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfigur
+
+3. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+4. Reconnaissance:
+   Technique: T1596.005 - Scan Databases
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may search within public scan databases for information about victims that can be used during targeting. Various online services continuously publish the results of Internet scans/surveys,
+
+5. Reconnaissance:
+   Technique: T1590.005 - IP Addresses
+   Tools: sqlmap, Burp Suite, curl
+   Description: Adversaries may gather the victim's IP addresses that can be used during targeting. Public IP addresses may be allocated to organizations by block, or a range of sequential addresses. Information abou
+
+--------------------------------
+RECOMMENDATION:
+- Disable debug mode and custom error handlers
+- Return generic 500 pages in production
+- Never expose stack traces to end users.
+
+================================
+
+--------------------------------
+[VULNERABILITY #18]
+Type: Open Redirect
+Severity: MEDIUM
+
+Affected URL:
+http://evil-attacker.example.com
+
+Evidence:
+- GET /redirect?url=http://evil-attacker.example.com → HTTP 302 Location: http://evil-attacker.example.com
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1204
+Technique Name: User Execution
+Tactics: collection, credential-access, execution, initial-access, lateral-movement
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Initial Access:
+   Technique: T1189 - Drive-by Compromise
+   Tools: curl, browser
+   Description: Adversaries may gain access to a system through a user visiting a website over the normal course of browsing. Multiple ways of delivering exploit code to a browser exist (i.e., Drive-by Target), inclu
+
+2. Execution:
+   Technique: T1204 - User Execution
+   Tools: curl, browser
+   Description: An adversary may rely upon specific actions by a user in order to gain execution. Users may be subjected to social engineering to get them to execute malicious code by, for example, opening a maliciou
+
+3. Credential Access:
+   Technique: T1212 - Exploitation for Credential Access
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in an attempt to collect credentials. Exploitation of a software vulnerability occurs when an adversary takes advantage of a programming error in a pro
+
+4. Lateral Movement:
+   Technique: T1550.004 - Web Session Cookie
+   Tools: curl, browser
+   Description: Adversaries can use stolen session cookies to authenticate to web applications and services. This technique bypasses some multi-factor authentication protocols since the session is already authenticat
+
+5. Collection:
+   Technique: T1185 - Browser Session Hijacking
+   Tools: curl, browser
+   Description: Adversaries may take advantage of security vulnerabilities and inherent functionality in browser software to change content, modify user-behaviors, and intercept information as part of various browser
+
+--------------------------------
+RECOMMENDATION:
+- Validate redirect destinations against a whitelist
+- Never redirect to user-supplied external URLs.
+
+================================
+
+--------------------------------
+[VULNERABILITY #19]
+Type: Insecure Cookie Configuration
+Severity: MEDIUM
+
+Affected URL:
+http://127.0.0.1:5000
+
+Evidence:
+- Live Set-Cookie header: session=eyJ1c2VyIjoiYWRtaW4ifQ.afBNjw.6B7zQD0ZSHPMLB4qAcU_P7zwnOA | HttpOnly | Path=/
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1185
+Technique Name: Browser Session Hijacking
+Tactics: collection, credential-access, lateral-movement
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Lateral Movement:
+   Technique: T1550.004 - Web Session Cookie
+   Tools: curl, browser
+   Description: Adversaries can use stolen session cookies to authenticate to web applications and services. This technique bypasses some multi-factor authentication protocols since the session is already authenticat
+
+2. Collection:
+   Technique: T1185 - Browser Session Hijacking
+   Tools: curl, browser
+   Description: Adversaries may take advantage of security vulnerabilities and inherent functionality in browser software to change content, modify user-behaviors, and intercept information as part of various browser
+
+3. Credential Access:
+   Technique: T1606.001 - Web Cookies
+   Tools: curl, browser
+   Description: Adversaries may forge web cookies that can be used to gain access to web applications or Internet services. Web applications and services (hosted in cloud SaaS environments or on-premise servers) ofte
+
+4. Credential Access:
+   Technique: T1539 - Steal Web Session Cookie
+   Tools: curl, browser
+   Description: An adversary may steal web application or service session cookies and use them to gain access to web applications or Internet services as an authenticated user without needing credentials. Web applica
+
+5. Credential Access:
+   Technique: T1606 - Forge Web Credentials
+   Tools: curl, browser
+   Description: Adversaries may forge credential materials that can be used to gain access to web applications or Internet services. Web applications and services (hosted in cloud SaaS environments or on-premise serv
+
+--------------------------------
+RECOMMENDATION:
+- Set cookies with: HttpOnly
+- Secure
+- SameSite=Strict (or Lax for SSO).
+
+================================
+
+--------------------------------
+[VULNERABILITY #20]
+Type: Exposed Sensitive Resource
+Severity: INFO
+
+Affected URL:
+http://127.0.0.1:5000/robots.txt
+
+Evidence:
+- GET http://127.0.0.1:5000/robots.txt → 200 OK | Preview: User-agent: * Disallow: /admin Disallow: /backup Disallow: /.env Disallow: /api/users Disallow: /config Disallow: /db...
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1596.002
+Technique Name: WHOIS
+Tactics: execution, initial-access, reconnaissance
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Reconnaissance:
+   Technique: T1596.002 - WHOIS
+   Tools: curl, browser
+   Description: Adversaries may search public WHOIS data for information about victims that can be used during targeting. WHOIS data is stored by regional Internet registries (RIR) responsible for allocating and assi
+
+2. Initial Access:
+   Technique: T1189 - Drive-by Compromise
+   Tools: curl, browser
+   Description: Adversaries may gain access to a system through a user visiting a website over the normal course of browsing. Multiple ways of delivering exploit code to a browser exist (i.e., Drive-by Target), inclu
+
+3. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+4. Reconnaissance:
+   Technique: T1592.003 - Firmware
+   Tools: curl, browser
+   Description: Adversaries may gather information about the victim's host firmware that can be used during targeting. Information about host firmware may include a variety of details such as type and versions on spe
+
+5. Reconnaissance:
+   Technique: T1593.002 - Search Engines
+   Tools: curl, browser
+   Description: Adversaries may use search engines to collect information about victims that can be used during targeting. Search engine services typical crawl online sites to index context and may provide users with
+
+--------------------------------
+RECOMMENDATION:
+- Remove or protect '/robots.txt'
+- Ensure sensitive files are outside the web root and access-controlled.
+
+================================
+
+--------------------------------
+[VULNERABILITY #21]
+Type: Exposed Sensitive Resource
+Severity: INFO
+
+Affected URL:
+http://127.0.0.1:5000/sitemap.xml
+
+Evidence:
+- GET http://127.0.0.1:5000/sitemap.xml → 200 OK | Preview: <?xml version="1.0" encoding="UTF-8"?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">   <url><loc>http://1...
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1596.002
+Technique Name: WHOIS
+Tactics: execution, initial-access, reconnaissance
+Tools / Software:
+- curl: Relevant web testing tool
+- browser: Relevant web testing tool
+- sqlmap: [sqlmap](https://attack.mitre.org/software/S0225) is an open source penetration testing tool that can be used to automate the process of detecting and exploiting SQL injection flaws. (Citation: sqlmap Introduction)
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Reconnaissance:
+   Technique: T1596.002 - WHOIS
+   Tools: curl, browser
+   Description: Adversaries may search public WHOIS data for information about victims that can be used during targeting. WHOIS data is stored by regional Internet registries (RIR) responsible for allocating and assi
+
+2. Initial Access:
+   Technique: T1190 - Exploit Public-Facing Application
+   Tools: sqlmap
+   Description: Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfigur
+
+3. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: curl, browser
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+4. Reconnaissance:
+   Technique: T1592.003 - Firmware
+   Tools: curl, browser
+   Description: Adversaries may gather information about the victim's host firmware that can be used during targeting. Information about host firmware may include a variety of details such as type and versions on spe
+
+5. Reconnaissance:
+   Technique: T1596.005 - Scan Databases
+   Tools: curl, browser
+   Description: Adversaries may search within public scan databases for information about victims that can be used during targeting. Various online services continuously publish the results of Internet scans/surveys,
+
+--------------------------------
+RECOMMENDATION:
+- Remove or protect '/sitemap.xml'
+- Ensure sensitive files are outside the web root and access-controlled.
+
+================================
+
+--------------------------------
+[VULNERABILITY #22]
+Type: Reflected Cross-Site Scripting (XSS)
+Severity: HIGH
+
+Affected URL:
+http://127.0.0.1:5000/search
+
+Evidence:
+- GET http://127.0.0.1:5000/search param=q payload=<script>alert('x')</script>
+
+--------------------------------
+MITRE ATT&CK MAPPING
+Technique ID: T1059.007
+Technique Name: JavaScript
+Tactics: credential-access, execution, initial-access, lateral-movement
+Tools / Software:
+- Burp Suite: Relevant web testing tool
+- browser: Relevant web testing tool
+- curl: Relevant web testing tool
+
+--------------------------------
+ATTACK CHAIN:
+
+1. Initial Access:
+   Technique: T1189 - Drive-by Compromise
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may gain access to a system through a user visiting a website over the normal course of browsing. Multiple ways of delivering exploit code to a browser exist (i.e., Drive-by Target), inclu
+
+2. Execution:
+   Technique: T1059.007 - JavaScript
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may abuse various implementations of JavaScript for execution. JavaScript (JS) is a platform-independent scripting language (compiled just-in-time at runtime) commonly associated with scri
+
+3. Credential Access:
+   Technique: T1606.001 - Web Cookies
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may forge web cookies that can be used to gain access to web applications or Internet services. Web applications and services (hosted in cloud SaaS environments or on-premise servers) ofte
+
+4. Lateral Movement:
+   Technique: T1210 - Exploitation of Remote Services
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may exploit remote services to gain unauthorized access to internal systems once inside of a network. Exploitation of a software vulnerability occurs when an adversary takes advantage of a
+
+5. Execution:
+   Technique: T1203 - Exploitation for Client Execution
+   Tools: Burp Suite, browser, curl
+   Description: Adversaries may exploit software vulnerabilities in client applications to execute code. Vulnerabilities can exist in software due to unsecure coding practices that can lead to unanticipated behavior.
+
+--------------------------------
+RECOMMENDATION:
+- Apply output encoding and input validation for form parameters.
+
+================================

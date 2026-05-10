@@ -91,6 +91,27 @@ class AttackChainGenerator:
         self.generation_history.append(result)
         return result
 
+    def generate_fast(
+        self,
+        scenario: str,
+        target_environment: str = "Enterprise Windows Active Directory network",
+        chain_length: int = None,
+        top_k: int = None,
+        tactic_filter: Optional[str] = None,
+        platform_filter: Optional[str] = None,
+    ) -> dict:
+        result = self.rag_engine.generate_attack_chain_fast(
+            scenario=scenario,
+            target_environment=target_environment,
+            chain_length=chain_length,
+            top_k=top_k,
+            tactic_filter=tactic_filter,
+            platform_filter=platform_filter,
+        )
+        result["analysis"] = self.analyze_chain(result)
+        self.generation_history.append(result)
+        return result
+
     def generate_predefined(self, scenario_key: str) -> dict:
         if scenario_key not in PREDEFINED_SCENARIOS:
             available = ", ".join(PREDEFINED_SCENARIOS.keys())

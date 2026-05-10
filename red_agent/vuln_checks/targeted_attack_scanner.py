@@ -25,6 +25,8 @@ import logging
 import requests
 from urllib.parse import urljoin, urlparse
 
+import config
+
 logger = logging.getLogger("red_elisar.targeted_scanner")
 
 # ── Severity mapping per attack type ───────────────────────────────
@@ -66,6 +68,8 @@ ATTACK_KEYWORDS = {
                             "hsts", "tls", "ssl", "network interception"],
 }
 
+DEFAULT_TIMEOUT_S = float(getattr(config, "WEB_UI_PROBE_TIMEOUT_S", 5.0))
+
 
 def detect_attack_type(scenario: str) -> str:
     """Detect attack type from scenario text via keyword matching."""
@@ -77,7 +81,7 @@ def detect_attack_type(scenario: str) -> str:
     return best if scores[best] > 0 else "generic"
 
 
-def probe_target(target_url: str, attack_type: str) -> dict:
+def probe_target(target_url: str, attack_type: str, timeout: float | None = None) -> dict:
     """
     Probe the target URL for the specified attack type.
     Returns a dict with: found, evidence, severity, endpoints_tested, recommendation
@@ -98,7 +102,8 @@ def probe_target(target_url: str, attack_type: str) -> dict:
         "generic":             _probe_generic,
     }
     probe_fn  = probers.get(attack_type, _probe_generic)
-    result    = probe_fn(target_url)
+    timeout_s = float(timeout) if timeout is not None else DEFAULT_TIMEOUT_S
+    result    = probe_fn(target_url, timeout_s)
     result["attack_type"] = attack_type
     result["target_url"]  = target_url
     result["severity"]    = SEVERITY.get(attack_type, "MEDIUM")
@@ -108,7 +113,7 @@ def probe_target(target_url: str, attack_type: str) -> dict:
 
 # ─── Individual Probers ───────────────────────────────────────────
 
-def _probe_xss(base: str) -> dict:
+def _probe_xss(base: str, timeout_s: float) -> dict:
     payloads = [
         '<script>alert(1)</script>',
         '"><script>alert(1)</script>',
@@ -128,7 +133,7 @@ def _probe_xss(base: str) -> dict:
             url = f"{base}{path}?{param}={payload}"
             endpoints_tested.append(url)
             try:
-                r = requests.get(url, timeout=5, allow_redirects=True)
+                r = requests.get(url, timeout=timeout_s, allow_redirects=True)
                 if payload.lower() in r.text.lower() or "<script>" in r.text.lower():
                     evidence.append({
                         "url":        url,
@@ -152,7 +157,7 @@ def _probe_xss(base: str) -> dict:
     }
 
 
-def _probe_sqli(base: str) -> dict:
+def _probe_sqli(base: str, timeout_s: float) -> dict:
     payloads = [
         ("' OR '1'='1", "shows all results — authentication bypass"),
         ("' OR '1'='1'--", "comments out password check"),
@@ -167,7 +172,7 @@ def _probe_sqli(base: str) -> dict:
         url = f"{base}/search?q={payload}"
         endpoints_tested.append(url)
         try:
-            r = requests.get(url, timeout=5)
+            r = requests.get(url, timeout=timeout_s)
             if r.status_code == 200 and len(r.text) > 500:
                 evidence.append({
                     "url":       url,
@@ -181,9 +186,12 @@ def _probe_sqli(base: str) -> dict:
 
     # Test POST /login
     try:
-        r = requests.post(f"{base}/login",
-                          data={"username": "' OR '1'='1'--", "password": "x"},
-                          timeout=5, allow_redirects=False)
+        r = requests.post(
+            f"{base}/login",
+            data={"username": "' OR '1'='1'--", "password": "x"},
+            timeout=timeout_s,
+            allow_redirects=False,
+        )
         endpoints_tested.append(f"{base}/login [POST SQLi]")
         if r.status_code in (302, 200) and "admin" in r.text.lower():
             evidence.append({
@@ -206,7 +214,7 @@ def _probe_sqli(base: str) -> dict:
     }
 
 
-def _probe_exposed_files(base: str) -> dict:
+def _probe_exposed_files(base: str, timeout_s: float) -> dict:
     sensitive_paths = [
         ("/.env",     "Environment file with API keys and secrets"),
         ("/backup",   "Database backup with all records"),
@@ -223,7 +231,7 @@ def _probe_exposed_files(base: str) -> dict:
         url = f"{base}{path}"
         endpoints_tested.append(url)
         try:
-            r = requests.get(url, timeout=5)
+            r = requests.get(url, timeout=timeout_s)
             if r.status_code == 200:
                 snippet = r.text[:200].replace("\n", " ")
                 evidence.append({
@@ -246,7 +254,7 @@ def _probe_exposed_files(base: str) -> dict:
     }
 
 
-def _probe_unauth_api(base: str) -> dict:
+def _probe_unauth_api(base: str, timeout_s: float) -> dict:
     api_endpoints = [
         ("/api/users",    "User database with passwords"),
         ("/api/products", "Product data"),
@@ -259,7 +267,7 @@ def _probe_unauth_api(base: str) -> dict:
         url = f"{base}{path}"
         endpoints_tested.append(url)
         try:
-            r = requests.get(url, timeout=5)
+            r = requests.get(url, timeout=timeout_s)
             if r.status_code == 200:
                 has_sensitive = any(w in r.text.lower()
                                     for w in ["password", "email", "username", "secret", "token"])
@@ -284,12 +292,12 @@ def _probe_unauth_api(base: str) -> dict:
     }
 
 
-def _probe_open_redirect(base: str) -> dict:
+def _probe_open_redirect(base: str, timeout_s: float) -> dict:
     test_url         = f"{base}/redirect?url=http://evil-example.com"
     endpoints_tested = [test_url]
     evidence         = []
     try:
-        r = requests.get(test_url, timeout=5, allow_redirects=False)
+        r = requests.get(test_url, timeout=timeout_s, allow_redirects=False)
         if r.status_code in (301, 302, 303, 307, 308):
             loc = r.headers.get("Location", "")
             if "evil-example.com" in loc or "http://" in loc:
@@ -313,12 +321,15 @@ def _probe_open_redirect(base: str) -> dict:
     }
 
 
-def _probe_cors(base: str) -> dict:
+def _probe_cors(base: str, timeout_s: float) -> dict:
     endpoints_tested = [base]
     evidence         = []
     try:
-        r = requests.get(base, timeout=5,
-                         headers={"Origin": "http://evil-attacker.com"})
+        r = requests.get(
+            base,
+            timeout=timeout_s,
+            headers={"Origin": "http://evil-attacker.com"},
+        )
         acao = r.headers.get("Access-Control-Allow-Origin", "")
         if acao == "*" or "evil-attacker.com" in acao:
             evidence.append({
@@ -330,8 +341,11 @@ def _probe_cors(base: str) -> dict:
             })
 
         # Also check ACAO on API endpoint
-        r2 = requests.get(f"{base}/api/users", timeout=5,
-                           headers={"Origin": "http://evil-attacker.com"})
+        r2 = requests.get(
+            f"{base}/api/users",
+            timeout=timeout_s,
+            headers={"Origin": "http://evil-attacker.com"},
+        )
         acao2 = r2.headers.get("Access-Control-Allow-Origin", "")
         if acao2 == "*":
             evidence.append({
@@ -355,7 +369,7 @@ def _probe_cors(base: str) -> dict:
     }
 
 
-def _probe_missing_headers(base: str) -> dict:
+def _probe_missing_headers(base: str, timeout_s: float) -> dict:
     required = {
         "Content-Security-Policy":    "Prevents XSS attacks",
         "X-Frame-Options":            "Prevents clickjacking",
@@ -367,7 +381,7 @@ def _probe_missing_headers(base: str) -> dict:
     evidence         = []
     endpoints_tested = [base]
     try:
-        r = requests.get(base, timeout=5)
+        r = requests.get(base, timeout=timeout_s)
         for header, purpose in required.items():
             if header not in r.headers:
                 evidence.append({
@@ -390,7 +404,7 @@ def _probe_missing_headers(base: str) -> dict:
     }
 
 
-def _probe_broken_auth(base: str) -> dict:
+def _probe_broken_auth(base: str, timeout_s: float) -> dict:
     credentials = [
         ("admin", "admin123"),
         ("admin", "admin"),
@@ -404,8 +418,12 @@ def _probe_broken_auth(base: str) -> dict:
         url = f"{base}/login"
         endpoints_tested.append(f"{url} [{user}:{pwd}]")
         try:
-            r = requests.post(url, data={"username": user, "password": pwd},
-                              timeout=5, allow_redirects=True)
+            r = requests.post(
+                url,
+                data={"username": user, "password": pwd},
+                timeout=timeout_s,
+                allow_redirects=True,
+            )
             if (r.status_code == 200 and
                     ("welcome" in r.text.lower() or
                      "dashboard" in r.text.lower() or
@@ -431,14 +449,14 @@ def _probe_broken_auth(base: str) -> dict:
     }
 
 
-def _probe_debug_mode(base: str) -> dict:
+def _probe_debug_mode(base: str, timeout_s: float) -> dict:
     test_url         = f"{base}/error_test"
     endpoints_tested = [test_url, f"{base}/nonexistent-page-12345"]
     evidence         = []
 
     for url in endpoints_tested:
         try:
-            r = requests.get(url, timeout=5)
+            r = requests.get(url, timeout=timeout_s)
             body = r.text.lower()
             if any(sig in body for sig in
                    ["traceback", "werkzeug", "debugger", "interactive console",
@@ -464,11 +482,11 @@ def _probe_debug_mode(base: str) -> dict:
     }
 
 
-def _probe_fingerprinting(base: str) -> dict:
+def _probe_fingerprinting(base: str, timeout_s: float) -> dict:
     endpoints_tested = [base]
     evidence         = []
     try:
-        r    = requests.get(base, timeout=5)
+        r    = requests.get(base, timeout=timeout_s)
         srv  = r.headers.get("Server", "")
         xpow = r.headers.get("X-Powered-By", "")
         if any(c.isdigit() for c in srv):   # version number in Server
@@ -500,12 +518,12 @@ def _probe_fingerprinting(base: str) -> dict:
     }
 
 
-def _probe_mitm_http(base: str) -> dict:
+def _probe_mitm_http(base: str, timeout_s: float) -> dict:
     endpoints_tested = [base]
     evidence         = []
     parsed           = urlparse(base)
     try:
-        r    = requests.get(base, timeout=5)
+        r    = requests.get(base, timeout=timeout_s)
         hsts = r.headers.get("Strict-Transport-Security", "")
         if parsed.scheme == "http":
             evidence.append({
@@ -536,11 +554,11 @@ def _probe_mitm_http(base: str) -> dict:
     }
 
 
-def _probe_generic(base: str) -> dict:
+def _probe_generic(base: str, timeout_s: float) -> dict:
     endpoints_tested = [base]
     evidence         = []
     try:
-        r = requests.get(base, timeout=5)
+        r = requests.get(base, timeout=timeout_s)
         evidence.append({
             "url":       base,
             "status":    r.status_code,

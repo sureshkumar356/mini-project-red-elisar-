@@ -1,0 +1,170 @@
+﻿{\rtf1\ansi\deff0{\fonttbl{\f0 Calibri;}}\f0\fs22 # Source Code Paste Guide (Report)\par 
+\par 
+Project: Red ELISAR\par 
+Date: 2026-04-30\par 
+\par 
+This file tells you exactly what code to paste into your academic report, in order, with heading names.\par 
+Use this as your "Source Code Appendix" plan.\par 
+\par 
+## Important Rule\par 
+- Do not paste full files.\par 
+- Paste only the listed class/function blocks.\par 
+- Keep each pasted block about 30-120 lines.\par 
+- For very large functions, paste the key part and add: "Full implementation available in repository file path".\par 
+\par 
+## Suggested Appendix Flow (From RAG to Final Output)\par 
+\par 
+### 1) RAG Data Preparation\par 
+Heading: `A. MITRE ATT&CK Parsing and Cleaning`\par 
+- File: `red_agent/rag/mitre_parser.py`\par 
+- Paste:\par 
+  - `class AttackTechnique`\par 
+  - `def clean_description(...)`\par 
+  - `class MITREParser` (constructor + parse flow)\par 
+\par 
+Heading: `B. Technique Chunking for Retrieval`\par 
+- File: `red_agent/rag/chunking.py`\par 
+- Paste:\par 
+  - `def chunk_text(...)`\par 
+  - `def chunk_techniques(...)`\par 
+- Optional:\par 
+  - `def chunk_offensive_logs(...)` (only if logs are part of your method chapter)\par 
+\par 
+### 2) Vector Store and Indexing\par 
+Heading: `C. FAISS Vector Store Construction`\par 
+- File: `red_agent/rag/vector_store_faiss.py`\par 
+- Paste:\par 
+  - `class FAISSVectorStore` (init, index, save/load, search methods)\par 
+\par 
+Heading: `D. Vector Interface Layer`\par 
+- File: `red_agent/rag/vector_store.py`\par 
+- Paste:\par 
+  - `class VectorStore` (if you want to show abstraction/design)\par 
+\par 
+### 3) RAG Retrieval Engine\par 
+Heading: `E. Retrieval-Augmented Generation Engine`\par 
+- File: `red_agent/rag/rag_engine.py`\par 
+- Paste:\par 
+  - `class RAGEngine`\par 
+- Focus on methods that do:\par 
+  - query embedding\par 
+  - top-k retrieval\par 
+  - relevance filtering\par 
+  - context assembly\par 
+\par 
+### 4) MITRE Mapping Layer\par 
+Heading: `F. MITRE Technique Mapping`\par 
+- File: `red_agent/mappings/mitre_mapper.py`\par 
+- Paste:\par 
+  - `class MITREMapper`\par 
+- Include the method that maps scenario/vulnerability text to technique IDs.\par 
+\par 
+Heading: `G. Tool and Mitigation Enrichment`\par 
+- Files:\par 
+  - `red_agent/mappings/exploit_tool_mapper.py`\par 
+  - `red_agent/mappings/mitigation_mapper.py`\par 
+- Paste:\par 
+  - `_load_tools`, `get_tools`, `get_tools_for_chain`\par 
+  - `_load_mitigations`, `get_mitigation`, `get_mitigations_for_chain`\par 
+\par 
+### 5) LLM Attack Chain Generation\par 
+Heading: `H. LLM Client with Retry and JSON Enforcement`\par 
+- File: `red_agent/llm/llm_client.py`\par 
+- Paste:\par 
+  - `class LLMResult`\par 
+  - `def _post_with_retry(...)`\par 
+  - `def groq_chat_json(...)`\par 
+  - `def mistral_chat_json(...)`\par 
+\par 
+Heading: `I. Attack Chain Generator`\par 
+- File: `red_agent/llm/attack_chain_generator.py`\par 
+- Paste:\par 
+  - `class AttackChainGenerator`\par 
+- Show prompt construction + chain post-processing.\par 
+\par 
+### 6) Validation and Vulnerability Checks\par 
+Heading: `J. Scenario Input Sanitization`\par 
+- File: `red_agent/vuln_checks/input_sanitizer.py`\par 
+- Paste:\par 
+  - `def sanitize_scenario(...)`\par 
+\par 
+Heading: `K. Live Vulnerability Validation`\par 
+- File: `red_agent/vuln_checks/live_vuln_checker.py`\par 
+- Paste:\par 
+  - `class LiveVulnChecker`\par 
+  - `def render_markdown_report(...)` (optional)\par 
+\par 
+Heading: `L. Targeted Attack Probing`\par 
+- File: `red_agent/vuln_checks/targeted_attack_scanner.py`\par 
+- Paste:\par 
+  - `def detect_attack_type(...)`\par 
+  - `def probe_target(...)`\par 
+  - one or two specific probe functions only (example: `_probe_sqli`, `_probe_xss`)\par 
+\par 
+Heading: `M. Automated Scanner and Recon`\par 
+- Files:\par 
+  - `red_agent/vuln_checks/vuln_scanner.py`\par 
+  - `red_agent/vuln_checks/web_recon.py`\par 
+- Paste:\par 
+  - `class VulnerabilityScanner`\par 
+  - `class WebReconAgent`\par 
+\par 
+### 7) Report Generation\par 
+Heading: `N. Security Report Generation`\par 
+- File: `red_agent/reporting/report_generator.py`\par 
+- Paste:\par 
+  - `class ReportGenerator`\par 
+\par 
+Heading: `O. PDF Rendering Pipeline`\par 
+- File: `red_agent/reporting/pdf_reporter.py`\par 
+- Paste:\par 
+  - `def render_markdown_to_pdf(...)`\par 
+\par 
+### 8) End-to-End Orchestration (Last Section)\par 
+Heading: `P. Runtime Orchestration and CLI Workflow`\par 
+- File: `run.py`\par 
+- Paste only these high-value parts:\par 
+  - `class RuntimeContext`\par 
+  - `def discover_attack_surface(...)`\par 
+  - `def _build_dynamic_chain_from_mapping(...)`\par 
+  - `def run_full_web_scan(...)`\par 
+  - `def run_scenario_generation(...)`\par 
+  - `def run_scenario_url_validation(...)`\par 
+  - `def run_scenario_only_analysis(...)`\par 
+  - `def menu_loop(...)` and `def main(...)`\par 
+\par 
+### 9) Configuration\par 
+Heading: `Q. Runtime Configuration`\par 
+- File: `red_agent/config.py`\par 
+- Paste:\par 
+  - constants used by retrieval, thresholds, output paths\par 
+  - `def ensure_directories(...)`\par 
+\par 
+## What NOT to Paste\par 
+- `enterprise-attack.json` (too large dataset)\par 
+- `faiss_index/*` binary/index files\par 
+- `output/*` generated reports\par 
+- `__pycache__/*`\par 
+- full logs\par 
+\par 
+## Suggested Appendix Chapter Order (One-line format)\par 
+1. MITRE Parsing\par 
+2. Chunking\par 
+3. FAISS Indexing\par 
+4. RAG Retrieval\par 
+5. MITRE Mapping\par 
+6. Tool/Mitigation Mapping\par 
+7. LLM Client\par 
+8. Attack Chain Generation\par 
+9. Input Sanitization\par 
+10. Validation and Probing\par 
+11. Vulnerability Scanner and Recon\par 
+12. Report Generator\par 
+13. Runtime Orchestration (`run.py`)\par 
+14. Config\par 
+\par 
+## Quick Length Target (for clean report)\par 
+- Main report body source code section: 8-12 pages\par 
+- Full appendix source code: 20-35 pages\par 
+- Keep each section with: heading + 1 paragraph explanation + selected code block.\par 
+}

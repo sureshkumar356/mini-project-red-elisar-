@@ -69,6 +69,17 @@ Architecture blocks:
    - vuln_report JSON/MD
    - human-readable TXT final report
 
+Live vulnerable-finding data path (show this flow diagram on slide):
+Target URL -> Route/Form Discovery -> Live Vulnerability Probes -> Finding Normalization + Dedup ->
+RAG Query Builder (vuln type + endpoint + evidence) -> FAISS MITRE Retrieval ->
+Primary Technique Enforcement (T1190/T1552/T1048 based on context) ->
+Logical 5 to 6 step ATT&CK chain generation -> JSON/MD/TXT reporting
+
+Architecture emphasis:
+- Keep the vulnerable app scan and RAG mapping in one continuous pipeline.
+- Show where duplicate findings are merged before ATT&CK mapping.
+- Show where context filtering removes unrelated malware/cloud/phishing noise.
+
 
 SLIDE 5 - RAG MODEL (WHOLE FLOW)
 RAG pipeline used in the project:
@@ -172,6 +183,19 @@ Comparison dimensions (Before vs After improvements):
 - Before: multiple repeated entries for same endpoint/type
 - After: endpoint+type dedup with evidence consolidation
 
+Add one RAG vs No-RAG table on this slide:
+
+| Metric | No-RAG Baseline | Red ELISAR (RAG) | Gain |
+|---|---:|---:|---:|
+| Tactical Coverage | 25.0% | 36.4% | +11.4% |
+| Valid Techniques Ratio | 75.0% | 97.4% | +22.4% |
+| Grounded Chain Score | 66.8% | 83.2% | +16.4% |
+| Hallucination Rate | 19.3% | 0.0% | -19.3% |
+| Chain Flow Coherence | 71.0% | 98.4% | +27.4% |
+
+Short takeaway line:
+RAG gives major quality and grounding gains while preserving practical runtime.
+
 
 SLIDE 10 - SAMPLE OUTPUT SNAPSHOTS (USE ACTUAL REPORTS)
 Recommended artifacts to screenshot:
@@ -215,3 +239,12 @@ APPENDIX - QUICK DEMO SCRIPT
 4. Show deduped vulnerabilities.
 5. Show one SQL and one credential-exposure mapping.
 6. Show chain length and flow quality.
+
+APPENDIX - WHAT HAS BEEN COMPLETED SO FAR
+1. Live vulnerable web target scanning integrated into the Red ELISAR flow.
+2. Discovery + passive + active + form probes merged into one normalized finding set.
+3. Endpoint+type deduplication implemented with evidence consolidation.
+4. RAG mapping hardened with primary technique enforcement by vulnerability family.
+5. Logical ATT&CK flow constrained to realistic lifecycle progression.
+6. RAG vs No-RAG comparison results exported for PPT evidence.
+7. Analyst output formats finalized: JSON, Markdown, and TXT.

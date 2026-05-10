@@ -1,0 +1,458 @@
+{
+  "report_title": "Red ELISAR \u2014 Autonomous Web Vulnerability Assessment",
+  "target_url": "http://127.0.0.1:5000",
+  "scan_date": "2026-04-28 05:44 UTC",
+  "overall_risk": "CRITICAL",
+  "total_vulns": 22,
+  "severity_counts": {
+    "CRITICAL": 9,
+    "HIGH": 8,
+    "MEDIUM": 3,
+    "LOW": 0,
+    "INFO": 2
+  },
+  "tech_stack": {
+    "server": "Werkzeug/3.1.6 Python/3.13.3, Apache/2.2.8 (Ubuntu)",
+    "language": "PHP/7.2.1",
+    "versions": {
+      "server": "Werkzeug/3.1.6 Python/3.13.3, Apache/2.2.8 (Ubuntu)",
+      "x_powered_by": "PHP/7.2.1"
+    }
+  },
+  "recon_summary": {
+    "domain": "127.0.0.1:5000",
+    "status_code": 200,
+    "ssl_enabled": false,
+    "exposed_paths": 5,
+    "missing_headers": 6,
+    "leaked_headers": 3
+  },
+  "vulnerabilities": [
+    {
+      "type": "Exposed Sensitive Resource",
+      "detail": "Sensitive path '/robots.txt' is publicly accessible (HTTP 200)",
+      "severity": "CRITICAL",
+      "cwe_id": "CWE-312",
+      "mitre_hint": "T1552",
+      "recommendation": "Avoid listing sensitive paths in robots.txt (security by obscurity is not security).",
+      "evidence": "GET /.env \u2192 200 (181 bytes) | GET /backup \u2192 200 (11537 bytes) | GET /api/users \u2192 200 (418 bytes) | GET /admin \u2192 200 (11659 bytes) | GET /robots.txt \u2192 200 (118 bytes)",
+      "extra": {
+        "preview": "SECRET_KEY=secret123\nDATABASE_URL=sqlite:///vuln_app.db\nADMIN_PASSWORD=admin123\nDEBUG=True\nFLASK_ENV"
+      },
+      "endpoint": "unknown-endpoint"
+    },
+    {
+      "type": "No HTTPS / Plain HTTP",
+      "detail": "Site is served over HTTP \u2014 all traffic is unencrypted",
+      "severity": "CRITICAL",
+      "cwe_id": "CWE-319",
+      "mitre_hint": "T1557",
+      "recommendation": "Enable HTTPS with a valid SSL/TLS certificate. Use Let's Encrypt for free certificates.",
+      "evidence": "URL scheme: http://",
+      "endpoint": "unknown-endpoint"
+    },
+    {
+      "type": "Missing Security Header",
+      "detail": "HTTP header 'Content-Security-Policy' is not set \u2014 Mitigates XSS by restricting allowed content sources",
+      "severity": "HIGH",
+      "cwe_id": "CWE-79",
+      "mitre_hint": "T1059.007",
+      "recommendation": "Add a Content-Security-Policy header to whitelist trusted content sources. Example: Content-Security-Policy: default-src 'self'",
+      "evidence": "Response header 'Content-Security-Policy': not present | Response header 'Strict-Transport-Security': not present | Response header 'X-Frame-Options': not present | Response header 'X-Content-Type-Options': not present | Response header 'Referrer-Policy': not present | Response header 'Permissions-Policy': not present",
+      "endpoint": "unknown-endpoint"
+    },
+    {
+      "type": "CORS Misconfiguration",
+      "detail": "Access-Control-Allow-Origin is wildcard (*)",
+      "severity": "HIGH",
+      "cwe_id": "CWE-942",
+      "mitre_hint": "T1557",
+      "recommendation": "Replace 'Access-Control-Allow-Origin: *' with specific allowed origins. Never use wildcard CORS for authenticated endpoints.",
+      "evidence": "Access-Control-Allow-Origin: *",
+      "endpoint": "unknown-endpoint"
+    },
+    {
+      "type": "Information Disclosure",
+      "detail": "Header 'Server' exposes technology details: 'Werkzeug/3.1.6 Python/3.13.3, Apache/2.2.8 (Ubuntu)'",
+      "severity": "MEDIUM",
+      "cwe_id": "CWE-200",
+      "mitre_hint": "T1592",
+      "recommendation": "Remove or genericize the Server header to hide version information.",
+      "evidence": "Server: Werkzeug/3.1.6 Python/3.13.3, Apache/2.2.8 (Ubuntu) | X-Powered-By: PHP/7.2.1 | X-App-Version: 1.0.0-dev | Live response header \u2192 Server: Werkzeug/3.1.6 Python/3.13.3, Apache/2.2.8 (Ubuntu) | Live response header \u2192 X-Powered-By: PHP/7.2.1 | Live response header \u2192 X-App-Version: 1.0.0-dev",
+      "endpoint": "unknown-endpoint"
+    },
+    {
+      "type": "Exposed Sensitive Resource",
+      "detail": "Path '/.env' returned HTTP 200 \u2014 Exposed .env file with credentials",
+      "severity": "CRITICAL",
+      "cwe_id": "CWE-312",
+      "mitre_hint": "T1552.001",
+      "evidence": "GET http://127.0.0.1:5000/.env \u2192 200 OK | Preview: SECRET_KEY=secret123 DATABASE_URL=sqlite:///vuln_app.db ADMIN_PASSWORD=admin123 DEBUG=True FLASK_ENV=development API_KEY...",
+      "confirmed_live": true,
+      "recommendation": "Remove or protect '/.env'. Ensure sensitive files are outside the web root and access-controlled.",
+      "endpoint": "http://127.0.0.1:5000/.env"
+    },
+    {
+      "type": "Exposed Sensitive Resource",
+      "detail": "Path '/backup' returned HTTP 200 \u2014 Exposed backup file/directory",
+      "severity": "CRITICAL",
+      "cwe_id": "CWE-312",
+      "mitre_hint": "T1552",
+      "evidence": "GET http://127.0.0.1:5000/backup \u2192 200 OK | Preview: <!DOCTYPE html> <html lang=\"en\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width,initial...",
+      "confirmed_live": true,
+      "recommendation": "Remove or protect '/backup'. Ensure sensitive files are outside the web root and access-controlled.",
+      "endpoint": "http://127.0.0.1:5000/backup"
+    },
+    {
+      "type": "Exposed Sensitive Resource",
+      "detail": "Path '/api/users' returned HTTP 200 \u2014 Unauthenticated user data API",
+      "severity": "CRITICAL",
+      "cwe_id": "CWE-306",
+      "mitre_hint": "T1078",
+      "evidence": "GET http://127.0.0.1:5000/api/users \u2192 200 OK | Preview: {   \"count\": 3,   \"status\": \"ok\",   \"users\": [     {       \"email\": \"admin@vuln-shop.local\",       \"id\": 1,       \"passw...",
+      "confirmed_live": true,
+      "recommendation": "Remove or protect '/api/users'. Ensure sensitive files are outside the web root and access-controlled.",
+      "endpoint": "http://127.0.0.1:5000/api/users"
+    },
+    {
+      "type": "SQL Injection",
+      "detail": "SQLi payload '' UNION SELECT id,username,password,email FROM users--' on http://127.0.0.1:5000/search?q=... triggered SQL error pattern 'sql' in live response",
+      "severity": "CRITICAL",
+      "cwe_id": "CWE-89",
+      "mitre_hint": "T1190",
+      "evidence": "GET http://127.0.0.1:5000/search?q=' OR '1'='1 \u2192 HTTP 200 | Matched: sql | GET http://127.0.0.1:5000/search?q=' OR 1=1-- \u2192 HTTP 200 | GET http://127.0.0.1:5000/search?q=' UNION SELECT NULL-- \u2192 HTTP 200 | GET http://127.0.0.1:5000/search?q=' UNION SELECT NULL,NULL-- \u2192 HTTP 200 | GET http://127.0.0.1:5000/search?q=' UNION SELECT id,username,password,email FROM users-- \u2192 HTTP 200 | GET http://127.0.0.1:5000/search?q=1 | DROP TABLE users-- \u2192 HTTP 200 | GET http://127.0.0.1:5000/search?q=' AND SLEEP(0)-- \u2192 HTTP 200 | GET http://127.0.0.1:5000/search?q=' OR SUBSTR(username,1,1)='a'-- \u2192 HTTP 200",
+      "confirmed_live": true,
+      "recommendation": "Use parameterised queries / prepared statements. NEVER concatenate user input into SQL strings.",
+      "endpoint": "http://127.0.0.1:5000/search"
+    },
+    {
+      "type": "SQL Injection",
+      "detail": "Login form bypassed using SQLi payload: '' OR '1'='1'--' \u2014 Classic tautology bypass. Response confirms successful login.",
+      "severity": "CRITICAL",
+      "cwe_id": "CWE-89",
+      "mitre_hint": "T1190",
+      "evidence": "Live response contains user credentials extracted from DB. Payload: ' UNION SELECT id,username,password,email FROM users-- | POST /login username='' OR '1'='1'--' password='anything' \u2192 HTTP 200 | Response: Logged in as: <b>' OR '1'='1'--</b> (ID=1)</div> | <form method=\"POST\">",
+      "confirmed_live": true,
+      "recommendation": "Use parameterised queries for all authentication checks. Implement account lockout and rate limiting.",
+      "endpoint": "unknown-endpoint"
+    },
+    {
+      "type": "Unauthenticated Admin Panel Access",
+      "detail": "Admin path '/admin' returns HTTP 200 without any authentication credentials",
+      "severity": "CRITICAL",
+      "cwe_id": "CWE-284",
+      "mitre_hint": "T1078",
+      "evidence": "GET http://127.0.0.1:5000/admin \u2192 HTTP 200 | Admin keywords confirmed in live response body",
+      "confirmed_live": true,
+      "recommendation": "Protect all admin routes with strong authentication and role-based access control.",
+      "endpoint": "http://127.0.0.1:5000/admin"
+    },
+    {
+      "type": "Unencrypted HTTP",
+      "detail": "Application is served over plain HTTP \u2014 all traffic including credentials is transmitted in cleartext",
+      "severity": "CRITICAL",
+      "cwe_id": "CWE-319",
+      "mitre_hint": "T1557",
+      "evidence": "Target URL scheme is 'http://' \u2014 confirmed from http://127.0.0.1:5000",
+      "confirmed_live": true,
+      "recommendation": "Deploy TLS (HTTPS) via a certificate authority (e.g. Let's Encrypt). Configure HSTS after enabling HTTPS.",
+      "endpoint": "http://'/"
+    },
+    {
+      "type": "Missing Security Header",
+      "detail": "HTTP response is missing the 'Strict-Transport-Security' header",
+      "severity": "HIGH",
+      "cwe_id": "CWE-79",
+      "mitre_hint": "T1059.007",
+      "evidence": "Header 'Content-Security-Policy' absent in live response from http://127.0.0.1:5000 | Header 'Strict-Transport-Security' absent in live response from http://127.0.0.1:5000 | Header 'X-Frame-Options' absent in live response from http://127.0.0.1:5000 | Header 'X-Content-Type-Options' absent in live response from http://127.0.0.1:5000 | Header 'Referrer-Policy' absent in live response from http://127.0.0.1:5000 | Header 'Permissions-Policy' absent in live response from http://127.0.0.1:5000",
+      "confirmed_live": true,
+      "recommendation": "Add 'Strict-Transport-Security' to all HTTP responses. Example config depends on your web server / framework.",
+      "endpoint": "http://127.0.0.1:5000/"
+    },
+    {
+      "type": "CORS Wildcard Misconfiguration",
+      "detail": "Server allows cross-origin requests from ANY domain (*)",
+      "severity": "HIGH",
+      "cwe_id": "CWE-942",
+      "mitre_hint": "T1557",
+      "evidence": "Live response: Access-Control-Allow-Origin: *",
+      "confirmed_live": true,
+      "recommendation": "Replace '*' with specific trusted origins. Never combine wildcard CORS with cookies/credentials.",
+      "endpoint": "unknown-endpoint"
+    },
+    {
+      "type": "Exposed Sensitive Resource",
+      "detail": "Path '/admin' returned HTTP 200 \u2014 Unauthenticated admin panel access",
+      "severity": "HIGH",
+      "cwe_id": "CWE-284",
+      "mitre_hint": "T1078",
+      "evidence": "GET http://127.0.0.1:5000/admin \u2192 200 OK | Preview: <!DOCTYPE html> <html lang=\"en\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width,initial...",
+      "confirmed_live": true,
+      "recommendation": "Remove or protect '/admin'. Ensure sensitive files are outside the web root and access-controlled.",
+      "endpoint": "http://127.0.0.1:5000/admin"
+    },
+    {
+      "type": "Reflected Cross-Site Scripting (XSS)",
+      "detail": "XSS payload reflected unescaped on http://127.0.0.1:5000/greet?name=<payload>",
+      "severity": "HIGH",
+      "cwe_id": "CWE-79",
+      "mitre_hint": "T1059.007",
+      "evidence": "Sent: <script>alert('XSS_1')</script> | Marker 'XSS_1' found verbatim in live HTTP response",
+      "confirmed_live": true,
+      "recommendation": "HTML-escape all user input before rendering. Use template engines with auto-escaping (e.g., Jinja2 with |e).",
+      "endpoint": "unknown-endpoint"
+    },
+    {
+      "type": "Error / Stack Trace Information Leakage",
+      "detail": "Raw SQL query exposed in error message at http://127.0.0.1:5000/search?q=' AND 1=CONVERT(int,'error')--",
+      "severity": "HIGH",
+      "cwe_id": "CWE-209",
+      "mitre_hint": "T1592",
+      "evidence": "GET http://127.0.0.1:5000/search?q=' AND 1=CONVERT(int,'error')-- \u2192 HTTP 200 | Pattern 'query was:' matched in live response",
+      "confirmed_live": true,
+      "recommendation": "Disable debug mode and custom error handlers. Return generic 500 pages in production. Never expose stack traces to end users.",
+      "endpoint": "http://127.0.0.1:5000/search"
+    },
+    {
+      "type": "Open Redirect",
+      "detail": "Parameter 'url' on /redirect causes unvalidated redirect to external domain: http://evil-attacker.example.com",
+      "severity": "MEDIUM",
+      "cwe_id": "CWE-601",
+      "mitre_hint": "T1204",
+      "evidence": "GET /redirect?url=http://evil-attacker.example.com \u2192 HTTP 302 Location: http://evil-attacker.example.com",
+      "confirmed_live": true,
+      "recommendation": "Validate redirect destinations against a whitelist. Never redirect to user-supplied external URLs.",
+      "endpoint": "http://evil-attacker.example.com/"
+    },
+    {
+      "type": "Insecure Cookie Configuration",
+      "detail": "Missing Secure flag \u2014 cookie sent over HTTP",
+      "severity": "MEDIUM",
+      "cwe_id": "CWE-614",
+      "mitre_hint": "T1185",
+      "evidence": "Live Set-Cookie header: session=eyJ1c2VyIjoiYWRtaW4ifQ.afBJKw.9Djay6urYiBhnQ89XVf15quhL7Y | HttpOnly | Path=/",
+      "confirmed_live": true,
+      "recommendation": "Set cookies with: HttpOnly; Secure; SameSite=Strict (or Lax for SSO).",
+      "endpoint": "unknown-endpoint"
+    },
+    {
+      "type": "Exposed Sensitive Resource",
+      "detail": "Path '/robots.txt' returned HTTP 200 \u2014 robots.txt reveals hidden paths",
+      "severity": "INFO",
+      "cwe_id": "CWE-200",
+      "mitre_hint": "T1592",
+      "evidence": "GET http://127.0.0.1:5000/robots.txt \u2192 200 OK | Preview: User-agent: * Disallow: /admin Disallow: /backup Disallow: /.env Disallow: /api/users Disallow: /config Disallow: /db...",
+      "confirmed_live": true,
+      "recommendation": "Remove or protect '/robots.txt'. Ensure sensitive files are outside the web root and access-controlled.",
+      "endpoint": "http://127.0.0.1:5000/robots.txt"
+    },
+    {
+      "type": "Exposed Sensitive Resource",
+      "detail": "Path '/sitemap.xml' returned HTTP 200 \u2014 sitemap.xml reveals all endpoints",
+      "severity": "INFO",
+      "cwe_id": "CWE-200",
+      "mitre_hint": "T1592",
+      "evidence": "GET http://127.0.0.1:5000/sitemap.xml \u2192 200 OK | Preview: <?xml version=\"1.0\" encoding=\"UTF-8\"?> <urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">   <url><loc>http://1...",
+      "confirmed_live": true,
+      "recommendation": "Remove or protect '/sitemap.xml'. Ensure sensitive files are outside the web root and access-controlled.",
+      "endpoint": "http://127.0.0.1:5000/sitemap.xml"
+    },
+    {
+      "type": "Reflected Cross-Site Scripting (XSS)",
+      "detail": "Form parameter 'q' at http://127.0.0.1:5000/search reflects unescaped input.",
+      "severity": "HIGH",
+      "cwe_id": "CWE-79",
+      "mitre_hint": "T1059.007",
+      "recommendation": "Apply output encoding and input validation for form parameters.",
+      "evidence": "GET http://127.0.0.1:5000/search param=q payload=<script>alert('x')</script>",
+      "endpoint": "http://127.0.0.1:5000/search",
+      "confirmed_live": true
+    }
+  ],
+  "attack_chain": [
+    {
+      "step": 1,
+      "tactic": "reconnaissance",
+      "technique_id": "T1592",
+      "technique_name": "Gather Victim Host Information",
+      "relevance_score": 0.6701,
+      "description": "Adversaries may gather information about the victim's hosts that can be used during targeting. Information about hosts may include a variety of details, including administrative data (ex: name, assign",
+      "source_vulnerability": {
+        "type": "Information Disclosure",
+        "detail": "Header 'Server' exposes technology details: 'Werkzeug/3.1.6 Python/3.13.3, Apache/2.2.8 (Ubuntu)'",
+        "severity": "MEDIUM"
+      },
+      "recommendation": "Remove or genericize the Server header to hide version information."
+    },
+    {
+      "step": 2,
+      "tactic": "resource-development",
+      "technique_id": "T1587.004",
+      "technique_name": "Exploits",
+      "relevance_score": 0.4504,
+      "description": "Adversaries may develop exploits that can be used during targeting. An exploit takes advantage of a bug or vulnerability in order to cause unintended or unanticipated behavior to occur on computer har",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: resource-development",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    },
+    {
+      "step": 3,
+      "tactic": "initial-access",
+      "technique_id": "T1190",
+      "technique_name": "Exploit Public-Facing Application",
+      "relevance_score": 0.4711,
+      "description": "Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfigur",
+      "source_vulnerability": {
+        "type": "SQL Injection",
+        "detail": "SQLi payload '' UNION SELECT id,username,password,email FROM users--' on http://127.0.0.1:5000/search?q=... triggered SQL error pattern 'sql' in live response",
+        "severity": "CRITICAL"
+      },
+      "recommendation": "Use parameterised queries / prepared statements. NEVER concatenate user input into SQL strings."
+    },
+    {
+      "step": 4,
+      "tactic": "execution",
+      "technique_id": "T1204.001",
+      "technique_name": "Malicious Link",
+      "relevance_score": 0.6151,
+      "description": "An adversary may rely upon a user clicking a malicious link in order to gain execution. Users may be subjected to social engineering to get them to click on a link that will lead to code execution. Th",
+      "source_vulnerability": {
+        "type": "Open Redirect",
+        "detail": "Parameter 'url' on /redirect causes unvalidated redirect to external domain: http://evil-attacker.example.com",
+        "severity": "MEDIUM"
+      },
+      "recommendation": "Validate redirect destinations against a whitelist. Never redirect to user-supplied external URLs."
+    },
+    {
+      "step": 5,
+      "tactic": "persistence",
+      "technique_id": "T1505.004",
+      "technique_name": "IIS Components",
+      "relevance_score": 0.4361,
+      "description": "Adversaries may install malicious components that run on Internet Information Services (IIS) web servers to establish persistence. IIS provides several mechanisms to extend the functionality of the we",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: persistence",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    },
+    {
+      "step": 6,
+      "tactic": "privilege-escalation",
+      "technique_id": "T1068",
+      "technique_name": "Exploitation for Privilege Escalation",
+      "relevance_score": 0.5378,
+      "description": "Adversaries may exploit software vulnerabilities in an attempt to elevate privileges. Exploitation of a software vulnerability occurs when an adversary takes advantage of a programming error in a prog",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: privilege-escalation",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    },
+    {
+      "step": 7,
+      "tactic": "defense-evasion",
+      "technique_id": "T1599",
+      "technique_name": "Network Boundary Bridging",
+      "relevance_score": 0.5451,
+      "description": "Adversaries may bridge network boundaries by compromising perimeter network devices or internal devices responsible for network segmentation. Breaching these devices may enable an adversary to bypass ",
+      "source_vulnerability": {
+        "type": "No HTTPS / Plain HTTP",
+        "detail": "Site is served over HTTP \u2014 all traffic is unencrypted",
+        "severity": "CRITICAL"
+      },
+      "recommendation": "Enable HTTPS with a valid SSL/TLS certificate. Use Let's Encrypt for free certificates."
+    },
+    {
+      "step": 8,
+      "tactic": "credential-access",
+      "technique_id": "T1552.001",
+      "technique_name": "Credentials In Files",
+      "relevance_score": 1.0,
+      "description": "Adversaries may search local file systems and remote file shares for files containing insecurely stored credentials. These can be files created by users to store their own credentials, shared credenti",
+      "source_vulnerability": {
+        "type": "Exposed Sensitive Resource",
+        "detail": "Path '/.env' returned HTTP 200 \u2014 Exposed .env file with credentials",
+        "severity": "CRITICAL"
+      },
+      "recommendation": "Remove or protect '/.env'. Ensure sensitive files are outside the web root and access-controlled."
+    },
+    {
+      "step": 9,
+      "tactic": "discovery",
+      "technique_id": "T1016.001",
+      "technique_name": "Internet Connection Discovery",
+      "relevance_score": 0.4872,
+      "description": "Adversaries may check for Internet connectivity on compromised systems. This may be performed during automated discovery and can be accomplished in numerous ways such as using Ping, tracert, and GET r",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: discovery",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    },
+    {
+      "step": 10,
+      "tactic": "lateral-movement",
+      "technique_id": "T1210",
+      "technique_name": "Exploitation of Remote Services",
+      "relevance_score": 0.5169,
+      "description": "Adversaries may exploit remote services to gain unauthorized access to internal systems once inside of a network. Exploitation of a software vulnerability occurs when an adversary takes advantage of a",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: lateral-movement",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    },
+    {
+      "step": 11,
+      "tactic": "collection",
+      "technique_id": "T1185",
+      "technique_name": "Browser Session Hijacking",
+      "relevance_score": 0.4097,
+      "description": "Adversaries may take advantage of security vulnerabilities and inherent functionality in browser software to change content, modify user-behaviors, and intercept information as part of various browser",
+      "source_vulnerability": {
+        "type": "Insecure Cookie Configuration",
+        "detail": "Missing Secure flag \u2014 cookie sent over HTTP",
+        "severity": "MEDIUM"
+      },
+      "recommendation": "Set cookies with: HttpOnly; Secure; SameSite=Strict (or Lax for SSO)."
+    },
+    {
+      "step": 12,
+      "tactic": "exfiltration",
+      "technique_id": "T1048.003",
+      "technique_name": "Exfiltration Over Unencrypted Non-C2 Protocol",
+      "relevance_score": 0.5285,
+      "description": "Adversaries may steal data by exfiltrating it over an un-encrypted network protocol other than that of the existing command and control channel. The data may also be sent to an alternate network locat",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: exfiltration",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    },
+    {
+      "step": 13,
+      "tactic": "impact",
+      "technique_id": "T1499.002",
+      "technique_name": "Service Exhaustion Flood",
+      "relevance_score": 0.5099,
+      "description": "Adversaries may target the different network services provided by systems to conduct a denial of service (DoS). Adversaries often target the availability of DNS and web services, however others have b",
+      "source_vulnerability": {
+        "type": "Lifecycle Coverage",
+        "detail": "Coverage-added tactic step: impact",
+        "severity": "INFO"
+      },
+      "recommendation": null
+    }
+  ],
+  "llm_analysis": "LLM analysis skipped in web UI mode.",
+  "disclaimer": "EDUCATIONAL USE ONLY. This assessment was performed on a deliberately vulnerable application for learning purposes. Unauthorized use of this tool against real systems is illegal."
+}
