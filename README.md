@@ -12,7 +12,7 @@ It includes an interactive CLI and a Flask web UI with live streaming output.
 - Optional vulnerable demo target for local testing
 
 ## Requirements
-- Python 3
+- Python 3.8+
 - API keys in the environment:
   - `LLAMA3_API_KEY`
   - `MISTRAL_API_KEY`
@@ -36,13 +36,13 @@ scenario on a URL, or analyze scenario only.
 ```bash
 python app.py
 ```
-Open http://127.0.0.1:7860
+Open http://127.0.0.1:7860 (separate from the demo target on port 5000).
 
 ### Demo target (optional)
 ```bash
 python vulnerable_app/app.py
 ```
-Open http://127.0.0.1:5000
+Open http://127.0.0.1:5000 (separate service from the web UI).
 
 ## Outputs
 - Reports and logs: `red_agent/output`, `red_agent/logs`
